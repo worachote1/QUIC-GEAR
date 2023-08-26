@@ -47,12 +47,14 @@ const deleteAuctionProducts = asyncHandler(async (req,res) => {
 
     try {
         const auctionProductId = req.params.id;
-
-        const deleteProductID = await auctionProduct.findByIdAndDelete(auctionProductId);
         
+        const deleteProductID = await auctionProduct.findById(auctionProductId);
+
         if(!deleteProductID) {
-            res.status(404).send(`Product ID not found!`);
+            return res.status(404).send(`Product ID not found!`);
         }
+
+        await auctionProduct.findByIdAndDelete(auctionProductId);
 
         res.status(200).send({
             message: `Deleted ${auctionProductId} from database`
