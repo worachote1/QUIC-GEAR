@@ -1,9 +1,87 @@
 const asyncHandler = require('express-async-handler');
 const product = require('../models/product');
 
-const getallProduct = asyncHandler(async (req, res) => {
+// Get all product => GET api/products
+const getAllProduct = asyncHandler(async (req, res) => {
     const products = await product.find();
     res.status(200).json(products);
 });
 
-module.exports = {getallProduct};
+// Get single product => GET api/products/:id
+const getSingleProduct = asyncHandler(async (req, res) => {
+    try {
+        const productId = req.params.id;
+
+        const targetProduct = await product.findById(productId);
+
+        if(!targetProduct) {
+            return res.status(404).send('Product ID not found!');
+        }
+
+        res.status(200).json(targetProduct);
+
+    } catch(err) {
+        console.log(err);
+    }
+});
+
+// Create new product => POST api/products/create
+const createProduct = asyncHandler(async (req, res) => {
+    try {
+        const { name,
+                price,
+                type,
+                brand,
+                isWireless,
+                isRGB,
+                imgPath,
+                stock,
+                rating,
+                description } = req.body;
+
+        if(!name || !price || !type || !brand || !isWireless || 
+            !isRGB || !imgPath || !stock || !rating || !description ) {
+            res.status(400).send('All data field must be valid.');
+        }
+
+        const products = await product.create({
+            name,
+            price,
+            type,
+            brand,
+            isWireless,
+            isRGB,
+            imgPath,
+            stock,
+            rating,
+            description
+        });
+
+        res.status(200).json(products)
+    } catch(err) {
+        console.log(err);
+    }
+});
+
+// Delete product => api/products/delete/:id
+const deleteProduct = asyncHandler(async (req, res) => {
+    try {
+        const productId = req.params.id;
+
+        const deleteProductId = await product.findById(productId);
+
+        if(!deleteProductId) {
+            return res.status(404).send('Product ID not found!');
+        }
+
+        await product.findByIdAndDelete(productId);
+
+        res.status(200).send({
+            message: `Deleted ${productId} from database`
+        });
+    } catch(err) {
+        console.log(err);
+    }
+});
+
+module.exports = { getAllProduct, createProduct, deleteProduct, getSingleProduct };
