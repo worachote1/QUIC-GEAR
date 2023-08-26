@@ -17,7 +17,7 @@ const createTransaction = asyncHandler (async (req,res) => {
         const { transactionType, imgPath, userID, amount} = req.body;
 
         if(!transactionType || !imgPath || !userID || !amount) {
-            res.status(400).send("All data field must be valid");
+            return res.status(400).send("All data field must be valid");
         }
 
         const transactions = await transaction.create({

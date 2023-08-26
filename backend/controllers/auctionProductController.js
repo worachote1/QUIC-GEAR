@@ -90,6 +90,26 @@ const updateAuctionProducts = asyncHandler(async (req,res) => {
     }
 });
 
+//@desc Get auctionProducts by ID
+//@route GET /api/auctionProducts/:id
+const getAuctionProducts = asyncHandler(async (req,res) => {
+
+    try {
+        const auctionProductId = req.params.id;
+    
+        const existingAuctionProduct =  await auctionProduct.findById(auctionProductId);
+        
+        if(!existingAuctionProduct) {
+            return res.status(404).send(`auctionProducts ID not found!`);
+        }
+
+        res.status(200).json(existingAuctionProduct);
+
+    } catch(err) {
+        console.log(err);
+    }
+});
+
 module.exports = {
-    getAllAuctionProducts, createAuctionProducts,deleteAuctionProducts,updateAuctionProducts
+    getAllAuctionProducts, createAuctionProducts,deleteAuctionProducts,updateAuctionProducts, getAuctionProducts
 };
