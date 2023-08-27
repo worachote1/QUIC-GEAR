@@ -57,13 +57,13 @@ const createProduct = asyncHandler(async (req, res) => {
             description
         });
 
-        res.status(200).json(products)
+        res.status(200).json(products);
     } catch(err) {
         console.log(err);
     }
 });
 
-// Delete product => api/products/delete/:id
+// Delete product => DELETE api/products/delete/:id
 const deleteProduct = asyncHandler(async (req, res) => {
     try {
         const productId = req.params.id;
@@ -84,4 +84,18 @@ const deleteProduct = asyncHandler(async (req, res) => {
     }
 });
 
-module.exports = { getAllProduct, createProduct, deleteProduct, getSingleProduct };
+// Update product => PUT api/products/update/:id
+const updateProduct = asyncHandler(async (req, res) => {
+    let products = await product.findById(req.params.id);
+
+    if(!products) {
+        return res.status(404).send('Product not found!');
+    }
+
+    products = await product.findByIdAndUpdate(req.params.id, req.body, {
+        new: true,
+    })
+    res.status(200).json(products)
+});
+
+module.exports = { getAllProduct, createProduct, deleteProduct, getSingleProduct, updateProduct };

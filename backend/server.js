@@ -12,6 +12,7 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/api/products', require('./routes/product'));
+app.use('/api/users', require('./routes/user'));
 
 app.listen(process.env.PORT, () => {
     console.log(`server's running on port ${process.env.PORT}`);
