@@ -1,7 +1,7 @@
 const asyncHandler = require('express-async-handler');
 const user = require('../models/user');
 
-// Get all user => GET api/users
+// Get all users => GET api/users
 const getAllUser = asyncHandler(async (req, res) => {
     const users = await user.find();
     res.status(200).json(users);
@@ -15,7 +15,7 @@ const getSingleUser = asyncHandler(async (req, res) => {
         const targetUser = await user.findById(userId);
 
         if(!targetUser) {
-            return res.status(404).send('Product ID not found!');
+            return res.status(404).send('User ID not found!');
         }
 
         res.status(200).json(targetUser);
@@ -74,7 +74,7 @@ const deleteUser = asyncHandler(async (req, res) => {
         const deleteUserId = await user.findById(userId);
 
         if(!deleteUserId) {
-            return res.status(404).send('Product ID not found!');
+            return res.status(404).send('User ID not found!');
         }
 
         await user.findByIdAndDelete(userId);
@@ -92,7 +92,7 @@ const updateUser = asyncHandler(async (req, res) => {
     let users = await user.findById(req.params.id);
 
     if(!users) {
-        return res.status(404).send('Product not found!');
+        return res.status(404).send('User not found!');
     }
 
     users = await user.findByIdAndUpdate(req.params.id, req.body, {
