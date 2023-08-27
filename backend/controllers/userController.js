@@ -1,28 +1,11 @@
 const asyncHandler = require('express-async-handler');
 const user = require('../models/user');
+const sendToken = require('../utils/jwtToken');
 
 // Get all users => GET api/users
 const getAllUser = asyncHandler(async (req, res) => {
     const users = await user.find();
     res.status(200).json(users);
-});
-
-// Get single user => GET api/users/:id
-const getSingleUser = asyncHandler(async (req, res) => {
-    try {
-        const userId = req.params.id;
-
-        const targetUser = await user.findById(userId);
-
-        if(!targetUser) {
-            return res.status(404).send('User ID not found!');
-        }
-
-        res.status(200).json(targetUser);
-
-    } catch(err) {
-        console.log(err);
-    }
 });
 
 // Create new user => POST api/users/create
@@ -101,4 +84,40 @@ const updateUser = asyncHandler(async (req, res) => {
     res.status(200).json(users)
 });
 
-module.exports = { getAllUser, getSingleUser, createUser, deleteUser, updateUser };
+// Login user => api/users/login
+const loginUser = asyncHandler(async (req, res) => {
+    const { email, password } = req.body;
+
+    if(!email || !password) {
+        return res.status(400).send('Please enter email & password');
+    }
+
+    const users = await user.findOne({ email }).select('+password');
+
+    if(!users) {
+        return res.status(400).send('Invalid Email or Password');
+    }
+
+    const isPasswordMatched = await users.comparePassword(password);
+
+    if(!isPasswordMatched) {
+        return res.status(401).send('Invalid Email or Password');
+    }
+
+    sendToken(users, 200, res);
+});
+
+// Logout user => api/users/logout
+const logoutUser = asyncHandler(async (req, res) => {
+    res.cookie('token', null, {
+        expires: new Date(Date.now()),
+        httpOnly: true
+    });
+
+    res.status(200).json({
+        success: true,
+        message: 'Logged out'
+    });
+});
+
+module.exports = { getAllUser, createUser, deleteUser, updateUser, loginUser, logoutUser };
