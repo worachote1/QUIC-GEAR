@@ -3,14 +3,23 @@ import axios from 'axios';
 
 export default function Topup() {
 
+  const defaultPrompayImg = "https://www.thaiichr.org/wp-content/uploads/2022/11/%E0%B8%9E%E0%B8%A3%E0%B9%89%E0%B8%AD%E0%B8%A1%E0%B9%80%E0%B8%9E%E0%B8%A2%E0%B9%8C-1.png";
   const [topupAmount, setTopupAmount] = useState('');
-  const [qrPromtpayImgSrc, setqrPromtpayImgSrc] = useState("https://www.thaiichr.org/wp-content/uploads/2022/11/%E0%B8%9E%E0%B8%A3%E0%B9%89%E0%B8%AD%E0%B8%A1%E0%B9%80%E0%B8%9E%E0%B8%A2%E0%B9%8C-1.png");
+  const [qrPromtpayImgSrc, setqrPromtpayImgSrc] = useState(defaultPrompayImg);
+
+  const formatTopup = (number) => {
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  };
+
   const amountFormHandler = (e) => {
-    if (!isNaN(e.target.value)) {
-      setTopupAmount(e.target.value)
+    const amount = e.target.value.replace(/,/g, '');
+    if (!isNaN(amount)) {
+      setTopupAmount(amount)
     }
   }
+
   const clickPlusAmount = (amount) => {
+
     if (topupAmount === '') {
       setTopupAmount(amount.toString());
     }
@@ -21,7 +30,6 @@ export default function Topup() {
     }
   }
 
-  //fetch POST API to http://localhost:5000/genPromtpayQR
   const handleSubmitTopup = (event) => {
     event.preventDefault();
     if (topupAmount === '' || parseInt(topupAmount) < 100 || isNaN(topupAmount)) {
@@ -39,6 +47,7 @@ export default function Topup() {
         });
     }
   }
+
   return (
     <div class="min-h-screen flex items-center justify-center">
       <div className='mt-2'>
@@ -49,7 +58,7 @@ export default function Topup() {
             <h2 className="card-title">กรอกจํานวนเงิน (บาท)</h2>
             <div>
               <form className="" onSubmit={handleSubmitTopup}>
-                <input type="text" placeholder="Type here" className="input input-bordered input-accent w-full" value={topupAmount} onChange={(e) => amountFormHandler(e)} />
+                <input type="text" placeholder="Type here" className="input input-bordered input-accent w-full" value={formatTopup(topupAmount)} onChange={(e) => amountFormHandler(e)} />
                 <button className="btn bg-green-500 w-full mt-2" type='submit'>ยืนยัน</button>
               </form>
             </div>

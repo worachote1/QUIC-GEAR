@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default function auction() {
+export default function Auction() {
   return (
     <div>
         auction
