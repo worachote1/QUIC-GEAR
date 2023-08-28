@@ -37,15 +37,12 @@ const userSchema = new mongoose.Schema({
     bankAccount: {
         bank: {
             type: String,
-            required: true
         },
         account_number: {
             type: String,
-            required: true
         },
         account_name: {
             type: String,
-            required: true
         },
     },
     coins: {
@@ -54,6 +51,10 @@ const userSchema = new mongoose.Schema({
     },
     isGoogleAccount: {
         type: Boolean
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now
     }
 });
 
