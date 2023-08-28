@@ -9,8 +9,8 @@ import Login from "./pages/Login";
 function App() {
   return (
     <div className="App">
-      <Navbar />
       <BrowserRouter>
+      <Navbar />
         <Routes>
           <Route path='/' element={<Home />} />
           <Route path='/login' element={<Login />} />
