@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios';
+import Swal from 'sweetalert2';
 
 export default function Topup() {
 
@@ -10,6 +11,14 @@ export default function Topup() {
   const formatTopup = (number) => {
     return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
   };
+
+  const alertTopupInvalid = () => {
+    Swal.fire({
+      icon: 'error',
+      title: 'Invalid top-up amount',
+      text: 'Please make sure to top up at least 100 baht.',
+    })
+  }
 
   const amountFormHandler = (e) => {
     const amount = e.target.value.replace(/,/g, '');
@@ -33,7 +42,7 @@ export default function Topup() {
   const handleSubmitTopup = (event) => {
     event.preventDefault();
     if (topupAmount === '' || parseInt(topupAmount) < 100 || isNaN(topupAmount)) {
-      alert("amonut top up must be number >= 100")
+      alertTopupInvalid();
     }
     else { 
       axios.post('http://localhost:5000/genPromtpayQR', {
@@ -59,6 +68,7 @@ export default function Topup() {
             <div>
               <form className="" onSubmit={handleSubmitTopup}>
                 <input type="text" placeholder="Type here" className="input input-bordered input-accent w-full" value={formatTopup(topupAmount)} onChange={(e) => amountFormHandler(e)} />
+                {/* <button className="btn bg-green-500 w-full mt-2" type='submit'></button> */}
                 <button className="btn bg-green-500 w-full mt-2" type='submit'>ยืนยัน</button>
               </form>
             </div>
