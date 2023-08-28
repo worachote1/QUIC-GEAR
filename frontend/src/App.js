@@ -5,7 +5,7 @@ import Home from "./pages/Home";
 import Register from "./pages/auth/Register";
 import Login from "./pages/auth/Login";
 import Admin from "./pages/admin/Admin";
-import Topup from "./pages/Topup";
+import Topup from "./pages/topup/Topup";
 import Cart from "./pages/Cart";
 import Auction from "./pages/Auction";
 import Product from "./pages/Product";
