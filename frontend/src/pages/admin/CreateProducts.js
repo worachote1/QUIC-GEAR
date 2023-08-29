@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { AiFillCaretDown } from 'react-icons/ai';
+import { brand ,type } from '../../constant/productConstants';
 
 export default function CreateProducts() {
-  const brand = ["Razer", "Nubwo", "Logitech", "Signo", "SteelSeries", "HyperX", "Corsair", "Neolution E-sport", "Keychron", "Zowie"];
-  const type = ["Headset", "Mouse", "Keyboard", "Table&Chair"];
   const [product, setProduct] = useState({
     name: "", price: "", stock: "", brand: brand[0], type: type[0], isWired: "", isRGB: "", description: "", imgPath: "prn"
   });

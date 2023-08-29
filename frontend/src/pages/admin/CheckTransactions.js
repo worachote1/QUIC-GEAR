@@ -35,7 +35,7 @@ export default function CheckTransactions() {
               Create At
             </th>
             <th scope="col" class="px-6 py-3">
-              Option
+              Status
             </th>
           </tr>
         </thead>
@@ -48,7 +48,7 @@ export default function CheckTransactions() {
               <td scope="row" class="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white">
                 <img class="w-10 h-10 rounded-full" src={testImgSrc} alt="Jese image" />
                 <div class="pl-3">
-                  <div class="text-base font-semibold">รอไต๋เพิ่ม user ให้ น่าให้ใส่เป็น object ของ uer ไปเลยจะได้ไม่ต้อง ยิง user api ทุกรอบ</div>
+                  <div class="text-base font-semibold">รอไต๋เพิ่ม user ให้ น่าให้ใส่เป็น object ของ uer ไปเลยจะได้ไม่ต้อง ยิง user api ทุกรอบ (เขียนไว้ใน gg doc)</div>
                   <div class="font-normal text-gray-500">รอไต๋เพิ่ม user email ให้</div>
                 </div>
               </td>
