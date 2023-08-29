@@ -28,6 +28,14 @@ const orderSchema = mongoose.Schema({
             imgPath: {
                 type: String,
                 required: true
+            },
+            brand: {
+                type: String,
+                required: true
+            },
+            type: {
+                type: String,
+                required: true
             }
         }
     ],
@@ -43,6 +51,10 @@ const orderSchema = mongoose.Schema({
     totalPrice: {
         type: Number,
         required: true
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now
     }
 });
 
