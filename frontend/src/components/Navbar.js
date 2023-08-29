@@ -12,7 +12,7 @@ export default function Navbar() {
     };
 
     return (
-        <div className="sticky top-0 z-50 bg-white">
+        <div className="sticky top-0 z-40 bg-white">
             <nav className="flex flex-col md:flex-row items-center p-4 shadow-md">
                 <div className="w-full md:w-1/2 text-center md:text-left">
                     <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold">

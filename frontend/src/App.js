@@ -5,12 +5,13 @@ import Home from "./pages/Home";
 import Register from "./pages/Register";
 import Topup from "./pages/Topup";
 import Login from "./pages/Login";
+import Mobilebar from "./components/Mobilebar";
 
 function App() {
   return (
     <div className="App">
       <BrowserRouter>
-      <Navbar />
+        <Navbar />
         <Routes>
           <Route path='/' element={<Home />} />
           <Route path='/login' element={<Login />} />
@@ -18,6 +19,7 @@ function App() {
           <Route path='/topup' element={<Topup />} />
         </Routes>
         <Footer />
+        <Mobilebar />
       </BrowserRouter>
     </div>
   );
