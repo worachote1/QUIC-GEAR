@@ -3,7 +3,7 @@ import { BsArrowLeftShort } from "react-icons/bs";
 import { SiTailwindcss } from "react-icons/si";
 import {useState} from 'react';
 import Menu from './components/menu';
-import Navbar from './components/navbar';
+import Navbar from './components/Navbar';
 import Carousel from './components/carousel';
 import './App.css';
 
