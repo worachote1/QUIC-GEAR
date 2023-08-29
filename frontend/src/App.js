@@ -13,7 +13,9 @@ function App() {
 
   return (
     <div className="App">
-      <Navbar />
+      <div className='sticky top-0 z-50'>
+        <Navbar />
+      </div>
       <div className='flex flex-col'>
         <nav className='fixed'>
           <div className={`bg-[#2F4AA4] h-screen p-5 pt-8 
@@ -33,20 +35,22 @@ function App() {
         </nav>
         <div className={`p-5 h-screen bg-slate-400 flex-grow pb-16 ${open ? "ml-72" : "ml-20"}`}>
           <div className={'flex-1 h-100 flex flex-col justify-center items-center'}>
-            <div className="lg:ml-16 lg:mr-16 sm:ml-4 sm:mr-4 sm:mt-8 sm:mb-8">
+            <div className="hidden md:block">
               <Carousel />
             </div>
           </div>
-          <div className="flex-1 bg-pink-600 h-100 flex flex-col  justify-center items-center">
-            <div className="flex lg:ml-16 lg:mr-16 sm:mt-8 sm:mb-8 lg:space-x-36">
-              <div className="md:w-[160px] xl:w-[256px] flex-1 bg-lime-600 h-100 flex flex-col">
-                <h1 className='text-lg font-semibold'>Content 2.1</h1>
-              </div>
-              <div className="md:w-[160px] xl:w-[256px] flex-1 bg-blue-600 h-100 flex flex-col">
-                <h1 className='text-lg font-semibold'>Content 2.2</h1>
-              </div>
-              <div className="md:w-[160px] xl:w-[256px] flex-1 bg-purple-600 h-100 flex flex-col">
-                <h1 className='text-lg font-semibold'>Content 2.3</h1>
+          <div className='hidden md:block'>
+            <div className="flex-1 bg-pink-600 h-100 flex flex-col justify-center items-center">
+              <div className="flex lg:ml-16 lg:mr-16 sm:mt-8 sm:mb-8 lg:space-x-36">
+                <div className="md:w-[160px] xl:w-[256px] flex-1 bg-lime-600 h-100 flex flex-col">
+                  <h1 className='text-lg font-semibold'>Content 2.1</h1>
+                </div>
+                <div className="md:w-[160px] xl:w-[256px] flex-1 bg-blue-600 h-100 flex flex-col">
+                  <h1 className='text-lg font-semibold'>Content 2.2</h1>
+                </div>
+                <div className="md:w-[160px] xl:w-[256px] flex-1 bg-purple-600 h-100 flex flex-col">
+                  <h1 className='text-lg font-semibold'>Content 2.3</h1>
+                </div>
               </div>
             </div>
           </div>

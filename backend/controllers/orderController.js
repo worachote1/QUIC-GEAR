@@ -8,6 +8,7 @@ const getAllOrder = asyncHandler(async (req, res) => {
 });
 
 // Get single order => GET api/orders/:id
+//Test
 const getSingleOrder = asyncHandler(async (req, res) => {
     try {
         const orderId = req.params.id;
