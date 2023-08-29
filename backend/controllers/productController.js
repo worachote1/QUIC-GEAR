@@ -37,7 +37,9 @@ const createProduct = asyncHandler(async (req, res) => {
                 imgPath,
                 stock,
                 rating,
-                description } = req.body;
+                description,
+                totalOrder,
+                createdAt } = req.body;
 
         if(!name || !price || !type || !brand || !isWireless || 
             !isRGB || !imgPath || !stock || !rating || !description ) {
@@ -54,7 +56,9 @@ const createProduct = asyncHandler(async (req, res) => {
             imgPath,
             stock,
             rating,
-            description
+            description,
+            totalOrder,
+            createdAt
         });
 
         res.status(200).json(products);
