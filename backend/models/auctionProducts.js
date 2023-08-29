@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-
+// Update
 const auctionProductSchema = new mongoose.Schema({
     startPrice: {
         type: Number,
