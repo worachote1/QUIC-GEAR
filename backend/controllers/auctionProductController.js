@@ -14,24 +14,26 @@ const getAllAuctionProducts = asyncHandler(async (req,res) => {
 
 const createAuctionProducts = asyncHandler(async (req,res) => {
     try {
-        const { name, idSeller, description, currentPrice, startPrice, buyOutPrice, imgPath, startAuctionDate, expiredAuctionDate} = req.body;
+        const {startPrice, buyOutPrice, start_auction_date, end_auction_date, auctionStatus, createAt, productItem
+        ,user_seller,userBidder} = req.body;
 
-        if(!name || !idSeller || !description || !currentPrice || !startPrice ||
-            !buyOutPrice || !startAuctionDate || !expiredAuctionDate) {
+        if(!startPrice ||
+            !buyOutPrice || !start_auction_date || !end_auction_date || !auctionStatus || !createAt
+            || !productItem || !user_seller || !userBidder) {
                 res.status(400).send("All data field must be valid");
             }
         
         //Create object from data
         const auctionProducts = await auctionProduct.create({
-            name,
-            idSeller,
-            description,
-            currentPrice,
             startPrice,
             buyOutPrice,
-            imgPath,
-            startAuctionDate,
-            expiredAuctionDate
+            start_auction_date,
+            end_auction_date,
+            auctionStatus,
+            createAt,
+            productItem: req.body.productItem,
+            user_seller: req.body.user_seller,
+            userBidder: req.body.userBidder
         });
 
         res.status(200).json(auctionProducts);
