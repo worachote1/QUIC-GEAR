@@ -1,4 +1,5 @@
 export const testImgSrc = "https://lh3.googleusercontent.com/ogw/AGvuzYZRQF_a0tm1dHizZsXzhHZAkHUTosYtX7fd0AOoyQ=s32-c-mo";
+
 export const testUserData = [
   {
     "id": "1",
@@ -199,6 +200,7 @@ export const testUserData = [
     "coins": 7200
   },
 ]
+
 export const testTransactionData = [
     {
       "id" : 1,
@@ -211,7 +213,7 @@ export const testTransactionData = [
     },
     {
       "id" : 2,
-      "transactionType" : "topup",
+      "transactionType" : "success",
       "slip_img" : "test.png",
       "userID" : "20",
       "createAt": new Date().toLocaleString(),
@@ -235,7 +237,7 @@ export const testTransactionData = [
     },
     {
       "id" : 5,
-      "transactionType" : "topup",
+      "transactionType" : "success",
       "slip_img" : "test.png",
       "userID" : "3",
       "createAt": new Date().toLocaleString(),
@@ -283,7 +285,7 @@ export const testTransactionData = [
     },
     {
       "id" : 11,
-      "transactionType" : "topup",
+      "transactionType" : "success",
       "slip_img" : "test.png",
       "userID" : "21",
       "createAt": new Date().toLocaleString(),
@@ -291,7 +293,7 @@ export const testTransactionData = [
     },
     {
       "id" : 12,
-      "transactionType" : "topup",
+      "transactionType" : "success",
       "slip_img" : "test.png",
       "userID" : "14",
       "createAt": new Date().toLocaleString(),
@@ -320,4 +322,119 @@ export const testTransactionData = [
       "createAt": new Date().toLocaleString(),
       "amount" : 10000
     },
+]
+
+export const testOrderData = [
+  {
+    "id" : "1",
+    "uerID" : "44",
+    "orderItems" : [
+      {
+        "productId" : 17,
+        "name" : "test item1",
+        "quantity" : 5,
+        "price" : 1200,
+        "imgPath" : "test.png",
+        "brand" : "Razer",
+        "type" : "keyboard"
+      },
+      {
+        "productId" : 8,
+        "name" : "test item2",
+        "quantity" : 2,
+        "price" : 1200,
+        "imgPath" : "test.png",
+        "brand" : "Razer",
+        "type" : "keyboard"
+      }
+    ],
+    "orderStatus" : "completed",
+    "shippingInfo" : "KMITL ECC",
+    "totalPrice" : 8400,
+    "createAt": new Date().toLocaleString()
+  },
+  {
+    "id" : "2",
+    "uerID" : "17",
+    "orderItems" : [
+      {
+        "productId" : 18,
+        "name" : "test item4",
+        "quantity" : 1,
+        "price" : 2500,
+        "imgPath" : "test.png",
+        "brand" : "Razer",
+        "type" : "keyboard"
+      },
+      {
+        "productId" : 19,
+        "name" : "test item5",
+        "quantity" : 1,
+        "price" : 500,
+        "imgPath" : "test.png",
+        "brand" : "Razer",
+        "type" : "keyboard"
+      }
+    ],
+    "orderStatus" : "toRecieve",
+    "shippingInfo" : "KMITL ECC",
+    "totalPrice" : 3000,
+    "createAt": new Date().toLocaleString()
+  },
+  {
+    "id" : "3",
+    "uerID" : "3",
+    "orderItems" : [
+      {
+        "productId" : 6,
+        "name" : "test item3",
+        "quantity" : 2,
+        "price" : 500,
+        "imgPath" : "test.png",
+        "brand" : "Razer",
+        "type" : "keyboard"
+      },
+    ],
+    "orderStatus" : "completed",
+    "shippingInfo" : "KMITL ECC",
+    "totalPrice" : 1000,
+    "createAt": new Date().toLocaleString()
+  },
+  {
+    "id" : "4",
+    "uerID" : "20",
+    "orderItems" : [
+      {
+        "productId" : 10,
+        "name" : "test item6",
+        "quantity" : 1,
+        "price" : 700,
+        "imgPath" : "test.png",
+        "brand" : "Razer",
+        "type" : "keyboard"
+      },
+      {
+        "productId" : 11,
+        "name" : "test item7",
+        "quantity" : 2,
+        "price" : 200,
+        "imgPath" : "test.png",
+        "brand" : "Razer",
+        "type" : "keyboard"
+      },
+      {
+        "productId" : 13,
+        "name" : "test item8",
+        "quantity" : 1,
+        "price" : 1200,
+        "imgPath" : "test.png",
+        "brand" : "Razer",
+        "type" : "keyboard"
+      }
+    ],
+    "orderStatus" : "success",
+    "shippingInfo" : "KMITL ECC",
+    "totalPrice" : 2300,
+    "createAt": new Date().toLocaleString()
+  },
 ]
