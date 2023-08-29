@@ -6,6 +6,9 @@ const connectDb = require('./config/dbConnection');
 
 app.use(express.json());
 app.use(cors());
+app.use('/api/products', require('./routes/product'));
+app.use('/api/users', require('./routes/user'));
+app.use('/api/orders', require('./routes/order'));
 app.use("/api/auctionProducts", require('./routes/auctionProductsRoutes'));
 app.use("/api/transactions", require('./routes/transactionsRoutes'));
 
