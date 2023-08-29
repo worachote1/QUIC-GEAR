@@ -4,7 +4,7 @@ const QRCode = require('qrcode');
 const generatePayload = require('promptpay-qr');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const connectData = require("./database");
+const connectData = require("./config/dbConnection");
 const dotenv = require("dotenv").config();
 
 app.use(express.json());
@@ -19,4 +19,4 @@ app.listen(process.env.PORT, () => {
     console.log(`server's running on port ${process.env.PORT}`);
 })
 
-connectData();
+connectDb();
