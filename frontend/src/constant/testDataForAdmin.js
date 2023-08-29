@@ -200,5 +200,124 @@ export const testUserData = [
   },
 ]
 export const testTransactionData = [
-    
+    {
+      "id" : 1,
+      "transactionType" : "topup",
+      "slip_img" : "test.png",
+      "userID" : "13",
+      "createAt": new Date().toLocaleString(),
+      "amount" : 4400,
+
+    },
+    {
+      "id" : 2,
+      "transactionType" : "topup",
+      "slip_img" : "test.png",
+      "userID" : "20",
+      "createAt": new Date().toLocaleString(),
+      "amount" : 700
+    },
+    {
+      "id" : 3,
+      "transactionType" : "withdraw",
+      "slip_img" : "test.png",
+      "userID" : "9",
+      "createAt": new Date().toLocaleString(),
+      "amount" : 1200
+    },
+    {
+      "id" : 4,
+      "transactionType" : "withdraw",
+      "slip_img" : "test.png",
+      "userID" : "7",
+      "createAt": new Date().toLocaleString(),
+      "amount" : 2000
+    },
+    {
+      "id" : 5,
+      "transactionType" : "topup",
+      "slip_img" : "test.png",
+      "userID" : "3",
+      "createAt": new Date().toLocaleString(),
+      "amount" : 1700
+    },
+    {
+      "id" : 6,
+      "transactionType" : "topup",
+      "slip_img" : "test.png",
+      "userID" : "16",
+      "createAt": new Date().toLocaleString(),
+      "amount" : 4400
+    },
+    {
+      "id" : 7,
+      "transactionType" : "topup",
+      "slip_img" : "test.png",
+      "userID" : "8",
+      "createAt": new Date().toLocaleString(),
+      "amount" : 4400
+    },
+    {
+      "id" : 8,
+      "transactionType" : "topup",
+      "slip_img" : "test.png",
+      "userID" : "9",
+      "createAt": new Date().toLocaleString(),
+      "amount" : 4400
+    },
+    {
+      "id" : 9,
+      "transactionType" : "topup",
+      "slip_img" : "test.png",
+      "userID" : "15",
+      "createAt": new Date().toLocaleString(),
+      "amount" : 4400
+    },
+    {
+      "id" : 10,
+      "transactionType" : "withdraw",
+      "slip_img" : "test.png",
+      "userID" : "5",
+      "createAt": new Date().toLocaleString(),
+      "amount" : 4400
+    },
+    {
+      "id" : 11,
+      "transactionType" : "topup",
+      "slip_img" : "test.png",
+      "userID" : "21",
+      "createAt": new Date().toLocaleString(),
+      "amount" : 4400
+    },
+    {
+      "id" : 12,
+      "transactionType" : "topup",
+      "slip_img" : "test.png",
+      "userID" : "14",
+      "createAt": new Date().toLocaleString(),
+      "amount" : 500
+    },    {
+      "id" : 13,
+      "transactionType" : "topup",
+      "slip_img" : "test.png",
+      "userID" : "17",
+      "createAt": new Date().toLocaleString(),
+      "amount" : 2300
+    },
+    {
+      "id" : 14,
+      "transactionType" : "withdraw",
+      "slip_img" : "test.png",
+      "userID" : "13",
+      "createAt": new Date().toLocaleString(),
+      "amount" : 750
+    },
+    {
+      "id" : 15,
+      "transactionType" : "topup",
+      "slip_img" : "test.png",
+      "userID" : "13",
+      "createAt": new Date().toLocaleString(),
+      "amount" : 10000
+    },
 ]
