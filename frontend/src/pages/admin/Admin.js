@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { AiFillCaretDown } from 'react-icons/ai';
-import CheckAuctions from './CheckAuctions';
-import CheckOrders from './CheckOrders';
-import CheckTransactions from './CheckTransactions';
-import CheckUsers from './CheckUsers';
-import CreateProducts from './CreateProducts';
+import CheckAuctions from './AuctionsAdmin/CheckAuctions';
+import CheckOrders from './OrdersAdmin/CheckOrders';
+import CheckTransactions from './TransactionsAdmin/CheckTransactions';
+import CheckUsers from './UsersAdmin/CheckUsers';
+import CreateProducts from './ProductsAdmin/CreateProducts';
 
 export default function Admin() {
   const adminTaskType = ["Auctions", "Orders", "Transactions", "Users", "Create Products"]

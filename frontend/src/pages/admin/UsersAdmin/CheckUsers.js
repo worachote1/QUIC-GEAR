@@ -1,18 +1,19 @@
-import React, { useEffect, useState } from 'react'
-import { testTransactionData ,testImgSrc } from '../../constant/testDataForAdmin'
-import AdminPagination from './AdminPagination';
+import React, { useState ,useEffect } from 'react';
+import { testUserData, testImgSrc } from '../../../constant/testDataForAdmin';
+import { formatNumberInput } from '../../../util/formatUtil';
+import AdminPagination from '../AdminPagination';
 
-export default function CheckTransactions() {
-  const [transactionsData, setTransactionsData] = useState([]);
+export default function CheckUsers() {
+  
+  const [userData , setUserData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [dataRowPerPage, setDataRowPerPage] = useState(7);
   const lastRowIndexPage = currentPage * dataRowPerPage;
   const firstRowIndexPage = lastRowIndexPage - dataRowPerPage;
-  const resDataPage = testTransactionData.slice(firstRowIndexPage, lastRowIndexPage);
-
+  const resDataPage = testUserData.slice(firstRowIndexPage, lastRowIndexPage);
   useEffect(() => {
     // Update the user data with the sliced data for the current page
-    setTransactionsData(resDataPage);
+    setUserData(resDataPage);
   }, [currentPage, dataRowPerPage]);
   return (
     <div>
@@ -23,24 +24,24 @@ export default function CheckTransactions() {
               ID
             </th>
             <th scope="col" class="px-6 py-3">
-              User
+              Username
             </th>
             <th scope="col" class="px-6 py-3">
-              Type
+              Name
             </th>
             <th scope="col" class="px-6 py-3">
-              amount
+              Last Name
             </th>
             <th scope="col" class="px-6 py-3">
               Create At
             </th>
             <th scope="col" class="px-6 py-3">
-              Status
+              Coins
             </th>
           </tr>
         </thead>
         <tbody>
-          {transactionsData?.map((item, Idx) => (
+          {userData?.map((item, Idx) => (
             <tr key={Idx} class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
               <td class="px-6 py-2">
                 {item["id"]}
@@ -48,28 +49,27 @@ export default function CheckTransactions() {
               <td scope="row" class="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white">
                 <img class="w-10 h-10 rounded-full" src={testImgSrc} alt="Jese image" />
                 <div class="pl-3">
-                  <div class="text-base font-semibold">test</div>
-                  <div class="font-normal text-gray-500">test user email ให้</div>
+                  <div class="text-base font-semibold">{item["username"]}</div>
+                  <div class="font-normal text-gray-500">{item["email"]}</div>
                 </div>
               </td>
               <td class="px-6 py-4">
-                {item["transactionType"]}
+                {item["name"]}
               </td>
               <td class="px-6 py-4">
-                {item["amount"]}
+                {item["lastname"]}
               </td>
               <td class="px-6 py-4">
-                {item["createAt"]} 
+                {item["createAt"]}
               </td>
               <td class="px-6 py-4">
-                {(item["transactionType"] === "topup" ? <div> <button className="btn btn-outline btn-warning">update coin</button> <a className="link link-info ml-2">Check proof of payment</a> </div>
-                : (item["transactionType"] === "withdraw") ? <button className="btn btn-outline btn-primary">Approve withdrawal</button> : <button className="btn btn-outline btn-success">Success</button>)}
+                {formatNumberInput(item["coins"])}
               </td>
             </tr>
           ))}
         </tbody>
       </table>
-      <AdminPagination totalDataRow={testTransactionData.length} dataRowPerPage={dataRowPerPage} currentPage={currentPage} setCurrentPage={setCurrentPage} />
+      <AdminPagination totalDataRow={testUserData.length} dataRowPerPage={dataRowPerPage} currentPage={currentPage} setCurrentPage={setCurrentPage}/>
     </div>
   )
 }

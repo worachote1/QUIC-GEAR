@@ -1,17 +1,19 @@
-import React, { useEffect, useState } from 'react'
-import { testOrderData , testImgSrc } from '../../constant/testDataForAdmin';
-import AdminPagination from './AdminPagination';
-export default function CheckOrders() {
-  const [ordersData, setOrdersData] = useState([]);
+import React, { useEffect, useState } from 'react';
+import { testTransactionData ,testImgSrc } from '../../../constant/testDataForAdmin';
+import { formatNumberInput } from '../../../util/formatUtil';
+import AdminPagination from '../AdminPagination';
+
+export default function CheckTransactions() {
+  const [transactionsData, setTransactionsData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [dataRowPerPage, setDataRowPerPage] = useState(7);
   const lastRowIndexPage = currentPage * dataRowPerPage;
   const firstRowIndexPage = lastRowIndexPage - dataRowPerPage;
-  const resDataPage = testOrderData.slice(firstRowIndexPage, lastRowIndexPage);
+  const resDataPage = testTransactionData.slice(firstRowIndexPage, lastRowIndexPage);
 
   useEffect(() => {
     // Update the user data with the sliced data for the current page
-    setOrdersData(resDataPage);
+    setTransactionsData(resDataPage);
   }, [currentPage, dataRowPerPage]);
   return (
     <div>
@@ -25,7 +27,10 @@ export default function CheckOrders() {
               User
             </th>
             <th scope="col" class="px-6 py-3">
-              Total price
+              Type
+            </th>
+            <th scope="col" class="px-6 py-3">
+              amount
             </th>
             <th scope="col" class="px-6 py-3">
               Create At
@@ -36,7 +41,7 @@ export default function CheckOrders() {
           </tr>
         </thead>
         <tbody>
-          {ordersData?.map((item, Idx) => (
+          {transactionsData?.map((item, Idx) => (
             <tr key={Idx} class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
               <td class="px-6 py-2">
                 {item["id"]}
@@ -49,20 +54,23 @@ export default function CheckOrders() {
                 </div>
               </td>
               <td class="px-6 py-4">
-                {item["totalPrice"]}
+                {item["transactionType"]}
+              </td>
+              <td class="px-6 py-4">
+                {formatNumberInput(item["amount"])}
               </td>
               <td class="px-6 py-4">
                 {item["createAt"]} 
               </td>
               <td class="px-6 py-4">
-                {(item["orderStatus"] === "completed") ? <div> <button className="btn btn-outline btn-success">Complete</button> </div>
-                :<div><button className="btn btn-outline btn-warning">To Recieve</button> <a className="link link-info ml-2">update order</a> </div>}
+                {(item["transactionType"] === "topup" ? <div> <button className="btn btn-outline btn-warning">Update coin</button> <button className="btn btn-outline btn-error">Decline</button><a className="link link-info ml-2">Check Proof of Payment</a> </div>
+                : (item["transactionType"] === "withdraw") ? <button className="btn btn-outline btn-primary">Approve withdrawal</button> : <button className="btn btn-outline btn-success">Success</button>)}
               </td>
             </tr>
           ))}
         </tbody>
       </table>
-      <AdminPagination totalDataRow={testOrderData.length} dataRowPerPage={dataRowPerPage} currentPage={currentPage} setCurrentPage={setCurrentPage} />
+      <AdminPagination totalDataRow={testTransactionData.length} dataRowPerPage={dataRowPerPage} currentPage={currentPage} setCurrentPage={setCurrentPage} />
     </div>
   )
 }

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios';
 import Swal from 'sweetalert2';
+import { formatNumberInput } from '../../util/formatUtil';
 
 export default function Topup() {
   const validExtensions = ['jpg', 'jpeg', 'png'];
@@ -9,10 +10,6 @@ export default function Topup() {
   const defaultPrompayImg = "https://www.thaiichr.org/wp-content/uploads/2022/11/%E0%B8%9E%E0%B8%A3%E0%B9%89%E0%B8%AD%E0%B8%A1%E0%B9%80%E0%B8%9E%E0%B8%A2%E0%B9%8C-1.png";
   const [topupAmount, setTopupAmount] = useState('');
   const [qrPromtpayImgSrc, setqrPromtpayImgSrc] = useState(defaultPrompayImg);
-
-  const formatTopup = (number) => {
-    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-  };
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -113,7 +110,7 @@ export default function Topup() {
           <div className="card-body">
             <h2 className="card-title">กรอกจํานวนเงิน (บาท)</h2>
             <div>
-              <input type="text" placeholder="Type here" className="input input-bordered input-accent w-full" value={formatTopup(topupAmount)} onChange={(e) => amountFormHandler(e)} />
+              <input type="text" placeholder="Type here" className="input input-bordered input-accent w-full" value={formatNumberInput(topupAmount)} onChange={(e) => amountFormHandler(e)} />
               <button className="btn bg-blue-500 w-2/4 mt-2" onClick={handleGenQrpromtpay}>Generate QR Code</button>
               <p className='text-red-500 mt-2'>*ยอดขั้นตํ่า : 100 THB</p>
               <div className="card-actions justify-around mt-2">

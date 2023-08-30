@@ -2,8 +2,6 @@ import React from 'react'
 
 export default function CheckProducts() {
   return (
-    <div>
-      CheckProducts
-    </div>
+    <div>CheckProducts44</div>
   )
 }

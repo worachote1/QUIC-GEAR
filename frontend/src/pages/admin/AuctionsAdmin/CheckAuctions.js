@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { testAuctionsData, testImgSrc } from '../../constant/testDataForAdmin';
-import AdminPagination from './AdminPagination';
+import { testAuctionsData, testImgSrc } from '../../../constant/testDataForAdmin';
+import AdminPagination from '../AdminPagination';
 
 export default function CheckAuctions() {
 
@@ -83,7 +83,7 @@ export default function CheckAuctions() {
               </td> */}
               <td class="px-6 py-4">
                 {
-                  (item["auctionStatus"] === "completed") ? <button className="btn btn-outline btn-success">Completed</button>
+                  (item["auctionStatus"] === "completed") ? <div> <button className="btn btn-outline btn-success">Completed</button> <a className="link link-info ml-2">link to auction</a> </div>
                     : (item["auctionStatus"] === "waiting approved") ? <div className=''> <button className="btn btn-outline btn-primary">Waiting for approval</button> <a className="link link-info ml-2">detail</a> </div>
                       : <div> <button className="btn btn-outline btn-warning">In progress</button> <a className="link link-info ml-2">link to auction</a> </div>
                 }
