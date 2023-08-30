@@ -39,12 +39,12 @@ export default function CheckAuctions() {
             <th scope="col" class="px-6 py-3">
               Create At
             </th>
-            <th scope="col" class="px-6 py-3">
+            {/* <th scope="col" class="px-6 py-3">
               Start date
             </th>
             <th scope="col" class="px-6 py-3">
               End date
-            </th>
+            </th> */}
             <th scope="col" class="px-6 py-3">
               Status
             </th>
@@ -75,16 +75,18 @@ export default function CheckAuctions() {
               <td class="px-6 py-4">
                 {item["createAt"]}
               </td>
-              <td class="px-6 py-4">
+              {/* <td class="px-6 py-4">
                 {item["start_auction_date"]}
               </td>
               <td class="px-6 py-4">
                 {item["end_auction_date"]}
-              </td>
+              </td> */}
               <td class="px-6 py-4">
-                {(item["auctionStatus"] === "completed") ? <button className="btn btn-outline btn-success">Completed</button>
-                  : (item["auctionStatus"] === "waiting approved") ? <div className='flex flex-col'> <button className="btn btn-outline btn-primary">Waiting </button> <a className="link link-info mt-2">approve</a> </div>
-                    : <div className='flex flex-col'> <button className="btn btn-outline btn-warning">In progress</button> <a className="link link-info mt-2">link to auction</a> </div>}
+                {
+                  (item["auctionStatus"] === "completed") ? <button className="btn btn-outline btn-success">Completed</button>
+                    : (item["auctionStatus"] === "waiting approved") ? <div className=''> <button className="btn btn-outline btn-primary">Waiting for approval</button> <a className="link link-info ml-2">detail</a> </div>
+                      : <div> <button className="btn btn-outline btn-warning">In progress</button> <a className="link link-info ml-2">link to auction</a> </div>
+                }
               </td>
             </tr>
           ))}
