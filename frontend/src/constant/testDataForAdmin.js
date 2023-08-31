@@ -456,7 +456,7 @@ export const testProductData = [
     "price" : 4950,
     "stock" : 57,
     "brand" : "Logitech" , 
-    "type" : "Headset", 
+    "type" : "Headphone", 
     "isWireless" : "", 
     "isRGB" : "", 
     "imgPath" : "" , 
