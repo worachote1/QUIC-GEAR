@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react';
 import Sidebar from '../components/Sidebar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft, faChevronRight, faDotCircle } from '@fortawesome/free-solid-svg-icons';
+import HotProductCard from '../components/HotProductCard';
+import NewProductCard from '../components/NewProductCard';
+import { productData } from '../constant/productData';
 
 export default function Home() {
   const slides = [
@@ -24,6 +27,25 @@ export default function Home() {
   ];
 
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [selectedCategory, setSelectedCategory] = useState("bestSelling");
+
+  const handleCategoryChange = (category) => {
+    setSelectedCategory(category);
+  };
+
+  const filterProducts = () => {
+    if (selectedCategory === "bestSelling") {
+      return productData
+        .sort((a, b) => b.product.totalOrders - a.product.totalOrders)
+        .slice(0, 10);
+    } else if (selectedCategory === "newArrivals") {
+      return productData
+        .sort((a, b) => new Date(b.product.createAt) - new Date(a.product.createAt))
+        .slice(0, 10);
+    }
+  };
+
+  const ProductCardComponent = selectedCategory === "bestSelling" ? HotProductCard : NewProductCard;
 
   const prevSlide = () => {
     const isFirstSlide = currentIndex === 0;
@@ -35,10 +57,6 @@ export default function Home() {
     const isLastSlide = currentIndex === slides.length - 1;
     const newIndex = isLastSlide ? 0 : currentIndex + 1;
     setCurrentIndex(newIndex);
-  };
-
-  const goToSlide = (slideIndex) => {
-    setCurrentIndex(slideIndex);
   };
 
   useEffect(() => {
@@ -75,11 +93,20 @@ export default function Home() {
           </div>
         </div>
 
+        {/* Category Cards */}
         <div className='hidden md:flex justify-center flex-row md:items-center md:mt-[-30px]'>
-          <div className='bg-gray-200 w-full max-w-[350px] h-[100px] rounded-md p-4 my-2 mx-5 flex items-center justify-center hover:bg-red-700/40 shadow-md transition duration-300'>
+          <div
+            className={`bg-gray-200 w-full max-w-[350px] h-[100px] rounded-md p-4 my-2 mx-5 flex items-center justify-center hover:bg-red-700/40 shadow-md transition duration-300 ${selectedCategory === "bestSelling" ? "bg-red-700/40 cursor-pointer" : "cursor-pointer"
+              }`}
+            onClick={() => handleCategoryChange("bestSelling")}
+          >
             <p className='text-2xl font-semibold mb-2 md:text-left'>สินค้าขายดี</p>
           </div>
-          <div className='bg-gray-200 w-full max-w-[350px] h-[100px] rounded-md p-4 my-2 mx-5 flex items-center justify-center hover:bg-red-700/40 shadow-md transition duration-300'>
+          <div
+            className={`bg-gray-200 w-full max-w-[350px] h-[100px] rounded-md p-4 my-2 mx-5 flex items-center justify-center hover:bg-red-700/40 shadow-md transition duration-300 ${selectedCategory === "newArrivals" ? "bg-red-700/40 cursor-pointer" : "cursor-pointer"
+              }`}
+            onClick={() => handleCategoryChange("newArrivals")}
+          >
             <p className='text-2xl font-semibold mb-2 md:text-left'>สินค้าใหม่</p>
           </div>
           <div className='bg-gray-200 w-full max-w-[350px] h-[100px] rounded-md p-4 my-2 mx-5 flex items-center justify-center hover:bg-red-700/40 shadow-md transition duration-300'>
@@ -91,157 +118,9 @@ export default function Home() {
         {/* Product Card */}
         <div className='md:flex justify-center items-center mt-8'>
           <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-2'>
-            {/* Product Card 1 */}
-            <div className='bg-white lg:w-[210px] md:w-[210px] w-[170px] rounded-md p-4 my-2 mx-2 md:mx-4 lg:mx-4 relative shadow-md transition duration-300'>
-              <div className='relative'>
-                <img src='https://mercular.s3.ap-southeast-1.amazonaws.com/images/products/2021/01/logitech-g-pro-x-superlight-wireless-gaming-mouse-white-icon.jpg' alt='Product 1' className='w-full h-[200px] object-cover mb-2' />
-
-                {/* Hot Badge */}
-                <div className='bg-red-500 text-white absolute top-0 left-0 mt-1 ml-2 px-2 py-1 rounded-full text-xs text-center'>
-                  สินค้าขายดี
-                </div>
-              </div>
-              <p className='text-xl font-semibold mb-1'>G Pro X Superlight</p>
-              <p className='text-lg font-medium mb-1'>4,990 บาท</p>
-
-              <div className='flex items-center'>
-                <div className='text-yellow-400 mr-1'>
-                  ★★★★☆
-                </div>
-                <p className='text-sm text-gray-500'>(245)</p>
-              </div>
-              <button className='mt-3 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-300'>
-                View Details
-              </button>
-            </div>
-
-            {/* Product Card 1 2row */}
-            <div className='bg-white lg:w-[210px] md:w-[210px] w-[170px] rounded-md p-4 my-2 mx-2 md:mx-4 lg:mx-4 relative shadow-md transition duration-300'>
-              <div className='relative'>
-                <img src='https://mercular.s3.ap-southeast-1.amazonaws.com/images/products/2021/01/logitech-g-pro-x-superlight-wireless-gaming-mouse-white-icon.jpg' alt='Product 1' className='w-full h-[200px] object-cover mb-2' />
-
-                {/* Hot Badge */}
-                <div className='bg-red-500 text-white absolute top-0 left-0 mt-1 ml-2 px-2 py-1 rounded-full text-xs text-center'>
-                  สินค้าขายดี
-                </div>
-              </div>
-              <p className='text-xl font-semibold mb-1'>G Pro X Superlight</p>
-              <p className='text-lg font-medium mb-1'>4,990 บาท</p>
-
-              <div className='flex items-center'>
-                <div className='text-yellow-400 mr-1'>
-                  ★★★★☆
-                </div>
-                <p className='text-sm text-gray-500'>(245)</p>
-              </div>
-              <button className='mt-3 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-300'>
-                View Details
-              </button>
-            </div>
-
-
-            {/* Product Card 2 */}
-            <div className='bg-white lg:w-[210px] md:w-[210px] w-[170px] rounded-md p-4 my-2 mx-2 md:mx-4 lg:mx-4 relative shadow-md transition duration-300'>
-              <div className='relative'>
-                <img src='https://mercular.s3.ap-southeast-1.amazonaws.com/images/products/2021/01/logitech-g-pro-x-superlight-wireless-gaming-mouse-white-icon.jpg' alt='Product 1' className='w-full h-[200px] object-cover mb-2' />
-
-                {/* Hot Badge */}
-                <div className='bg-red-500 text-white absolute top-0 left-0 mt-1 ml-2 px-2 py-1 rounded-full text-xs text-center'>
-                  สินค้าขายดี
-                </div>
-              </div>
-              <p className='text-xl font-semibold mb-1'>G Pro X Superlight</p>
-              <p className='text-lg font-medium mb-1'>4,990 บาท</p>
-
-              <div className='flex items-center'>
-                <div className='text-yellow-400 mr-1'>
-                  ★★★★☆
-                </div>
-                <p className='text-sm text-gray-500'>(245)</p>
-              </div>
-              <button className='mt-3 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-300'>
-                View Details
-              </button>
-            </div>
-
-
-
-            {/* Product Card 3 */}
-            <div className='bg-white lg:w-[210px] md:w-[210px] w-[170px] rounded-md p-4 my-2 mx-2 md:mx-4 lg:mx-4 relative shadow-md transition duration-300'>
-              <div className='relative'>
-                <img src='https://mercular.s3.ap-southeast-1.amazonaws.com/images/products/2021/01/logitech-g-pro-x-superlight-wireless-gaming-mouse-white-icon.jpg' alt='Product 1' className='w-full h-[200px] object-cover mb-2' />
-
-                {/* Hot Badge */}
-                <div className='bg-red-500 text-white absolute top-0 left-0 mt-1 ml-2 px-2 py-1 rounded-full text-xs text-center'>
-                  สินค้าขายดี
-                </div>
-              </div>
-              <p className='text-xl font-semibold mb-1'>G Pro X Superlight</p>
-              <p className='text-lg font-medium mb-1'>4,990 บาท</p>
-
-              <div className='flex items-center'>
-                <div className='text-yellow-400 mr-1'>
-                  ★★★★☆
-                </div>
-                <p className='text-sm text-gray-500'>(245)</p>
-              </div>
-              <button className='mt-3 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-300'>
-                View Details
-              </button>
-            </div>
-
-
-
-            {/* Product Card 4 */}
-            <div className='bg-white lg:w-[210px] md:w-[210px] w-[170px] rounded-md p-4 my-2 mx-2 md:mx-4 lg:mx-4 relative shadow-md transition duration-300'>
-              <div className='relative'>
-                <img src='https://mercular.s3.ap-southeast-1.amazonaws.com/images/products/2021/01/logitech-g-pro-x-superlight-wireless-gaming-mouse-white-icon.jpg' alt='Product 1' className='w-full h-[200px] object-cover mb-2' />
-
-                {/* Hot Badge */}
-                <div className='bg-red-500 text-white absolute top-0 left-0 mt-1 ml-2 px-2 py-1 rounded-full text-xs text-center'>
-                  สินค้าขายดี
-                </div>
-              </div>
-              <p className='text-xl font-semibold mb-1'>G Pro X Superlight</p>
-              <p className='text-lg font-medium mb-1'>4,990 บาท</p>
-
-              <div className='flex items-center'>
-                <div className='text-yellow-400 mr-1'>
-                  ★★★★☆
-                </div>
-                <p className='text-sm text-gray-500'>(245)</p>
-              </div>
-              <button className='mt-3 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-300'>
-                View Details
-              </button>
-            </div>
-
-
-
-            {/* Product Card 5 */}
-            <div className='bg-white lg:w-[210px] md:w-[210px] w-[170px] rounded-md p-4 my-2 mx-2 md:mx-4 lg:mx-4 relative shadow-md transition duration-300'>
-              <div className='relative'>
-                <img src='https://mercular.s3.ap-southeast-1.amazonaws.com/images/products/2021/01/logitech-g-pro-x-superlight-wireless-gaming-mouse-white-icon.jpg' alt='Product 1' className='w-full h-[200px] object-cover mb-2' />
-
-                {/* Hot Badge */}
-                <div className='bg-red-500 text-white absolute top-0 left-0 mt-1 ml-2 px-2 py-1 rounded-full text-xs text-center'>
-                  สินค้าขายดี
-                </div>
-              </div>
-              <p className='text-xl font-semibold mb-1'>G Pro X Superlight</p>
-              <p className='text-lg font-medium mb-1'>4,990 บาท</p>
-
-              <div className='flex items-center'>
-                <div className='text-yellow-400 mr-1'>
-                  ★★★★☆
-                </div>
-                <p className='text-sm text-gray-500'>(245)</p>
-              </div>
-              <button className='mt-3 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-300'>
-                View Details
-              </button>
-            </div>
-
+            {filterProducts().map((product) => (
+              <ProductCardComponent key={product.id} product={product.product} />
+            ))}
           </div>
         </div>
       </div>
