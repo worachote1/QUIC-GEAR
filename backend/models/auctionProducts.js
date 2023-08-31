@@ -54,6 +54,10 @@ const auctionProductSchema = new mongoose.Schema({
             imgPath: {
                 type: String,
                 required: true
+            },
+            subType: {
+                type: String,
+                required: true
             }
         }
     ],
