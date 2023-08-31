@@ -42,13 +42,17 @@ const productSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    totalOrder: {
+    totalProductOrder: {
         type: Number,
         required: true
     },
     createdAt: {
         type: Date,
         default: Date.now
+    },
+    subType: {
+        type: String,
+        required: true
     }
 });
 
