@@ -10,15 +10,17 @@ import Auction from "./pages/Auction";
 import Product from "./pages/Product";
 
 import Admin from "./pages/admin/Admin";
-import CheckAuctions from "./pages/admin/AuctionsAdmin/CheckAuctions";
-import DetailAuction from "./pages/admin/AuctionsAdmin/DetailAuction";
-import CheckOrders from "./pages/admin/OrdersAdmin/CheckOrders";
-import DetailOrder from "./pages/admin/OrdersAdmin/DetailOrder";
-import CheckTransactions from "./pages/admin/TransactionsAdmin/CheckTransactions";
-import DetailTransaction from "./pages/admin/TransactionsAdmin/DetailTransaction";
-import CheckProducts from "./pages/admin/ProductsAdmin/CheckProducts";
-import CheckUsers from "./pages/admin/UsersAdmin/CheckUsers";
-import CreateProducts from "./pages/admin/ProductsAdmin/CreateProducts";
+import CheckAuctions from "./pages/admin/auctionsAdmin/CheckAuctions";
+import DetailAuction from "./pages/admin/auctionsAdmin/DetailAuction";
+import CheckOrders from "./pages/admin/ordersAdmin/CheckOrders";
+import DetailOrder from "./pages/admin/ordersAdmin/DetailOrder";
+import CheckTransactions from "./pages/admin/transactionsAdmin/CheckTransactions";
+import CheckProducts from "./pages/admin/productsAdmin/CheckProducts";
+import CheckUsers from "./pages/admin/usersAdmin/CheckUsers";
+import CreateProducts from "./pages/admin/productsAdmin/CreateProducts";
+import UpdateProducts from "./pages/admin/productsAdmin/UpdateProducts";
+
+import NotFound from "./util/not_found/NotFound";
 
 function App() {
   return (
@@ -43,10 +45,12 @@ function App() {
           <Route path='/admin/check_orders' element={<CheckOrders />} />
           <Route path='/admin/check_orders/:id' element={<DetailOrder />} />
           <Route path='/admin/check_transactions' element={<CheckTransactions />} />
-          <Route path='/admin/check_transactions/:id' element={<DetailTransaction />} />
           <Route path='/admin/check_products' element={<CheckProducts />} />
           <Route path='/admin/create_products' element={<CreateProducts />} />
+          <Route path='/admin/update_products/:id' element={<UpdateProducts/>} />
           <Route path='/admin/check_users' element={<CheckUsers />} />
+
+          <Route path="*" element={<NotFound />} />
         </Routes>
         <Footer />
       </BrowserRouter>

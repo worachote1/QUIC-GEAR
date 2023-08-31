@@ -1,6 +1,7 @@
 import React, { useState ,useEffect } from 'react';
 import { testUserData, testImgSrc } from '../../../constant/testDataForAdmin';
 import { formatNumberInput } from '../../../util/formatUtil';
+import { Link, useNavigate } from 'react-router-dom';
 import AdminPagination from '../AdminPagination';
 
 export default function CheckUsers() {

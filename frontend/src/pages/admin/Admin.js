@@ -1,18 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { AiFillCaretDown } from 'react-icons/ai';
-import CheckAuctions from './AuctionsAdmin/CheckAuctions';
-import CheckOrders from './OrdersAdmin/CheckOrders';
-import CheckTransactions from './TransactionsAdmin/CheckTransactions';
-import CheckUsers from './UsersAdmin/CheckUsers';
-import CreateProducts from './ProductsAdmin/CreateProducts';
+import CheckAuctions from './auctionsAdmin/CheckAuctions';
+import CheckOrders from './ordersAdmin/CheckOrders';
+import CheckTransactions from './transactionsAdmin/CheckTransactions';
+import CheckUsers from './usersAdmin/CheckUsers';
+import CreateProducts from './productsAdmin/CreateProducts';
+import CheckProducts from './productsAdmin/CheckProducts';
 
 export default function Admin() {
-  const adminTaskType = ["Auctions", "Orders", "Transactions", "Users", "Create Products"]
+  const adminTaskType = ["Auctions", "Orders", "Transactions", "Users", "Products", "Create Products"]
   const taskBGColor = {
     "Auctions": "bg-red-500",
     "Orders": "bg-orange-500",
     "Transactions": "bg-green-500",
     "Users": "bg-blue-500",
+    "Products": "bg-pink-500",
     "Create Products": "bg-yellow-500"
   }
   const testImgSrc = "https://lh3.googleusercontent.com/ogw/AGvuzYZRQF_a0tm1dHizZsXzhHZAkHUTosYtX7fd0AOoyQ=s32-c-mo";
@@ -36,6 +38,9 @@ export default function Admin() {
         break;
       case "Users":
         setSelectedTasktCompoent(<CheckUsers />);
+        break;
+      case "Products":
+        setSelectedTasktCompoent(<CheckProducts />);
         break;
       case "Create Products":
         setSelectedTasktCompoent(<CreateProducts />);

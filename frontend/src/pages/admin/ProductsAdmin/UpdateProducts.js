@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
-import { brand, type, subType } from '../../../constant/productConstants';
+import { brand, type } from '../../../constant/productConstants';
 import { formatNumberInput } from '../../../util/formatUtil';
 import Swal from 'sweetalert2';
 
-export default function CreateProducts() {
+export default function UpdateProducts() {
   const checkEmptyREGEX = /^\s*$/gm;
   const checkDigitREGEX = /^\d+$/;
-  const [product, setProduct] = useState({
-    name: "", price: "", stock: "", brand: brand[0], type: type[0], subType : subType[type[0]][0],isWired: "", isRGB: "", description: "", imgPath: ""
-  });
+  // test
+  const [product, setProduct] = useState({});
 
   const alertFormError = (err_msg) => {
     Swal.fire({
@@ -19,7 +18,7 @@ export default function CreateProducts() {
 
   const onChangeInput = (e) => {
     const { name, value } = e.target;
-    setProduct({ ...product, [name]: value })
+    setProduct({[name] : value })
   }
 
   const handleFileChange = (e) => {
@@ -52,8 +51,8 @@ export default function CreateProducts() {
     if (checkFormError)
       alertFormError(checkFormError);
     else {
-      // POST api to create product later
-      console.log("create product success")
+      // PUT api to update product later
+      console.log("update product success")
     }
     console.log(product)
   }
@@ -81,17 +80,17 @@ export default function CreateProducts() {
             <div>
               <label className="block mb-1 font-bold text-gray-500">Product Name</label>
               <input type="name" className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-300" name='name'
-                onChange={onChangeInput} />
+                onChange={onChangeInput} value={product.name}/>
             </div>
             <div className='mt-2'>
               <label className="block mb-1 font-bold text-gray-500">Price</label>
               <input name="price" className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-300"
-                onChange={onChangeInput} />
+                onChange={onChangeInput} value={product.price}/>
             </div>
             <div className='mt-2'>
               <label className="block mb-1 font-bold text-gray-500">Stock</label>
               <input name="stock" className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-300"
-                onChange={onChangeInput} />
+                onChange={onChangeInput} value={product.stock}/>
             </div>
             {/* Select input */}
             <div className='mt-2'>
@@ -116,19 +115,6 @@ export default function CreateProducts() {
                 onChange={onChangeInput}
               >
                 {type.map((item, Idx) => {
-                  return <option value={item}>{item}</option>
-                })}
-              </select>
-            </div>
-            <div className='mt-2'>
-              <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select Subtype</label>
-              <select class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600
-               dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500
-               overflow-y-auto max-h-44"
-                name='subType'
-                onChange={onChangeInput}
-              >
-                {subType[product.type].map((item, Idx) => {
                   return <option value={item}>{item}</option>
                 })}
               </select>

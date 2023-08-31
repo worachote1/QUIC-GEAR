@@ -440,6 +440,165 @@ export const testOrderData = [
   },
 ]
 
+export const testProductData = [
+  {
+    "id" : 1,
+    "name" : "Razer deathAdder",
+    "price" : 1390,
+    "stock" : 58,
+    "brand" : "Razer" , 
+    "type" : "Mouse",
+    "isWireless" : "", 
+    "isRGB" : "", 
+    "imgPath" : "" , 
+    "description" : "test description",
+    "createAt": new Date().toLocaleString()
+  },
+  {
+    "id" : 2,
+    "name" : "SteelSeries Sensei Ten Gaming Mouse",
+    "price" : 2000,
+    "stock" : 44,
+    "brand" : "SteelSeries", 
+    "type" : "Mouse", 
+    "isWireless" : "", 
+    "isRGB" : "", 
+    "imgPath" : "" , 
+    "description" : "test description",
+    "createAt": new Date().toLocaleString()
+  },
+  {
+    "id" : 3,
+    "name" : "หูฟัง SteelSeries Arctis 9 Wireless Headphone",
+    "price" : 4950,
+    "stock" : 57,
+    "brand" : "SteelSeries" , 
+    "type" : "Headset", 
+    "isWireless" : "", 
+    "isRGB" : "", 
+    "imgPath" : "" , 
+    "description" : "test description",
+    "createAt": new Date().toLocaleString()
+  },
+  {
+    "id" : 4,
+    "name" : "หูฟัง Logitech G733 Lightspeed Gaming Headphone",
+    "price" : 4950,
+    "stock" : 57,
+    "brand" : "Logitech" , 
+    "type" : "Headset", 
+    "isWireless" : "", 
+    "isRGB" : "", 
+    "imgPath" : "" , 
+    "description" : "test description",
+    "createAt": new Date().toLocaleString()
+  },
+  {
+    "id" : 5,
+    "name" : "คีย์บอร์ดไร้สาย Keychron K2 V.2 Wireless Hotswap Mechanical Keyboard TH",
+    "price" : 6500,
+    "stock" : 15,
+    "brand" : "Keychron" , 
+    "type" : "Keyboard", 
+    "isWireless" : "", 
+    "isRGB" : "", 
+    "imgPath" : "" , 
+    "description" : "test description",
+    "createAt": new Date().toLocaleString()
+  },
+  {
+    "id" : 6,
+    "name" : "คีย์บอร์ด HyperX Alloy Origins Core PBT Gaming Keyboard (EN/TH)",
+    "price" : 3500,
+    "stock" : 20,
+    "brand" : "HyperX" , 
+    "type" : "Keyboard", 
+    "isWireless" : "", 
+    "isRGB" : "", 
+    "imgPath" : "" , 
+    "description" : "test description",
+    "createAt": new Date().toLocaleString()
+  },
+  {
+    "id" : 7,
+    "name" : "คีย์บอร์ด Razer BlackWidow V3 TKL Optical Mechanical Gaming Keyboard",
+    "price" : 3790,
+    "stock" : 27,
+    "brand" : "Razer" , 
+    "type" : "Keyboard", 
+    "isWireless" : "", 
+    "isRGB" : "", 
+    "imgPath" : "" , 
+    "description" : "test description",
+    "createAt": new Date().toLocaleString()
+  },
+  {
+    "id" : 8,
+    "name" : "คีย์บอร์ด Razer Huntsman V2: BATTLEGROUNDS Edition Gaming Keyboard (EN)",
+    "price" : 7790,
+    "stock" : 120,
+    "brand" : "Razer" , 
+    "type" : "Keyboard", 
+    "isWireless" : "", 
+    "isRGB" : "", 
+    "imgPath" : "" , 
+    "description" : "test description",
+    "createAt": new Date().toLocaleString()
+  },
+  {
+    "id" : 9,
+    "name" : "เก้าอี้เกมมิ่ง Nubwo CH-007 Gaming Chair",
+    "price" : 3790,
+    "stock" : 27,
+    "brand" : "Nubwo" , 
+    "type" : "Table&Chair", 
+    "isWireless" : "", 
+    "isRGB" : "", 
+    "imgPath" : "" , 
+    "description" : "test description",
+    "createAt": new Date().toLocaleString()
+  },
+  {
+    "id" : 10,
+    "name" : "โต๊ะเล่นเกม Nubwo ND-600S Gaming Desk",
+    "price" : 3200,
+    "stock" : 147,
+    "brand" : "Nubwo" , 
+    "type" : "Table&Chair", 
+    "isWireless" : "", 
+    "isRGB" : "", 
+    "imgPath" : "" , 
+    "description" : "test description",
+    "createAt": new Date().toLocaleString()
+  },
+  {
+    "id" : 11,
+    "name" : "เก้าอี้เกมมิ่ง Neolution E-Sport Pastel Gaming Chair",
+    "price" : 4400,
+    "stock" : 200,
+    "brand" : "Neolution E-sport" , 
+    "type" : "Table&Chair", 
+    "isWireless" : "", 
+    "isRGB" : "", 
+    "imgPath" : "" , 
+    "description" : "test description",
+    "createAt": new Date().toLocaleString()
+  },
+  {
+    "id" : 12,
+    "name" : "โต๊ะเกมมิ่ง Neolution E-Sport Mantle Gaming Desk",
+    "price" : 2500,
+    "stock" : 227,
+    "brand" : "Neolution E-sport" , 
+    "type" : "Table&Chair", 
+    "isWireless" : "", 
+    "isRGB" : "", 
+    "imgPath" : "" , 
+    "description" : "test description",
+    "createAt": new Date().toLocaleString()
+  }
+]
+
 export const testAuctionsData = [
   {
     "id" : 1,

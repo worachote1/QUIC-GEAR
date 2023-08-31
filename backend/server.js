@@ -12,11 +12,11 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.post('/genPromtpayQR',(req,res) => {
     const amount = parseFloat(req.body.amount);
-    const mobileNumber = '0942541545';
+    const mobileNumber = process.env.PROMTPAY_NUMBER;
     const payload = generatePayload(mobileNumber , { amount });
     const option = {
         color : {
-            dark : '#000',
+            dark : '#000', 
             light : '#fff'
         }
     }; 
@@ -28,9 +28,9 @@ app.post('/genPromtpayQR',(req,res) => {
             })
         }
         return res.status(200).json({
-            msg : "gen promtpayQR success !!",
+            msg : "gen promtpayQR success !",
             res_url : url
-        })
+        }) 
     })
 })
 
@@ -38,3 +38,4 @@ app.listen(process.env.PORT, () => {
     console.log(`server's running on port ${process.env.PORT}`);
 })
 
+ 

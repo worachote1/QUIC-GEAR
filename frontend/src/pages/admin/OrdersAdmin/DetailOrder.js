@@ -2,6 +2,6 @@ import React from 'react'
 
 export default function DetailOrder() {
   return (
-    <div>DetailOrder</div>
+    <div>รอ reuse code จาก หน้า cart</div>
   )
 }

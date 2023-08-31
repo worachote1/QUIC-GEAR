@@ -10,7 +10,7 @@ export default function Topup() {
   const defaultPrompayImg = "https://www.thaiichr.org/wp-content/uploads/2022/11/%E0%B8%9E%E0%B8%A3%E0%B9%89%E0%B8%AD%E0%B8%A1%E0%B9%80%E0%B8%9E%E0%B8%A2%E0%B9%8C-1.png";
   const [topupAmount, setTopupAmount] = useState('');
   const [qrPromtpayImgSrc, setqrPromtpayImgSrc] = useState(defaultPrompayImg);
-
+  console.log(process.env.REACT_APP_QUIC_GEAR_API)
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     setSelectedFile(file);
@@ -69,7 +69,7 @@ export default function Topup() {
       alertTopupInvalid("invalid_amount");
     }
     else {
-      axios.post('http://localhost:5000/genPromtpayQR', {
+      axios.post(`${process.env.REACT_APP_QUIC_GEAR_API}/genPromtpayQR`, {
         amount: parseFloat(topupAmount)
       })
         .then(function (response) {

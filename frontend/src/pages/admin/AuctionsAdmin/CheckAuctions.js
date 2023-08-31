@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { testAuctionsData, testImgSrc } from '../../../constant/testDataForAdmin';
+import { Link, useNavigate } from 'react-router-dom';
 import AdminPagination from '../AdminPagination';
 
 export default function CheckAuctions() {
@@ -39,12 +40,6 @@ export default function CheckAuctions() {
             <th scope="col" class="px-6 py-3">
               Create At
             </th>
-            {/* <th scope="col" class="px-6 py-3">
-              Start date
-            </th>
-            <th scope="col" class="px-6 py-3">
-              End date
-            </th> */}
             <th scope="col" class="px-6 py-3">
               Status
             </th>
@@ -75,16 +70,10 @@ export default function CheckAuctions() {
               <td class="px-6 py-4">
                 {item["createAt"]}
               </td>
-              {/* <td class="px-6 py-4">
-                {item["start_auction_date"]}
-              </td>
-              <td class="px-6 py-4">
-                {item["end_auction_date"]}
-              </td> */}
               <td class="px-6 py-4">
                 {
-                  (item["auctionStatus"] === "completed") ? <div> <button className="btn btn-outline btn-success">Completed</button> <a className="link link-info ml-2">link to auction</a> </div>
-                    : (item["auctionStatus"] === "waiting approved") ? <div className=''> <button className="btn btn-outline btn-primary">Waiting for approval</button> <a className="link link-info ml-2">detail</a> </div>
+                  (item["auctionStatus"] === "completed") ? <div> <button className="btn btn-outline btn-success">Completed</button></div>
+                    : (item["auctionStatus"] === "waiting approved") ? <div className=''> <button className="btn btn-outline btn-primary">Waiting for approval</button> <Link to={`/admin/check_auctions/${item["id"]}`}><a className="link link-info ml-2">detail</a> </Link>  </div>
                       : <div> <button className="btn btn-outline btn-warning">In progress</button> <a className="link link-info ml-2">link to auction</a> </div>
                 }
               </td>
