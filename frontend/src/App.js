@@ -10,15 +10,15 @@ import Auction from "./pages/Auction";
 import Product from "./pages/Product";
 
 import Admin from "./pages/admin/Admin";
-import CheckAuctions from "./pages/admin/auctionsAdmin/CheckAuctions";
-import DetailAuction from "./pages/admin/auctionsAdmin/DetailAuction";
-import CheckOrders from "./pages/admin/ordersAdmin/CheckOrders";
-import DetailOrder from "./pages/admin/ordersAdmin/DetailOrder";
-import CheckTransactions from "./pages/admin/transactionsAdmin/CheckTransactions";
-import CheckProducts from "./pages/admin/productsAdmin/CheckProducts";
-import CheckUsers from "./pages/admin/usersAdmin/CheckUsers";
-import CreateProducts from "./pages/admin/productsAdmin/CreateProducts";
-import UpdateProducts from "./pages/admin/productsAdmin/UpdateProducts";
+import CheckAuctions from "./pages/admin/AuctionsAdmin/CheckAuctions";
+import DetailAuction from "./pages/admin/AuctionsAdmin/DetailAuction";
+import CheckOrders from "./pages/admin/OrdersAdmin/CheckOrders";
+import DetailOrder from "./pages/admin/OrdersAdmin/DetailOrder";
+import CheckTransactions from "./pages/admin/TransactionsAdmin/CheckTransactions";
+import CheckProducts from "./pages/admin/ProductsAdmin/CheckProducts";
+import CheckUsers from "./pages/admin/UsersAdmin/CheckUsers";
+import CreateProducts from "./pages/admin/ProductsAdmin/CreateProducts";
+import UpdateProducts from "./pages/admin/ProductsAdmin/UpdateProducts";
 
 import NotFound from "./util/not_found/NotFound";
 

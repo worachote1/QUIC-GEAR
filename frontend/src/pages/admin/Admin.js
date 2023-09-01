@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { AiFillCaretDown } from 'react-icons/ai';
-import CheckAuctions from './auctionsAdmin/CheckAuctions';
-import CheckOrders from './ordersAdmin/CheckOrders';
-import CheckTransactions from './transactionsAdmin/CheckTransactions';
-import CheckUsers from './usersAdmin/CheckUsers';
-import CreateProducts from './productsAdmin/CreateProducts';
-import CheckProducts from './productsAdmin/CheckProducts';
+import CheckAuctions from './AuctionsAdmin/CheckAuctions';
+import CheckOrders from './OrdersAdmin/CheckOrders';
+import CheckTransactions from './TransactionsAdmin/CheckTransactions';
+import CheckUsers from './UsersAdmin/CheckUsers';
+import CreateProducts from './ProductsAdmin/CreateProducts';
+import CheckProducts from './ProductsAdmin/CheckProducts';
 
 export default function Admin() {
   const adminTaskType = ["Auctions", "Orders", "Transactions", "Users", "Products", "Create Products"]
@@ -45,7 +45,7 @@ export default function Admin() {
       case "Create Products":
         setSelectedTasktCompoent(<CreateProducts />);
         break;
-    }
+    } 
   }
 
   useEffect(() => {

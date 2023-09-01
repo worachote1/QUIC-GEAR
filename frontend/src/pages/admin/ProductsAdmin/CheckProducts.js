@@ -16,7 +16,7 @@ export default function CheckProducts() {
     const lastRowIndexPage = currentPage * dataRowPerPage;
     const firstRowIndexPage = lastRowIndexPage - dataRowPerPage;
     const resDataPage = testProductData.slice(firstRowIndexPage, lastRowIndexPage);
-    const [filteredProducts, setFilteredProducts] = useState(resDataPage);
+    const [filteredProducts, setFilteredProducts] = useState([]);
 
     //for filter
     const [selectedBrands, setSelectedBrands] = useState([]);
@@ -54,9 +54,9 @@ export default function CheckProducts() {
         // DELETE api to remove later
     }
 
-    // prn paggination + filter solve
+    // prn paggination + filter solve 
     useEffect(() => {
-        setProductData(filteredProducts.length > 0 ? filteredProducts : resDataPage);
+        setProductData(filteredProducts.length > 0 ? filteredProducts.slice(firstRowIndexPage, lastRowIndexPage) : resDataPage);
       }, [filteredProducts, currentPage, dataRowPerPage]);
 
     return (
@@ -108,7 +108,7 @@ export default function CheckProducts() {
                         </ul>
                     </div>
                     <div>
-                    <button className="btn btn-accent" onClick={handleFilterProducts}> {<BiSearch size={20} />} </button>
+                    <button className="btn btn-accent ml-2" onClick={handleFilterProducts}> {<BiSearch size={20} />} </button>
                     </div>
                 </div>
             </div>
@@ -133,6 +133,9 @@ export default function CheckProducts() {
                         </th>
                         <th scope="col" class="px-6 py-3">
                             Stock
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Total Orders
                         </th>
                         <th scope="col" class="px-6 py-3">
                             Create At
@@ -162,6 +165,9 @@ export default function CheckProducts() {
                             </td>
                             <td class="px-6 py-2">
                                 {formatNumberInput(item["stock"])}
+                            </td>
+                            <td class="px-6 py-2">
+                                {formatNumberInput(item["totalProductOrder"])}
                             </td>
                             <td class="px-6 py-4">
                                 {item["createAt"]}

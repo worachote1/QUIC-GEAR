@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import { testOrderData , testImgSrc } from '../../../constant/testDataForAdmin';
+import { testOrderData, testImgSrc } from '../../../constant/testDataForAdmin';
 import { formatNumberInput } from '../../../util/formatUtil';
 import { Link, useNavigate } from 'react-router-dom';
+import { status } from '../../../constant/ordersConstants';
+import { AiFillCaretDown } from 'react-icons/ai';
+import { BiSearch } from 'react-icons/bi'
 import AdminPagination from '../AdminPagination';
 
 export default function CheckOrders() {
@@ -12,12 +15,63 @@ export default function CheckOrders() {
   const firstRowIndexPage = lastRowIndexPage - dataRowPerPage;
   const resDataPage = testOrderData.slice(firstRowIndexPage, lastRowIndexPage);
 
+  const [filteredOrders, setFilteredOrders] = useState([]);
+  const [selectedStatus, setSelectedStatus] = useState([]);
+
+  const handleStatusCheckboxChange = (status) => {
+    if (selectedStatus.includes(status)) {
+      setSelectedStatus(selectedStatus.filter((item) => item !== status));
+    } else {
+      setSelectedStatus([...selectedStatus, status]);
+    }
+  };
+
+  const handleFilterOrders = () => {
+    const filtered = testOrderData.filter((item) =>
+      selectedStatus.includes(item.orderStatus)
+    );
+    setFilteredOrders(filtered);
+    console.log(filtered)
+    setCurrentPage(1);
+  };
+
   useEffect(() => {
-    // Update the user data with the sliced data for the current page
-    setOrdersData(resDataPage);
-  }, [currentPage, dataRowPerPage]);
+    setOrdersData(filteredOrders.length > 0 ? filteredOrders.slice(firstRowIndexPage, lastRowIndexPage) : resDataPage);
+  }, [filteredOrders, currentPage, dataRowPerPage]);
+
   return (
-    <div>
+    <div className='mx-2 mt-1'>
+      <div className='sm:flex sm:justify-between '>
+        <div className='flex items-center'>
+          <div>
+            <h2 class="text-2xl font-semibold leading-tight">Filter : </h2>
+          </div>
+          <div className="dropdown ml-2">
+            <label tabIndex={0} className={`btn m-1 text-white bg-blue-600 `} > {'Status'} <span className='ml-1'> {<AiFillCaretDown size={20} />} </span></label>
+            <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
+              {
+                status.map((item, Idx) => {
+                  return (
+                    <li key={Idx}>
+                      <label>
+                        <input
+                          type="checkbox"
+                          // checked={selectedBrands.includes(item)}
+                          onChange={() => handleStatusCheckboxChange(item)}
+                        />
+                        {item}
+                      </label>
+                    </li>)
+                })
+              }
+
+            </ul>
+          </div>
+          <div>
+            <button className="btn btn-accent ml-2" onClick={handleFilterOrders}> {<BiSearch size={20} />} </button>
+          </div>
+        </div>
+      </div>
       <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400 mt-3">
         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
           <tr>
@@ -55,17 +109,17 @@ export default function CheckOrders() {
                 {formatNumberInput(item["totalPrice"])}
               </td>
               <td class="px-6 py-4">
-                {item["createAt"]} 
+                {item["createAt"]}
               </td>
               <td class="px-6 py-4">
-                {(item["orderStatus"] === "completed") ? <div> <button className="btn btn-outline btn-success">Complete</button> </div>
-                :<div><button className="btn btn-outline btn-warning">To Recieve</button> <a className="link link-info ml-2">update order</a> </div>}
+                {(item["orderStatus"] === "completed") ? <div> <button className="btn btn-outline btn-success">Completed</button> </div>
+                  : <div><button className="btn btn-outline btn-warning">To Recieve</button> <a className="link link-info ml-2">update order</a> </div>}
               </td>
             </tr>
           ))}
         </tbody>
       </table>
-      <AdminPagination totalDataRow={testOrderData.length} dataRowPerPage={dataRowPerPage} currentPage={currentPage} setCurrentPage={setCurrentPage} />
+      <AdminPagination totalDataRow={(!filteredOrders.length) ? testOrderData.length : filteredOrders.length} dataRowPerPage={dataRowPerPage} currentPage={currentPage} setCurrentPage={setCurrentPage} />
     </div>
   )
 }

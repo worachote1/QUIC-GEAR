@@ -5,3 +5,4 @@ export default function DetailOrder() {
     <div>รอ reuse code จาก หน้า cart</div>
   )
 }
+ 

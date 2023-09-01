@@ -54,7 +54,7 @@ export default function UpdateProducts() {
       // PUT api to update product later
       console.log("update product success")
     }
-    console.log(product)
+    console.log(product) 
   }
   return (
     <diV class=''>
