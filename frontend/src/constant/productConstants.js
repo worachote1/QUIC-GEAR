@@ -10,3 +10,5 @@ export const subType =
     "Streaming": ["Webcam", "Microphone", "Accessory"],
     "Table&Chair": ["Table", "Chair"],
 };
+
+export const productSortType = ["Newest","Oldest","Best sales","Price: Hight-Low","Price: Low-Hight"]

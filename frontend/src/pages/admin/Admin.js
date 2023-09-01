@@ -6,6 +6,7 @@ import CheckTransactions from './TransactionsAdmin/CheckTransactions';
 import CheckUsers from './UsersAdmin/CheckUsers';
 import CreateProducts from './ProductsAdmin/CreateProducts';
 import CheckProducts from './ProductsAdmin/CheckProducts';
+import { productSortType } from '../../constant/productConstants';
 
 export default function Admin() {
   const adminTaskType = ["Auctions", "Orders", "Transactions", "Users", "Products", "Create Products"]

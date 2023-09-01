@@ -51,24 +51,16 @@ export default function CheckAuctions() {
       const foundType = selectedTypes.includes(item.product.type);
       const foundStatus = selectedStatus.includes(item.auctionStatus);
       //prn logic filter : 001 -> 111
-      return  ((!foundBrand && !foundType  && foundStatus) 
-      || (!foundBrand && foundType && !foundStatus)
-      || (!foundBrand && foundType && foundStatus)
-      || (foundBrand && !foundType && !foundStatus)
-      || (foundBrand && !foundType && foundStatus)
-      || (!foundBrand && foundType && !foundStatus)
-      || foundBrand && foundType && foundStatus)
+      return ((!foundBrand && !foundType && foundStatus)
+        || (!foundBrand && foundType && !foundStatus)
+        || (!foundBrand && foundType && foundStatus)
+        || (foundBrand && !foundType && !foundStatus)
+        || (foundBrand && !foundType && foundStatus)
+        || (!foundBrand && foundType && !foundStatus)
+        || foundBrand && foundType && foundStatus)
     }
     );
-  
-
     setFilteredAuctions(filtered);
-    console.log("Brand")
-    console.log(selectedBrands)
-    console.log("Type")
-    console.log(selectedTypes)
-    console.log("Filter")
-    console.log(filtered)
     setCurrentPage(1);
   };
 

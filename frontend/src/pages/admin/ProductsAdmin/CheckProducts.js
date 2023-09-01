@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { testProductData, testImgSrc } from '../../../constant/testDataForAdmin';
-import { brand, type } from '../../../constant/productConstants';
+import { brand, type, productSortType } from '../../../constant/productConstants';
+import { sortByType } from '../../../util/adminModule/adminProduct';
 import { AiFillCaretDown } from 'react-icons/ai';
 import { BiSearch } from 'react-icons/bi'
 import AdminPagination from '../AdminPagination';
@@ -22,6 +23,8 @@ export default function CheckProducts() {
     const [selectedBrands, setSelectedBrands] = useState([]);
     const [selectedTypes, setSelectedTypes] = useState([]);
 
+    const [sortOption, setsortOption] = useState(0);
+
     const handleBrandCheckboxChange = (brand) => {
         if (selectedBrands.includes(brand)) {
             setSelectedBrands(selectedBrands.filter((item) => item !== brand));
@@ -41,7 +44,7 @@ export default function CheckProducts() {
 
     const handleFilterProducts = () => {
         const filtered = testProductData.filter((item) =>
-            (selectedBrands.includes(item.brand) && selectedTypes.includes(item.type)
+        (selectedBrands.includes(item.brand) && selectedTypes.includes(item.type)
             || (selectedBrands.length === 0 && selectedTypes.includes(item.type))
             || (selectedBrands.includes(item.brand) && selectedTypes.length === 0))
         );
@@ -54,14 +57,16 @@ export default function CheckProducts() {
         // DELETE api to remove later
     }
 
-    // prn paggination + filter solve 
     useEffect(() => {
-        setProductData(filteredProducts.length > 0 ? filteredProducts.slice(firstRowIndexPage, lastRowIndexPage) : resDataPage);
-      }, [filteredProducts, currentPage, dataRowPerPage]);
+        setProductData(
+            filteredProducts.length > 0
+                ? sortByType(filteredProducts, sortOption).slice(firstRowIndexPage, lastRowIndexPage)
+                : sortByType(testProductData, sortOption).slice(firstRowIndexPage, lastRowIndexPage));
+    }, [filteredProducts, sortOption, currentPage, dataRowPerPage]);
 
     return (
         <div className='mx-2 mt-1'>
-            <div className='sm:flex sm:justify-between '>
+            <div className='sm:flex sm:justify-between'>
                 <div className='flex items-center'>
                     <div>
                         <h2 class="text-2xl font-semibold leading-tight">Filter : </h2>
@@ -107,8 +112,19 @@ export default function CheckProducts() {
                             }
                         </ul>
                     </div>
-                    <div>
                     <button className="btn btn-accent ml-2" onClick={handleFilterProducts}> {<BiSearch size={20} />} </button>
+                </div>
+                <div className='flex items-center'>
+                    <div>
+                        <h2 class="text-2xl font-semibold leading-tight">Sort : </h2>
+                    </div>
+                    <div className="dropdown ml-2">
+                        <label tabIndex={0} className={`btn m-1 text-white bg-yellow-500 `} > {`${productSortType[sortOption]}`} <span className='ml-1'> {<AiFillCaretDown size={20} />} </span></label>
+                        <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
+                            {productSortType.map((item, Idx) => {
+                                return <li key={`sort-option-${Idx}`}> <button onClick={() => setsortOption(Idx)}> {productSortType[Idx]} </button> </li>
+                            })}
+                        </ul>
                     </div>
                 </div>
             </div>
