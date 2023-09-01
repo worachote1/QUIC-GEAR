@@ -6,40 +6,53 @@ const categories = [
         title: "หูฟังเกมมิ่ง",
         submenu: true,
         submenuItem: [
-            { title: "หูฟัง True Wireless" },
-            { title: "หูฟังไร้สาย & หูฟังบลูทูธ" },
-            { title: "หูฟังครอบหู & แนบหู" },
-            { title: "หูฟัง In Ear" },
-            { title: "หูฟัง EarBud" },
-            { title: "SoundCard" },
+            { title: "หูฟัง True Wireless", path: "/product?search=Headphone/TrueWireless" },
+            { title: "หูฟังไร้สาย & หูฟังบลูทูธ", path: "/product?search=Headphone/Wireless" },
+            { title: "หูฟังครอบหู & แนบหู", path: "/product?search=Headphone/Fullsize" },
+            { title: "หูฟัง In Ear", path: "/product?search=Headphone/InEar" },
+            { title: "หูฟัง EarBud", path: "/product?search=Headphone/Earbud" },
+            { title: "SoundCard", path: "/product?search=Headphone/SoundCard" },
+            { title: "อุปกรณ์เสริมหูฟัง", path: "/product?search=Headphone/Accessory" }
         ],
     },
     {
         title: "เมาส์เกมมิ่ง",
         submenu: true,
         submenuItem: [
-            { title: "เมาส์เกมมิ่ง" },
-            { title: "แผ่นรองเมาส์" },
-            { title: "อุปกรณ์เสริมเมาส์" },
+            { title: "เมาส์เกมมิ่ง", path: "/product?search=Mouse/Mouse" },
+            { title: "แผ่นรองเมาส์", path: "/product?search=Mouse/Pad" },
+            { title: "อุปกรณ์เสริมเมาส์", path: "/product?search=Mouse/Accessory" },
         ],
     },
     {
         title: "คีย์บอร์ดเกมมิ่ง",
         submenu: true,
         submenuItem: [
-            { title: "คีย์บอร์ดเกมมิ่ง" },
-            { title: "ที่่รองข้อมือคีย์บอร์ดเกมมิ่ง" },
+            { title: "คีย์บอร์ด RubberDome", path: "/product?search=Keyboard/RubberDome" },
+            { title: "คีย์บอร์ด Mechanical", path: "/product?search=Keyboard/Mechanical" },
+            { title: "ที่่รองข้อมือคีย์บอร์ดเกมมิ่ง", path: "/product?search=Keyboard/WristRest" },
         ],
+    },
+    {
+        title: "อุปกรณ์สตรีมเกม",
+        submenu: true,
+        submenuItem: [
+            { title: "กล้อง Webcam", path: "/product?search=Streaming/Webcam" },
+            { title: "Microphone", path: "/product?search=Streaming/Microphone" },
+            { title: "Accessory", path: "/product?search=Streaming/Accessory" }],
     },
     {
         title: "โต๊ะ & เก้าอี้เกมมิ่ง",
         submenu: true,
-        submenuItem: [{ title: "โต๊ะเกมมิ่ง" }, { title: "เก้าอี้เกมมิ่ง" }],
+        submenuItem: [
+            { title: "โต๊ะเกมมิ่ง", path: "/product?search=Table&Chair/Table" },
+            { title: "เก้าอี้เกมมิ่ง", path: "/product?search=Table&Chair/Chair" }],
     },
 ];
+
 export default function Mobilebar() {
     const [open, setOpen] = useState(false);
-    const [userRole, setUserRole] = useState("admin"); {/*guest,user,admin*/}
+    const [userRole, setUserRole] = useState("admin"); {/*guest,user,admin*/ }
     const [profileMenuActive, setProfileMenuActive] = useState(false);
     const [submenuStates, setSubmenuStates] = useState(
         categories.map((menu) => ({
@@ -77,6 +90,9 @@ export default function Mobilebar() {
                                             menu.title === "คีย์บอร์ดเกมมิ่ง" ? (
                                                 <i class="fa-solid fa-keyboard text-2xl block float-left"></i>
                                             ) :
+                                            menu.title === "อุปกรณ์สตรีมเกม" ? (
+                                                <i class="fa-solid fa-video text-2xl block float-left"></i>
+                                              ) :
                                                 menu.title === "โต๊ะ & เก้าอี้เกมมิ่ง" ? (
                                                     <i class="fa-solid fa-gamepad text-2xl block float-left"></i>
                                                 ) :
@@ -99,7 +115,7 @@ export default function Mobilebar() {
                                                 key={subIndex}
                                                 className="text-white text-sm flex items-center gap-x-4 cursor-pointer p-2 hover:bg-red-700 rounded-md mt-2 px-5"
                                             >
-                                                {submenuItem.title}
+                                                <Link to={submenuItem.path}>{submenuItem.title}</Link>
                                             </li>
                                         ))}
                                     </ul>
@@ -121,13 +137,13 @@ export default function Mobilebar() {
                         >
                             <i className="fa-solid fa-bars" style={{ fontSize: "1.25rem" }}></i>
                         </button>
-                        <Link to ="/favorite"
+                        <Link to="/favorite"
                             className="btn text-red-600 mr-2 hover:bg-red-700/30 rounded-full"
                             id="fav_m_btn"
                         >
                             <i className="fas fa-heart" style={{ fontSize: "1.25rem" }}></i>
                         </Link>
-                        <Link to ="/auction"
+                        <Link to="/auction"
                             className="btn text-red-600 mr-2  hover:bg-red-700/30 rounded-full"
                             id="auction_m_btn"
                         >
@@ -136,7 +152,7 @@ export default function Mobilebar() {
                                 style={{ fontSize: "1.25rem" }}
                             ></i>
                         </Link>
-                        <Link to ="/cart"
+                        <Link to="/cart"
                             className="btn text-red-600 mr-2  hover:bg-red-700/30 rounded-full"
                             id="cart_m_btn"
                         >
@@ -206,14 +222,14 @@ export default function Mobilebar() {
                                     </div>
                                 )}
                             </div>
-                        
+
                         ) : (
-                        <Link to ="/login"
-                            className="btn text-red-600 mr-2  hover:bg-red-700/30 rounded-full"
-                            id="profile_m_btn"
-                        >
-                            <i className="fa-solid fa-user" style={{ fontSize: "1.25rem" }}></i>
-                        </Link>
+                            <Link to="/login"
+                                className="btn text-red-600 mr-2  hover:bg-red-700/30 rounded-full"
+                                id="profile_m_btn"
+                            >
+                                <i className="fa-solid fa-user" style={{ fontSize: "1.25rem" }}></i>
+                            </Link>
                         )}
                     </div>
                 </div>

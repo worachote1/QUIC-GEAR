@@ -1,39 +1,52 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 const categories = [
   {
     title: "หูฟังเกมมิ่ง",
     submenu: true,
     submenuItem: [
-      { title: "หูฟัง True Wireless" },
-      { title: "หูฟังไร้สาย & หูฟังบลูทูธ" },
-      { title: "หูฟังครอบหู & แนบหู" },
-      { title: "หูฟัง In Ear" },
-      { title: "หูฟัง EarBud" },
-      { title: "SoundCard" },
+      { title: "หูฟัง True Wireless", path: "/product?search=Headphone/TrueWireless" },
+      { title: "หูฟังไร้สาย & หูฟังบลูทูธ", path: "/product?search=Headphone/Wireless" },
+      { title: "หูฟังครอบหู & แนบหู", path: "/product?search=Headphone/Fullsize" },
+      { title: "หูฟัง In Ear", path: "/product?search=Headphone/InEar" },
+      { title: "หูฟัง EarBud", path: "/product?search=Headphone/Earbud" },
+      { title: "SoundCard", path: "/product?search=Headphone/SoundCard" },
+      { title: "อุปกรณ์เสริมหูฟัง", path: "/product?search=Headphone/Accessory" }
     ],
   },
   {
     title: "เมาส์เกมมิ่ง",
     submenu: true,
     submenuItem: [
-      { title: "เมาส์เกมมิ่ง" },
-      { title: "แผ่นรองเมาส์" },
-      { title: "อุปกรณ์เสริมเมาส์" },
+      { title: "เมาส์เกมมิ่ง", path: "/product?search=Mouse/Mouse" },
+      { title: "แผ่นรองเมาส์", path: "/product?search=Mouse/Pad" },
+      { title: "อุปกรณ์เสริมเมาส์", path: "/product?search=Mouse/Accessory" },
     ],
   },
   {
     title: "คีย์บอร์ดเกมมิ่ง",
     submenu: true,
     submenuItem: [
-      { title: "คีย์บอร์ดเกมมิ่ง" },
-      { title: "ที่่รองข้อมือคีย์บอร์ดเกมมิ่ง" },
+      { title: "คีย์บอร์ด RubberDome", path: "/product?search=Keyboard/RubberDome" },
+      { title: "คีย์บอร์ด Mechanical", path: "/product?search=Keyboard/Mechanical" },
+      { title: "ที่่รองข้อมือคีย์บอร์ดเกมมิ่ง", path: "/product?search=Keyboard/WristRest" },
     ],
+  },
+  {
+    title: "อุปกรณ์สตรีมเกม",
+    submenu: true,
+    submenuItem: [
+      { title: "กล้อง Webcam", path: "/product?search=Streaming/Webcam" },
+      { title: "Microphone", path: "/product?search=Streaming/Microphone" },
+      { title: "Accessory", path: "/product?search=Streaming/Accessory" }],
   },
   {
     title: "โต๊ะ & เก้าอี้เกมมิ่ง",
     submenu: true,
-    submenuItem: [{ title: "โต๊ะเกมมิ่ง" }, { title: "เก้าอี้เกมมิ่ง" }],
+    submenuItem: [
+      { title: "โต๊ะเกมมิ่ง", path: "/product?search=Table&Chair/Table" },
+      { title: "เก้าอี้เกมมิ่ง", path: "/product?search=Table&Chair/Chair" }],
   },
 ];
 
@@ -79,11 +92,14 @@ export default function Sidebar() {
                     menu.title === "คีย์บอร์ดเกมมิ่ง" ? (
                       <i class="fa-solid fa-keyboard text-2xl block float-left"></i>
                     ) :
-                      menu.title === "โต๊ะ & เก้าอี้เกมมิ่ง" ? (
-                        <i class="fa-solid fa-gamepad text-2xl block float-left"></i>
-                      ) : (
-                        <i class="fa-solid fa-question text-2xl block float-left"></i>
-                      )}
+                      menu.title === "อุปกรณ์สตรีมเกม" ? (
+                        <i class="fa-solid fa-video text-2xl block float-left"></i>
+                      ) :
+                        menu.title === "โต๊ะ & เก้าอี้เกมมิ่ง" ? (
+                          <i class="fa-solid fa-chair text-2xl block float-left"></i>
+                        ) : (
+                          <i class="fa-solid fa-question text-2xl block float-left"></i>
+                        )}
                 </span>
                 <span
                   className={`text-base font-medium flex-1 duration-200 ${!open && "hidden"
@@ -104,7 +120,7 @@ export default function Sidebar() {
                       key={subIndex}
                       className="text-white text-sm flex items-center gap-x-4 cursor-pointer p-2 hover:bg-red-700 rounded-md mt-2 px-5"
                     >
-                      {submenuItem.title}
+                      <Link to={submenuItem.path}>{submenuItem.title}</Link>
                     </li>
                   ))}
                 </ul>

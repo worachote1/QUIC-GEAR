@@ -109,9 +109,9 @@ export default function Home() {
           >
             <p className='text-2xl font-semibold mb-2 md:text-left'>สินค้าใหม่</p>
           </div>
-          <div className='bg-gray-200 w-full max-w-[350px] h-[100px] rounded-md p-4 my-2 mx-5 flex items-center justify-center hover:bg-red-700/40 shadow-md transition duration-300'>
-            <p className='text-2xl font-semibold mb-2 md:text-left'>ประมูลสินค้ามือสอง</p>
-          </div>
+          <a href="/auction" class='bg-gray-200 w-full max-w-[350px] h-[100px] rounded-md p-4 my-2 mx-5 flex items-center justify-center hover:bg-red-700/40 shadow-md transition duration-300'>
+            <p class='text-2xl font-semibold mb-2 md:text-left'>ประมูลสินค้ามือสอง</p>
+          </a>
         </div>
 
 
