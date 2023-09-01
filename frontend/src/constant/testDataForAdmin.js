@@ -273,7 +273,7 @@ export const testTransactionData = [
       "userID" : "9",
       "createAt": new Date().toLocaleString(),
       "amount" : 400,
-      "transactionStatus" : "completed"
+      "transactionStatus" : "pending"
     },
     {
       "id" : 9,
@@ -282,7 +282,7 @@ export const testTransactionData = [
       "userID" : "15",
       "createAt": new Date().toLocaleString(),
       "amount" : 900,
-      "transactionStatus" : "completed"
+      "transactionStatus" : "pending"
     },
     {
       "id" : 10,
@@ -557,7 +557,7 @@ export const testProductData = [
     "price" : 4950,
     "stock" : 57,
     "brand" : "SteelSeries" , 
-    "type" : "Headset", 
+    "type" : "Headphone", 
     "isWireless" : "", 
     "isRGB" : "", 
     "imgPath" : "" , 
