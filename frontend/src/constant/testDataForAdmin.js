@@ -347,7 +347,7 @@ export const testOrderData = [
         "type" : "keyboard"
       }
     ],
-    "orderStatus" : "toRecieve",
+    "orderStatus" : "to recieve",
     "shippingInfo" : "KMITL ECC",
     "totalPrice" : 3000,
     "createAt": new Date().toLocaleString()
@@ -366,7 +366,7 @@ export const testOrderData = [
         "type" : "keyboard"
       },
     ],
-    "orderStatus" : "completed",
+    "orderStatus" : "to recieve",
     "shippingInfo" : "KMITL ECC",
     "totalPrice" : 1000,
     "createAt": new Date().toLocaleString()
@@ -403,7 +403,7 @@ export const testOrderData = [
         "type" : "keyboard"
       },
     ],
-    "orderStatus" : "success",
+    "orderStatus" : "completed",
     "shippingInfo" : "KMITL ECC",
     "totalPrice" : 2300,
     "createAt": new Date().toLocaleString()
@@ -536,7 +536,8 @@ export const testProductData = [
     "isRGB" : "", 
     "imgPath" : "" , 
     "description" : "test description",
-    "createAt": new Date().toLocaleString()
+    "createAt": new Date().toLocaleString(),
+    "totalProductOrder" : 500,
   },
   {
     "id" : 2,
@@ -549,7 +550,8 @@ export const testProductData = [
     "isRGB" : "", 
     "imgPath" : "" , 
     "description" : "test description",
-    "createAt": new Date().toLocaleString()
+    "createAt": new Date().toLocaleString(),
+    "totalProductOrder" : 24,
   },
   {
     "id" : 3,
@@ -562,7 +564,8 @@ export const testProductData = [
     "isRGB" : "", 
     "imgPath" : "" , 
     "description" : "test description",
-    "createAt": new Date().toLocaleString()
+    "createAt": new Date().toLocaleString(),
+    "totalProductOrder" : 78,
   },
   {
     "id" : 4,
@@ -575,7 +578,8 @@ export const testProductData = [
     "isRGB" : "", 
     "imgPath" : "" , 
     "description" : "test description",
-    "createAt": new Date().toLocaleString()
+    "createAt": new Date().toLocaleString(),
+    "totalProductOrder" : 20,
   },
   {
     "id" : 5,
@@ -588,7 +592,8 @@ export const testProductData = [
     "isRGB" : "", 
     "imgPath" : "" , 
     "description" : "test description",
-    "createAt": new Date().toLocaleString()
+    "createAt": new Date().toLocaleString(),
+    "totalProductOrder" : 10,
   },
   {
     "id" : 6,
@@ -601,7 +606,8 @@ export const testProductData = [
     "isRGB" : "", 
     "imgPath" : "" , 
     "description" : "test description",
-    "createAt": new Date().toLocaleString()
+    "createAt": new Date().toLocaleString(),
+    "totalProductOrder" : 21,
   },
   {
     "id" : 7,
@@ -614,7 +620,8 @@ export const testProductData = [
     "isRGB" : "", 
     "imgPath" : "" , 
     "description" : "test description",
-    "createAt": new Date().toLocaleString()
+    "createAt": new Date().toLocaleString(),
+    "totalProductOrder" : 5,
   },
   {
     "id" : 8,
@@ -627,7 +634,8 @@ export const testProductData = [
     "isRGB" : "", 
     "imgPath" : "" , 
     "description" : "test description",
-    "createAt": new Date().toLocaleString()
+    "createAt": new Date().toLocaleString(),
+    "totalProductOrder" : 17,
   },
   {
     "id" : 9,
@@ -640,7 +648,8 @@ export const testProductData = [
     "isRGB" : "", 
     "imgPath" : "" , 
     "description" : "test description",
-    "createAt": new Date().toLocaleString()
+    "createAt": new Date().toLocaleString(),
+    "totalProductOrder" : 27,
   },
   {
     "id" : 10,
@@ -653,7 +662,8 @@ export const testProductData = [
     "isRGB" : "", 
     "imgPath" : "" , 
     "description" : "test description",
-    "createAt": new Date().toLocaleString()
+    "createAt": new Date().toLocaleString(),
+    "totalProductOrder" : 2,
   },
   {
     "id" : 11,
@@ -666,7 +676,8 @@ export const testProductData = [
     "isRGB" : "", 
     "imgPath" : "" , 
     "description" : "test description",
-    "createAt": new Date().toLocaleString()
+    "createAt": new Date().toLocaleString(),
+    "totalProductOrder" : 44,
   },
   {
     "id" : 12,
@@ -679,7 +690,8 @@ export const testProductData = [
     "isRGB" : "", 
     "imgPath" : "" , 
     "description" : "test description",
-    "createAt": new Date().toLocaleString()
+    "createAt": new Date().toLocaleString(),
+    "totalProductOrder" : 15,
   }
 ]
 
