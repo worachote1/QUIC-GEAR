@@ -4,7 +4,7 @@ import { formatNumberInput } from '../../../util/formatUtil';
 import { Link, useNavigate } from 'react-router-dom';
 import { status } from '../../../constant/ordersConstants';
 import { AiFillCaretDown } from 'react-icons/ai';
-import { BiSearch } from 'react-icons/bi'
+import { BiSearch } from 'react-icons/bi';
 import AdminPagination from '../AdminPagination';
 
 export default function CheckOrders() {

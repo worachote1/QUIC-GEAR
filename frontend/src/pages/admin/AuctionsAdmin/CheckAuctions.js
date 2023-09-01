@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { testAuctionsData, testImgSrc } from '../../../constant/testDataForAdmin';
 import { Link, useNavigate } from 'react-router-dom';
 import { formatNumberInput } from '../../../util/formatUtil';
+import { brand, type, status } from '../../../constant/auctionsConstants';
+import { AiFillCaretDown } from 'react-icons/ai';
+import { BiSearch } from 'react-icons/bi';
 import AdminPagination from '../AdminPagination';
 
 export default function CheckAuctions() {
@@ -13,13 +16,141 @@ export default function CheckAuctions() {
   const firstRowIndexPage = lastRowIndexPage - dataRowPerPage;
   const resDataPage = testAuctionsData.slice(firstRowIndexPage, lastRowIndexPage);
 
+  const [filteredAuctions, setFilteredAuctions] = useState([]);
+  const [selectedBrands, setSelectedBrands] = useState([]);
+  const [selectedTypes, setSelectedTypes] = useState([]);
+  const [selectedStatus, setSelectedStatus] = useState([]);
+
+  const handleBrandCheckboxChange = (brand) => {
+    if (selectedBrands.includes(brand)) {
+      setSelectedBrands(selectedBrands.filter((item) => item !== brand));
+    } else {
+      setSelectedBrands([...selectedBrands, brand]);
+    }
+  };
+
+  const handleTypeCheckboxChange = (type) => {
+    if (selectedTypes.includes(type)) {
+      setSelectedTypes(selectedTypes.filter((item) => item !== type));
+    } else {
+      setSelectedTypes([...selectedTypes, type]);
+    }
+  };
+
+  const handleStatusCheckboxChange = (status) => {
+    if (selectedStatus.includes(status)) {
+      setSelectedStatus(selectedStatus.filter((item) => item !== status));
+    } else {
+      setSelectedStatus([...selectedStatus, status]);
+    }
+  };
+
+  const handleFilterAuctions = () => {
+    const filtered = testAuctionsData.filter((item) => {
+      const foundBrand = selectedBrands.includes(item.product.brand);
+      const foundType = selectedTypes.includes(item.product.type);
+      const foundStatus = selectedStatus.includes(item.auctionStatus);
+      //prn logic filter : 001 -> 111
+      return  ((!foundBrand && !foundType  && foundStatus) 
+      || (!foundBrand && foundType && !foundStatus)
+      || (!foundBrand && foundType && foundStatus)
+      || (foundBrand && !foundType && !foundStatus)
+      || (foundBrand && !foundType && foundStatus)
+      || (!foundBrand && foundType && !foundStatus)
+      || foundBrand && foundType && foundStatus)
+    }
+    );
+  
+
+    setFilteredAuctions(filtered);
+    console.log("Brand")
+    console.log(selectedBrands)
+    console.log("Type")
+    console.log(selectedTypes)
+    console.log("Filter")
+    console.log(filtered)
+    setCurrentPage(1);
+  };
+
   useEffect(() => {
-    // Update the user data with the sliced data for the current page
-    setAuctionData(resDataPage);
-  }, [currentPage, dataRowPerPage]);
+    setAuctionData(filteredAuctions.length > 0 ? filteredAuctions.slice(firstRowIndexPage, lastRowIndexPage) : resDataPage);
+  }, [filteredAuctions, currentPage, dataRowPerPage]);
 
   return (
-    <div>
+    <div className='mx-2 mt-1'>
+      <div className='sm:flex sm:justify-between '>
+        <div className='flex items-center'>
+          <div>
+            <h2 class="text-2xl font-semibold leading-tight">Filter : </h2>
+          </div>
+          <div className="dropdown ml-2">
+            <label tabIndex={0} className={`btn m-1 text-white bg-yellow-500 `} > {'Brand'} <span className='ml-1'> {<AiFillCaretDown size={20} />} </span></label>
+            <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
+              {
+                brand.map((item, Idx) => {
+                  return (
+                    <li key={Idx}>
+                      <label>
+                        <input
+                          type="checkbox"
+                          // checked={selectedBrands.includes(item)}
+                          onChange={() => handleBrandCheckboxChange(item)}
+                        />
+                        {item}
+                      </label>
+                    </li>)
+                })
+              }
+
+            </ul>
+          </div>
+          <div className="dropdown ml-2">
+            <label tabIndex={0} className={`btn m-1 text-white bg-green-500 `} > {'Type'} <span className='ml-1'> {<AiFillCaretDown size={20} />} </span></label>
+            <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
+              {
+                type.map((item, Idx) => {
+                  return (
+                    <li key={Idx}>
+                      <label>
+                        <input
+                          type="checkbox"
+                          // checked={selectedBrands.includes(item)}
+                          onChange={() => handleTypeCheckboxChange(item)}
+                        />
+                        {item}
+                      </label>
+                    </li>)
+                })
+              }
+
+            </ul>
+          </div>
+          <div className="dropdown ml-2">
+            <label tabIndex={0} className={`btn m-1 text-white bg-blue-600 `} > {'Status'} <span className='ml-1'> {<AiFillCaretDown size={20} />} </span></label>
+            <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
+              {
+                status.map((item, Idx) => {
+                  return (
+                    <li key={Idx}>
+                      <label>
+                        <input
+                          type="checkbox"
+                          // checked={selectedBrands.includes(item)}
+                          onChange={() => handleStatusCheckboxChange(item)}
+                        />
+                        {item}
+                      </label>
+                    </li>)
+                })
+              }
+
+            </ul>
+          </div>
+          <div>
+            <button className="btn btn-accent ml-2" onClick={handleFilterAuctions}> {<BiSearch size={20} />} </button>
+          </div>
+        </div>
+      </div>
       <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400 mt-3">
         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
           <tr>
@@ -88,7 +219,7 @@ export default function CheckAuctions() {
           ))}
         </tbody>
       </table>
-      <AdminPagination totalDataRow={testAuctionsData.length} dataRowPerPage={dataRowPerPage} currentPage={currentPage} setCurrentPage={setCurrentPage} />
+      <AdminPagination totalDataRow={(!filteredAuctions.length) ? testAuctionsData.length : filteredAuctions.length} dataRowPerPage={dataRowPerPage} currentPage={currentPage} setCurrentPage={setCurrentPage} />
     </div>
   )
 }

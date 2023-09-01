@@ -747,7 +747,7 @@ export const testAuctionsData = [
     "product" : {
       "name" : "หูฟัง SteelSeries Arctis 9 Wireless Headphone",
       "brand" : "SteelSeries" , 
-      "type" : "Headset", 
+      "type" : "Headphone", 
       "isWireless" : "", 
       "isRGB" : "", 
       "imgPath" : "" , 
@@ -770,7 +770,7 @@ export const testAuctionsData = [
     "product" : {
       "name" : "หูฟัง Logitech G733 Lightspeed Gaming Headphone",
       "brand" : "Logitech" , 
-      "type" : "Headset", 
+      "type" : "Headphone", 
       "isWireless" : "", 
       "isRGB" : "", 
       "imgPath" : "" , 
