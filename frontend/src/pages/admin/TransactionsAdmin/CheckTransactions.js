@@ -64,8 +64,8 @@ export default function CheckTransactions() {
                 {item["createAt"]} 
               </td>
               <td class="px-6 py-4">
-                {(item["transactionType"] === "topup" ? <div> <button className="btn btn-outline btn-warning">Update coin</button> <button className="btn btn-outline btn-error">Decline</button><a className="link link-info ml-2">Check Proof of Payment</a> </div>
-                : (item["transactionType"] === "withdraw") ? <button className="btn btn-outline btn-primary">Approve withdrawal</button> : <button className="btn btn-outline btn-success">Success</button>)}
+                {(item["transactionType"] === "topup" && item["transactionStatus"] !== "completed" ? <div> <button className="btn btn-outline btn-warning">Update coin</button> <button className="btn btn-outline btn-error">Decline</button><a className="link link-info ml-2">Check Proof of Payment</a> </div>
+                : (item["transactionType"] === "withdraw" && item["transactionStatus"] !== "completed") ? <button className="btn btn-outline btn-primary">Approve withdrawal</button> : <button className="btn btn-outline btn-success">Completed</button>)}
               </td>
             </tr>
           ))}

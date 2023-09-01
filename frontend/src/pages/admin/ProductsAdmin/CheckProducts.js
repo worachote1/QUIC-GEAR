@@ -1,29 +1,118 @@
 import React, { useEffect, useState } from 'react';
 import { testProductData, testImgSrc } from '../../../constant/testDataForAdmin';
+import { brand, type } from '../../../constant/productConstants';
+import { AiFillCaretDown } from 'react-icons/ai';
+import { BiSearch } from 'react-icons/bi'
 import AdminPagination from '../AdminPagination';
 import { formatNumberInput } from '../../../util/formatUtil';
 import { Link, useNavigate } from 'react-router-dom';
 
 export default function CheckProducts() {
 
+    //for pagination
     const [ProductData, setProductData] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [dataRowPerPage, setDataRowPerPage] = useState(7);
     const lastRowIndexPage = currentPage * dataRowPerPage;
     const firstRowIndexPage = lastRowIndexPage - dataRowPerPage;
     const resDataPage = testProductData.slice(firstRowIndexPage, lastRowIndexPage);
+    const [filteredProducts, setFilteredProducts] = useState(resDataPage);
 
-    useEffect(() => {
-        // Update the user data with the sliced data for the current page
-        setProductData(resDataPage);
-    }, [currentPage, dataRowPerPage]);
+    //for filter
+    const [selectedBrands, setSelectedBrands] = useState([]);
+    const [selectedTypes, setSelectedTypes] = useState([]);
+
+    const handleBrandCheckboxChange = (brand) => {
+        if (selectedBrands.includes(brand)) {
+            setSelectedBrands(selectedBrands.filter((item) => item !== brand));
+        } else {
+            setSelectedBrands([...selectedBrands, brand]);
+        }
+
+    };
+
+    const handleTypeCheckboxChange = (type) => {
+        if (selectedTypes.includes(type)) {
+            setSelectedTypes(selectedTypes.filter((item) => item !== type));
+        } else {
+            setSelectedTypes([...selectedTypes, type]);
+        }
+    };
+
+    const handleFilterProducts = () => {
+        const filtered = testProductData.filter((item) =>
+            (selectedBrands.includes(item.brand) && selectedTypes.includes(item.type)
+            || (selectedBrands.length === 0 && selectedTypes.includes(item.type))
+            || (selectedBrands.includes(item.brand) && selectedTypes.length === 0))
+        );
+        setFilteredProducts(filtered);
+        console.log(filtered)
+        setCurrentPage(1);
+    };
 
     const hanleDeleteProduct = (id) => {
         // DELETE api to remove later
     }
 
+    // prn paggination + filter solve
+    useEffect(() => {
+        setProductData(filteredProducts.length > 0 ? filteredProducts : resDataPage);
+      }, [filteredProducts, currentPage, dataRowPerPage]);
+
     return (
-        <div>
+        <div className='mx-2 mt-1'>
+            <div className='sm:flex sm:justify-between '>
+                <div className='flex items-center'>
+                    <div>
+                        <h2 class="text-2xl font-semibold leading-tight">Filter : </h2>
+                    </div>
+                    <div className="dropdown ml-2">
+                        <label tabIndex={0} className={`btn m-1 text-white bg-blue-600 `} > {'Brand'} <span className='ml-1'> {<AiFillCaretDown size={20} />} </span></label>
+                        <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
+                            {
+                                brand.map((item, Idx) => {
+                                    return (
+                                        <li key={Idx}>
+                                            <label>
+                                                <input
+                                                    type="checkbox"
+                                                    // checked={selectedBrands.includes(item)}
+                                                    onChange={() => handleBrandCheckboxChange(item)}
+                                                />
+                                                {item}
+                                            </label>
+                                        </li>)
+                                })
+                            }
+
+                        </ul>
+                    </div>
+                    <div className="dropdown">
+                        <label tabIndex={0} className={`btn m-1 text-white bg-yellow-500 `} > {'Type'} <span className='ml-1'> {<AiFillCaretDown size={20} />} </span></label>
+                        <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
+                            {
+                                type.map((item, Idx) => {
+                                    return (
+                                        <li key={Idx}>
+                                            <label>
+                                                <input
+                                                    type="checkbox"
+                                                    // checked={selectedTypes.includes(item)}
+                                                    onChange={() => handleTypeCheckboxChange(item)}
+                                                />
+                                                {item}
+                                            </label>
+                                        </li>)
+                                })
+                            }
+                        </ul>
+                    </div>
+                    <div>
+                    <button className="btn btn-accent" onClick={handleFilterProducts}> {<BiSearch size={20} />} </button>
+                    </div>
+                </div>
+            </div>
+
             <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400 mt-3">
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                     <tr>
@@ -79,15 +168,15 @@ export default function CheckProducts() {
                             </td>
                             <td class="px-6 py-4">
                                 <Link to={`/admin/update_products/${item["id"]}`}>
-                                        <button className="btn btn-outline btn-warning">Update</button>
+                                    <button className="btn btn-outline btn-warning">Update</button>
                                 </Link>
-                                 <button className="btn btn-outline btn-error ml-1" onClick={hanleDeleteProduct(item["id"])}>Delete</button> 
+                                <button className="btn btn-outline btn-error ml-1" onClick={hanleDeleteProduct(item["id"])}>Delete</button>
                             </td>
                         </tr>
                     ))}
                 </tbody>
             </table>
-            <AdminPagination totalDataRow={testProductData.length} dataRowPerPage={dataRowPerPage} currentPage={currentPage} setCurrentPage={setCurrentPage} />
+            <AdminPagination totalDataRow={(!filteredProducts.length) ? testProductData.length : filteredProducts.length} dataRowPerPage={dataRowPerPage} currentPage={currentPage} setCurrentPage={setCurrentPage} />
         </div>
     )
 }

@@ -401,13 +401,127 @@ export const testOrderData = [
         "imgPath" : "test.png",
         "brand" : "Razer",
         "type" : "keyboard"
-      }
+      },
     ],
     "orderStatus" : "success",
     "shippingInfo" : "KMITL ECC",
     "totalPrice" : 2300,
     "createAt": new Date().toLocaleString()
   },
+  {
+    "id" : "5",
+    "uerID" : "3",
+    "orderItems" : [
+      {
+        "productId" : 6,
+        "name" : "test item3",
+        "quantity" : 2,
+        "price" : 500,
+        "imgPath" : "test.png",
+        "brand" : "Razer",
+        "type" : "keyboard"
+      },
+    ],
+    "orderStatus" : "completed",
+    "shippingInfo" : "KMITL ECC",
+    "totalPrice" : 1000,
+    "createAt": new Date().toLocaleString()
+  },
+  {
+    "id" : "6",
+    "uerID" : "3",
+    "orderItems" : [
+      {
+        "productId" : 6,
+        "name" : "test item3",
+        "quantity" : 2,
+        "price" : 500,
+        "imgPath" : "test.png",
+        "brand" : "Razer",
+        "type" : "keyboard"
+      },
+    ],
+    "orderStatus" : "completed",
+    "shippingInfo" : "KMITL ECC",
+    "totalPrice" : 1000,
+    "createAt": new Date().toLocaleString()
+  },
+  {
+    "id" : "7",
+    "uerID" : "3",
+    "orderItems" : [
+      {
+        "productId" : 6,
+        "name" : "test item3",
+        "quantity" : 2,
+        "price" : 500,
+        "imgPath" : "test.png",
+        "brand" : "Razer",
+        "type" : "keyboard"
+      },
+    ],
+    "orderStatus" : "completed",
+    "shippingInfo" : "KMITL ECC",
+    "totalPrice" : 1000,
+    "createAt": new Date().toLocaleString()
+  },
+  {
+    "id" : "8",
+    "uerID" : "3",
+    "orderItems" : [
+      {
+        "productId" : 6,
+        "name" : "test item3",
+        "quantity" : 2,
+        "price" : 500,
+        "imgPath" : "test.png",
+        "brand" : "Razer",
+        "type" : "keyboard"
+      },
+    ],
+    "orderStatus" : "completed",
+    "shippingInfo" : "KMITL ECC",
+    "totalPrice" : 1000,
+    "createAt": new Date().toLocaleString()
+  },
+  {
+    "id" : "9",
+    "uerID" : "3",
+    "orderItems" : [
+      {
+        "productId" : 6,
+        "name" : "test item3",
+        "quantity" : 2,
+        "price" : 500,
+        "imgPath" : "test.png",
+        "brand" : "Razer",
+        "type" : "keyboard"
+      },
+    ],
+    "orderStatus" : "completed",
+    "shippingInfo" : "KMITL ECC",
+    "totalPrice" : 1000,
+    "createAt": new Date().toLocaleString()
+  },
+  {
+    "id" : "10",
+    "uerID" : "3",
+    "orderItems" : [
+      {
+        "productId" : 6,
+        "name" : "test item3",
+        "quantity" : 2,
+        "price" : 500,
+        "imgPath" : "test.png",
+        "brand" : "Razer",
+        "type" : "keyboard"
+      },
+    ],
+    "orderStatus" : "completed",
+    "shippingInfo" : "KMITL ECC",
+    "totalPrice" : 1000,
+    "createAt": new Date().toLocaleString()
+  }
 ]
 
 export const testProductData = [

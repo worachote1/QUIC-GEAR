@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { testAuctionsData, testImgSrc } from '../../../constant/testDataForAdmin';
 import { Link, useNavigate } from 'react-router-dom';
+import { formatNumberInput } from '../../../util/formatUtil';
 import AdminPagination from '../AdminPagination';
 
 export default function CheckAuctions() {
@@ -35,6 +36,9 @@ export default function CheckAuctions() {
               Type
             </th>
             <th scope="col" class="px-6 py-3">
+              Opening Bid
+            </th>
+            <th scope="col" class="px-6 py-3">
               Seller
             </th>
             <th scope="col" class="px-6 py-3">
@@ -59,6 +63,9 @@ export default function CheckAuctions() {
               </td>
               <td class="px-6 py-2">
                 {item["product"]["type"]}
+              </td>
+              <td class="px-6 py-2">
+                {formatNumberInput(item["startPrice"])}
               </td>
               <td scope='row' class="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white">
                 <img class="w-10 h-10 rounded-full" src={testImgSrc} alt="Jese image" />
