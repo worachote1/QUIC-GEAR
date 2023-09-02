@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { testTransactionData, testImgSrc } from '../../../constant/testDataForAdmin';
 import { formatNumberInput } from '../../../util/formatUtil';
 import { Link, useNavigate } from 'react-router-dom';
-import { status , type } from '../../../constant/transactionsConstant';
+import { status, type, transactionSortType } from '../../../constant/transactionsConstant';
+import { sortByType } from '../../../util/adminModule/adminTransaction';
 import { AiFillCaretDown } from 'react-icons/ai';
 import { BiSearch } from 'react-icons/bi'
 import AdminPagination from '../AdminPagination';
@@ -20,7 +21,9 @@ export default function CheckTransactions() {
   //for filter
   const [selectedStatus, setSelectedStatus] = useState([]);
   const [selectedTypes, setSelectedTypes] = useState([]);
-  
+
+  const [sortOption, setsortOption] = useState(0);
+
   const handleStatusCheckboxChange = (status) => {
     if (selectedStatus.includes(status)) {
       setSelectedStatus(selectedStatus.filter((item) => item !== status));
@@ -53,8 +56,9 @@ export default function CheckTransactions() {
   }
 
   useEffect(() => {
-    setTransactionsData(filteredTransactions.length > 0 ? filteredTransactions.slice(firstRowIndexPage, lastRowIndexPage) : resDataPage);
-  }, [filteredTransactions, currentPage, dataRowPerPage]);
+    setTransactionsData(filteredTransactions.length > 0 ? sortByType(filteredTransactions, sortOption).slice(firstRowIndexPage, lastRowIndexPage) 
+    : sortByType(testTransactionData, sortOption).slice(firstRowIndexPage, lastRowIndexPage));
+  }, [filteredTransactions, sortOption,currentPage, dataRowPerPage]);
 
   return (
     <div className='mx-2 mt-1'>
@@ -106,6 +110,19 @@ export default function CheckTransactions() {
           </div>
           <div>
             <button className="btn btn-accent ml-2" onClick={handleFilterTranactions}> {<BiSearch size={20} />} </button>
+          </div>
+        </div>
+        <div className='flex items-center'>
+          <div>
+            <h2 class="text-2xl font-semibold leading-tight">Sort : </h2>
+          </div>
+          <div className="dropdown ml-2">
+            <label tabIndex={0} className={`btn m-1 text-white bg-yellow-500 `} > {`${transactionSortType[sortOption]}`} <span className='ml-1'> {<AiFillCaretDown size={20} />} </span></label>
+            <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
+              {transactionSortType.map((item, Idx) => {
+                return <li key={`sort-option-${Idx}`}> <button onClick={() => setsortOption(Idx)}> {transactionSortType[Idx]} </button> </li>
+              })}
+            </ul>
           </div>
         </div>
       </div>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { testProductData, testImgSrc } from '../../../constant/testDataForAdmin';
-import { brand, type, productSortType } from '../../../constant/productConstants';
+import { brand, type, productSortType } from '../../../constant/productsConstants';
 import { sortByType } from '../../../util/adminModule/adminProduct';
 import { AiFillCaretDown } from 'react-icons/ai';
 import { BiSearch } from 'react-icons/bi'

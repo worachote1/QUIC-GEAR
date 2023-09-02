@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react'
 import { testOrderData, testImgSrc } from '../../../constant/testDataForAdmin';
 import { formatNumberInput } from '../../../util/formatUtil';
 import { Link, useNavigate } from 'react-router-dom';
-import { status } from '../../../constant/ordersConstants';
+import { status, orderSortType } from '../../../constant/ordersConstants';
+import { sortByType } from '../../../util/adminModule/adminOrder';
 import { AiFillCaretDown } from 'react-icons/ai';
 import { BiSearch } from 'react-icons/bi';
 import AdminPagination from '../AdminPagination';
@@ -17,6 +18,8 @@ export default function CheckOrders() {
 
   const [filteredOrders, setFilteredOrders] = useState([]);
   const [selectedStatus, setSelectedStatus] = useState([]);
+
+  const [sortOption, setsortOption] = useState(0);
 
   const handleStatusCheckboxChange = (status) => {
     if (selectedStatus.includes(status)) {
@@ -36,8 +39,10 @@ export default function CheckOrders() {
   };
 
   useEffect(() => {
-    setOrdersData(filteredOrders.length > 0 ? filteredOrders.slice(firstRowIndexPage, lastRowIndexPage) : resDataPage);
-  }, [filteredOrders, currentPage, dataRowPerPage]);
+    setOrdersData(filteredOrders.length > 0 ?
+      sortByType(filteredOrders, sortOption).slice(firstRowIndexPage, lastRowIndexPage)
+      : sortByType(testOrderData, sortOption).slice(firstRowIndexPage, lastRowIndexPage));
+  }, [filteredOrders, sortOption, currentPage, dataRowPerPage]);
 
   return (
     <div className='mx-2 mt-1'>
@@ -69,6 +74,19 @@ export default function CheckOrders() {
           </div>
           <div>
             <button className="btn btn-accent ml-2" onClick={handleFilterOrders}> {<BiSearch size={20} />} </button>
+          </div>
+        </div>
+        <div className='flex items-center'>
+          <div>
+            <h2 class="text-2xl font-semibold leading-tight">Sort : </h2>
+          </div>
+          <div className="dropdown ml-2">
+            <label tabIndex={0} className={`btn m-1 text-white bg-yellow-500 `} > {`${orderSortType[sortOption]}`} <span className='ml-1'> {<AiFillCaretDown size={20} />} </span></label>
+            <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
+              {orderSortType.map((item, Idx) => {
+                return <li key={`sort-option-${Idx}`}> <button onClick={() => setsortOption(Idx)}> {orderSortType[Idx]} </button> </li>
+              })}
+            </ul>
           </div>
         </div>
       </div>

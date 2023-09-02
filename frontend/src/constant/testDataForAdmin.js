@@ -9,7 +9,7 @@ export const testUserData = [
     "name": "Worachote",
     "lastname": "Jairew",
     "createAt": new Date().toLocaleString(),
-    "coins": 4400
+    "coins": 44000
   },
   {
     "id": "2",
@@ -27,7 +27,7 @@ export const testUserData = [
     "name": "Worachote3",
     "lastname": "Jairew3",
     "createAt": new Date().toLocaleString(),
-    "coins": 7200
+    "coins": 200
   },
   {
     "id": "4",
@@ -36,7 +36,7 @@ export const testUserData = [
     "name": "Worachote3",
     "lastname": "Jairew3",
     "createAt": new Date().toLocaleString(),
-    "coins": 7200
+    "coins": 100
   },
   {
     "id": "5",
@@ -45,7 +45,7 @@ export const testUserData = [
     "name": "Worachote3",
     "lastname": "Jairew3",
     "createAt": new Date().toLocaleString(),
-    "coins": 7200
+    "coins": 850
   },
   {
     "id": "6",
@@ -54,7 +54,7 @@ export const testUserData = [
     "name": "Worachote3",
     "lastname": "Jairew3",
     "createAt": new Date().toLocaleString(),
-    "coins": 7200
+    "coins": 9000
   },
   {
     "id": "7",
@@ -63,7 +63,7 @@ export const testUserData = [
     "name": "Worachote3",
     "lastname": "Jairew3",
     "createAt": new Date().toLocaleString(),
-    "coins": 7200
+    "coins": 4400
   },
   {
     "id": "8",
@@ -72,7 +72,7 @@ export const testUserData = [
     "name": "Worachote3",
     "lastname": "Jairew3",
     "createAt": new Date().toLocaleString(),
-    "coins": 7200
+    "coins": 500
   },
   {
     "id": "9",
@@ -81,7 +81,7 @@ export const testUserData = [
     "name": "Worachote3",
     "lastname": "Jairew3",
     "createAt": new Date().toLocaleString(),
-    "coins": 7200
+    "coins": 720
   },
   {
     "id": "10",
@@ -90,7 +90,7 @@ export const testUserData = [
     "name": "Worachote3",
     "lastname": "Jairew3",
     "createAt": new Date().toLocaleString(),
-    "coins": 7200
+    "coins": 200
   },
   {
     "id": "11",
@@ -99,7 +99,7 @@ export const testUserData = [
     "name": "Worachote3",
     "lastname": "Jairew3",
     "createAt": new Date().toLocaleString(),
-    "coins": 7200
+    "coins": 200
   },
   {
     "id": "12",
@@ -108,7 +108,7 @@ export const testUserData = [
     "name": "Worachote3",
     "lastname": "Jairew3",
     "createAt": new Date().toLocaleString(),
-    "coins": 7200
+    "coins": 500
   },
   {
     "id": "13",
@@ -117,7 +117,7 @@ export const testUserData = [
     "name": "Worachote3",
     "lastname": "Jairew3",
     "createAt": new Date().toLocaleString(),
-    "coins": 7200
+    "coins": 5000
   },
   {
     "id": "14",
@@ -126,7 +126,7 @@ export const testUserData = [
     "name": "Worachote3",
     "lastname": "Jairew3",
     "createAt": new Date().toLocaleString(),
-    "coins": 7200
+    "coins": 300
   },
   {
     "id": "15",
@@ -135,7 +135,7 @@ export const testUserData = [
     "name": "Worachote3",
     "lastname": "Jairew3",
     "createAt": new Date().toLocaleString(),
-    "coins": 7200
+    "coins": 550
   },
   {
     "id": "16",
@@ -144,7 +144,7 @@ export const testUserData = [
     "name": "Worachote3",
     "lastname": "Jairew3",
     "createAt": new Date().toLocaleString(),
-    "coins": 7200
+    "coins": 400
   },
   {
     "id": "17",
@@ -153,7 +153,7 @@ export const testUserData = [
     "name": "Worachote3",
     "lastname": "Jairew3",
     "createAt": new Date().toLocaleString(),
-    "coins": 7200
+    "coins": 870
   },
   {
     "id": "18",
@@ -162,7 +162,7 @@ export const testUserData = [
     "name": "Worachote3",
     "lastname": "Jairew3",
     "createAt": new Date().toLocaleString(),
-    "coins": 7200
+    "coins": 1500
   },
   {
     "id": "19",
@@ -171,7 +171,7 @@ export const testUserData = [
     "name": "Worachote3",
     "lastname": "Jairew3",
     "createAt": new Date().toLocaleString(),
-    "coins": 7200
+    "coins": 2500
   },
   {
     "id": "20",
@@ -180,7 +180,7 @@ export const testUserData = [
     "name": "Worachote3",
     "lastname": "Jairew3",
     "createAt": new Date().toLocaleString(),
-    "coins": 7200
+    "coins": 500
   },
   {
     "id": "21",
@@ -189,7 +189,7 @@ export const testUserData = [
     "name": "Worachote3",
     "lastname": "Jairew3",
     "createAt": new Date().toLocaleString(),
-    "coins": 7200
+    "coins": 670
   },
   {
     "id": "22",
@@ -198,7 +198,7 @@ export const testUserData = [
     "name": "Worachote3",
     "lastname": "Jairew3",
     "createAt": new Date().toLocaleString(),
-    "coins": 7200
+    "coins": 3000
   },
 ]
 

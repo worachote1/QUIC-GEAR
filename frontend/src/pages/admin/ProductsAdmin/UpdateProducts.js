@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { brand, type } from '../../../constant/productConstants';
+import { brand, type } from '../../../constant/productsConstants';
 import { formatNumberInput } from '../../../util/formatUtil';
 import Swal from 'sweetalert2';
 

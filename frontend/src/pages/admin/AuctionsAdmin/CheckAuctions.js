@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { testAuctionsData, testImgSrc } from '../../../constant/testDataForAdmin';
 import { Link, useNavigate } from 'react-router-dom';
 import { formatNumberInput } from '../../../util/formatUtil';
-import { brand, type, status } from '../../../constant/auctionsConstants';
+import { brand, type, status, auctionSortType } from '../../../constant/auctionsConstants';
+import { sortByType } from '../../../util/adminModule/adminAuction';
 import { AiFillCaretDown } from 'react-icons/ai';
 import { BiSearch } from 'react-icons/bi';
 import AdminPagination from '../AdminPagination';
@@ -20,6 +21,8 @@ export default function CheckAuctions() {
   const [selectedBrands, setSelectedBrands] = useState([]);
   const [selectedTypes, setSelectedTypes] = useState([]);
   const [selectedStatus, setSelectedStatus] = useState([]);
+
+  const [sortOption, setsortOption] = useState(0);
 
   const handleBrandCheckboxChange = (brand) => {
     if (selectedBrands.includes(brand)) {
@@ -57,7 +60,7 @@ export default function CheckAuctions() {
         || (foundBrand && !foundType && !foundStatus)
         || (foundBrand && !foundType && foundStatus)
         || (!foundBrand && foundType && !foundStatus)
-        || foundBrand && foundType && foundStatus)
+        || (foundBrand && foundType && foundStatus))
     }
     );
     setFilteredAuctions(filtered);
@@ -65,8 +68,10 @@ export default function CheckAuctions() {
   };
 
   useEffect(() => {
-    setAuctionData(filteredAuctions.length > 0 ? filteredAuctions.slice(firstRowIndexPage, lastRowIndexPage) : resDataPage);
-  }, [filteredAuctions, currentPage, dataRowPerPage]);
+    setAuctionData(filteredAuctions.length > 0 ?
+      sortByType(filteredAuctions, sortOption).slice(firstRowIndexPage, lastRowIndexPage)
+      : sortByType(testAuctionsData, sortOption).slice(firstRowIndexPage, lastRowIndexPage));
+  }, [filteredAuctions, sortOption, currentPage, dataRowPerPage]);
 
   return (
     <div className='mx-2 mt-1'>
@@ -140,6 +145,19 @@ export default function CheckAuctions() {
           </div>
           <div>
             <button className="btn btn-accent ml-2" onClick={handleFilterAuctions}> {<BiSearch size={20} />} </button>
+          </div>
+        </div>
+        <div className='flex items-center'>
+          <div>
+            <h2 class="text-2xl font-semibold leading-tight">Sort : </h2>
+          </div>
+          <div className="dropdown ml-2">
+            <label tabIndex={0} className={`btn m-1 text-white bg-yellow-500 `} > {`${auctionSortType[sortOption]}`} <span className='ml-1'> {<AiFillCaretDown size={20} />} </span></label>
+            <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
+              {auctionSortType.map((item, Idx) => {
+                return <li key={`sort-option-${Idx}`}> <button onClick={() => setsortOption(Idx)}> {auctionSortType[Idx]} </button> </li>
+              })}
+            </ul>
           </div>
         </div>
       </div>
