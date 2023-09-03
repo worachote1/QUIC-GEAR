@@ -35,14 +35,14 @@ const Carousel = () => {
     }
 
     return (
-        <div className="w-full select-none relative overflow-hidden rounded-3xl">
+        <div className="w-3/6 select-none relative overflow-hidden rounded-3xl">
             <div className="flex transition-transform ease-in-out duration-700 max-w-7xl max-h-96"
                  style={{transform: `translateX(-${currIndex * 100}%)`}}>
                 {slides.map((slide, index) => (
                     <img key={index} src={slide} alt="" />
                 ))}
             </div>
-            <div className="text-5xl lg:text-7xl absolute w-full flex justify-between top-0 bottom-0 items-center">
+            <div className="text-5xl lg:text-7xl absolute w-3/6 flex justify-between top-0 bottom-0 items-center">
                 <button onClick={onPrevSlide}>
                     <MdNavigateBefore className="text-white opacity-50 hover:opacity-90 cursor-pointer" />
                 </button>
