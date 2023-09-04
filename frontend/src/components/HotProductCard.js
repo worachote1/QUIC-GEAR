@@ -14,7 +14,7 @@ const HotProductCard = ({ product }) => {
         <img src={imgPath} alt={name} className='w-full h-[200px] object-cover mb-2' />
 
         {/* Hot Badge */}
-        <div className='bg-red-500 text-white absolute top-0 left-0 mt-1 ml-2 px-2 py-1 rounded-full text-xs text-center'>
+        <div className='bg-[#a51d2d] text-white absolute top-0 left-0 mt-1 ml-2 px-2 py-1 rounded-full text-xs text-center'>
           สินค้าขายดี
         </div>
       </div>
@@ -27,7 +27,7 @@ const HotProductCard = ({ product }) => {
         </div>
       </div>
       <button className="mt-3 border border-red-500 bg-white text-red-500 font-bold px-4 py-2 rounded-md hover:bg-red-500 hover:text-white transition duration-300 your-custom-class">
-        <Link to={`/productdetail?id=${id}`}>View Details</Link>
+        <Link to={`/productview?id=${id}`}>View Details</Link>
       </button>
 
 

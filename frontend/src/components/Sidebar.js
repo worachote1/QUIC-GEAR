@@ -1,56 +1,57 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link , useLocation} from "react-router-dom";
 
 const categories = [
   {
     title: "หูฟังเกมมิ่ง",
     submenu: true,
     submenuItem: [
-      { title: "หูฟัง True Wireless", path: "/product?search=Headphone/TrueWireless" },
-      { title: "หูฟังไร้สาย & หูฟังบลูทูธ", path: "/product?search=Headphone/Wireless" },
-      { title: "หูฟังครอบหู & แนบหู", path: "/product?search=Headphone/Fullsize" },
-      { title: "หูฟัง In Ear", path: "/product?search=Headphone/InEar" },
-      { title: "หูฟัง EarBud", path: "/product?search=Headphone/Earbud" },
-      { title: "SoundCard", path: "/product?search=Headphone/SoundCard" },
-      { title: "อุปกรณ์เสริมหูฟัง", path: "/product?search=Headphone/Accessory" }
+      { title: "หูฟัง True Wireless", path: "?search=Headphone/TrueWireless" },
+      { title: "หูฟังไร้สาย & หูฟังบลูทูธ", path: "?search=Headphone/Wireless" },
+      { title: "หูฟังครอบหู & แนบหู", path: "?search=Headphone/Fullsize" },
+      { title: "หูฟัง In Ear", path: "?search=Headphone/InEar" },
+      { title: "หูฟัง EarBud", path: "?search=Headphone/Earbud" },
+      { title: "SoundCard", path: "?search=Headphone/SoundCard" },
+      { title: "อุปกรณ์เสริมหูฟัง", path: "?search=Headphone/Accessory" }
     ],
   },
   {
     title: "เมาส์เกมมิ่ง",
     submenu: true,
     submenuItem: [
-      { title: "เมาส์เกมมิ่ง", path: "/product?search=Mouse/Mouse" },
-      { title: "แผ่นรองเมาส์", path: "/product?search=Mouse/Pad" },
-      { title: "อุปกรณ์เสริมเมาส์", path: "/product?search=Mouse/Accessory" },
+      { title: "เมาส์เกมมิ่ง", path: "?search=Mouse/Mouse" },
+      { title: "แผ่นรองเมาส์", path: "?search=Mouse/Mousepad" },
+      { title: "อุปกรณ์เสริมเมาส์", path: "?search=Mouse/Accessory" },
     ],
   },
   {
     title: "คีย์บอร์ดเกมมิ่ง",
     submenu: true,
     submenuItem: [
-      { title: "คีย์บอร์ด RubberDome", path: "/product?search=Keyboard/RubberDome" },
-      { title: "คีย์บอร์ด Mechanical", path: "/product?search=Keyboard/Mechanical" },
-      { title: "ที่่รองข้อมือคีย์บอร์ดเกมมิ่ง", path: "/product?search=Keyboard/WristRest" },
+      { title: "คีย์บอร์ด RubberDome", path: "?search=Keyboard/RubberDome" },
+      { title: "คีย์บอร์ด Mechanical", path: "?search=Keyboard/Mechanical" },
+      { title: "ที่่รองข้อมือคีย์บอร์ดเกมมิ่ง", path: "?search=Keyboard/WristRest" },
     ],
   },
   {
     title: "อุปกรณ์สตรีมเกม",
     submenu: true,
     submenuItem: [
-      { title: "กล้อง Webcam", path: "/product?search=Streaming/Webcam" },
-      { title: "Microphone", path: "/product?search=Streaming/Microphone" },
-      { title: "Accessory", path: "/product?search=Streaming/Accessory" }],
+      { title: "กล้อง Webcam", path: "?search=Streaming/Webcam" },
+      { title: "Microphone", path: "?search=Streaming/Microphone" },
+      { title: "Accessory", path: "?search=Streaming/Accessory" }],
   },
   {
     title: "โต๊ะ & เก้าอี้เกมมิ่ง",
     submenu: true,
     submenuItem: [
-      { title: "โต๊ะเกมมิ่ง", path: "/product?search=Table&Chair/Table" },
-      { title: "เก้าอี้เกมมิ่ง", path: "/product?search=Table&Chair/Chair" }],
+      { title: "โต๊ะเกมมิ่ง", path: "?search=TableAndChair/Table" },
+      { title: "เก้าอี้เกมมิ่ง", path: "?search=TableAndChair/Chair" }],
   },
 ];
 
 export default function Sidebar() {
+  const currentPath = useLocation().pathname;
   const [open, setOpen] = useState(true);
   const [submenuStates, setSubmenuStates] = useState(
     categories.map((menu) => ({
@@ -61,11 +62,11 @@ export default function Sidebar() {
   return (
     <div>
       <div
-        className={`fixed bg-red-800/90 h-screen pt-5 pt-8 ${open ? "w-72" : "w-20"
+        className={`fixed bg-[#ebebeb] border-r-4 border-[dbdbdb] h-screen pt-5 pt-8 ${open ? "w-72" : "w-20"
           } duration-300`}
       >
         <i
-          className={`fa-solid fa-caret-left bg-white text-red-500 text-3xl rounded-full absolute -right-5 top-1 w-10 border-2 border-red-500 text-center cursor-pointer ${!open ? "rotate-180" : ""
+          className={`fa-solid fa-caret-left bg-white text-black-500 text-3xl rounded-full absolute -right-5 top-1 w-10 border-2 border-slate-500 text-center cursor-pointer ${!open ? "rotate-180" : ""
             }`}
           onClick={() => { setOpen(!open); }}
 
@@ -75,7 +76,7 @@ export default function Sidebar() {
             <>
               <li
                 key={index}
-                className="text-white text-md flex items-center gap-x-4 cursor-pointer p-2 hover:bg-red-700 rounded-md mt-2"
+                className="text-black text-md flex items-center gap-x-4 cursor-pointer p-2 hover:bg-[#d8d8d8] rounded-md mt-2"
                 onClick={() => {
                   const updatedSubmenuStates = [...submenuStates];
                   updatedSubmenuStates[index].submenuOpen =
@@ -118,9 +119,9 @@ export default function Sidebar() {
                   {menu.submenuItem.map((submenuItem, subIndex) => (
                     <li
                       key={subIndex}
-                      className="text-white text-sm flex items-center gap-x-4 cursor-pointer p-2 hover:bg-red-700 rounded-md mt-2 px-5"
+                      className="text-black text-sm flex items-center gap-x-4 cursor-pointer p-2 hover:bg-[#d8d8d8] rounded-md mt-2 px-5"
                     >
-                      <Link to={submenuItem.path}>{submenuItem.title}</Link>
+                      <Link to={currentPath === "/auction" ? `/auction${submenuItem.path}` : `/product${submenuItem.path}`}>{submenuItem.title}</Link>
                     </li>
                   ))}
                 </ul>

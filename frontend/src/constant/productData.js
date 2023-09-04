@@ -91,7 +91,7 @@ export const productData = [
       "name" : "Tenchi Pro",
       "brand" : "Loga" , 
       "type" : "Mouse", 
-      "subtype" : "Pad",
+      "subtype" : "Mousepad",
       "price" : "1,490", 
       "rating": 5, 
       "totalOrders" : 94,

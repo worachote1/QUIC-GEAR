@@ -1,56 +1,57 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link , useLocation } from "react-router-dom";
 
 const categories = [
     {
         title: "หูฟังเกมมิ่ง",
         submenu: true,
         submenuItem: [
-            { title: "หูฟัง True Wireless", path: "/product?search=Headphone/TrueWireless" },
-            { title: "หูฟังไร้สาย & หูฟังบลูทูธ", path: "/product?search=Headphone/Wireless" },
-            { title: "หูฟังครอบหู & แนบหู", path: "/product?search=Headphone/Fullsize" },
-            { title: "หูฟัง In Ear", path: "/product?search=Headphone/InEar" },
-            { title: "หูฟัง EarBud", path: "/product?search=Headphone/Earbud" },
-            { title: "SoundCard", path: "/product?search=Headphone/SoundCard" },
-            { title: "อุปกรณ์เสริมหูฟัง", path: "/product?search=Headphone/Accessory" }
+            { title: "หูฟัง True Wireless", path: "?search=Headphone/TrueWireless" },
+            { title: "หูฟังไร้สาย & หูฟังบลูทูธ", path: "?search=Headphone/Wireless" },
+            { title: "หูฟังครอบหู & แนบหู", path: "?search=Headphone/Fullsize" },
+            { title: "หูฟัง In Ear", path: "?search=Headphone/InEar" },
+            { title: "หูฟัง EarBud", path: "?search=Headphone/Earbud" },
+            { title: "SoundCard", path: "?search=Headphone/SoundCard" },
+            { title: "อุปกรณ์เสริมหูฟัง", path: "?search=Headphone/Accessory" }
         ],
     },
     {
         title: "เมาส์เกมมิ่ง",
         submenu: true,
         submenuItem: [
-            { title: "เมาส์เกมมิ่ง", path: "/product?search=Mouse/Mouse" },
-            { title: "แผ่นรองเมาส์", path: "/product?search=Mouse/Pad" },
-            { title: "อุปกรณ์เสริมเมาส์", path: "/product?search=Mouse/Accessory" },
+            { title: "เมาส์เกมมิ่ง", path: "?search=Mouse/Mouse" },
+            { title: "แผ่นรองเมาส์", path: "?search=Mouse/MousePad" },
+            { title: "อุปกรณ์เสริมเมาส์", path: "?search=Mouse/Accessory" },
         ],
     },
     {
         title: "คีย์บอร์ดเกมมิ่ง",
         submenu: true,
         submenuItem: [
-            { title: "คีย์บอร์ด RubberDome", path: "/product?search=Keyboard/RubberDome" },
-            { title: "คีย์บอร์ด Mechanical", path: "/product?search=Keyboard/Mechanical" },
-            { title: "ที่่รองข้อมือคีย์บอร์ดเกมมิ่ง", path: "/product?search=Keyboard/WristRest" },
+            { title: "คีย์บอร์ด RubberDome", path: "?search=Keyboard/RubberDome" },
+            { title: "คีย์บอร์ด Mechanical", path: "?search=Keyboard/Mechanical" },
+            { title: "ที่่รองข้อมือคีย์บอร์ดเกมมิ่ง", path: "?search=Keyboard/WristRest" },
         ],
     },
     {
         title: "อุปกรณ์สตรีมเกม",
         submenu: true,
         submenuItem: [
-            { title: "กล้อง Webcam", path: "/product?search=Streaming/Webcam" },
-            { title: "Microphone", path: "/product?search=Streaming/Microphone" },
-            { title: "Accessory", path: "/product?search=Streaming/Accessory" }],
+            { title: "กล้อง Webcam", path: "?search=Streaming/Webcam" },
+            { title: "Microphone", path: "?search=Streaming/Microphone" },
+            { title: "Accessory", path: "?search=Streaming/Accessory" }],
     },
     {
         title: "โต๊ะ & เก้าอี้เกมมิ่ง",
         submenu: true,
         submenuItem: [
-            { title: "โต๊ะเกมมิ่ง", path: "/product?search=Table&Chair/Table" },
-            { title: "เก้าอี้เกมมิ่ง", path: "/product?search=Table&Chair/Chair" }],
+            { title: "โต๊ะเกมมิ่ง", path: "?search=TableAndChair/Table" },
+            { title: "เก้าอี้เกมมิ่ง", path: "?search=TableAndChair/Chair" }],
     },
 ];
 
 export default function Mobilebar() {
+    const currentPath = useLocation().pathname;
     const [open, setOpen] = useState(false);
     const [userRole, setUserRole] = useState("admin"); {/*guest,user,admin*/ }
     const [profileMenuActive, setProfileMenuActive] = useState(false);
@@ -66,14 +67,14 @@ export default function Mobilebar() {
         <div>
             <div>
                 <div
-                    className={`fixed top-20 md:top-10 mt-6 bg-red-800/90 h-screen pt-5 pt-8 w-72 duration-300 ${open ? "opacity-100 lg:hidden" : "opacity-0 invisible lg:hidden"}`}
+                    className={`fixed top-20 md:top-10 mt-6 bg-[#ebebeb] h-screen pt-5 pt-8 w-72 duration-300 ${open ? "opacity-100 lg:hidden" : "opacity-0 invisible lg:hidden"}`}
                 >
                     <ul className="pt-2">
                         {categories.map((menu, index) => (
                             <>
                                 <li
                                     key={index}
-                                    className="text-white text-md flex items-center gap-x-4 cursor-pointer p-2 hover:bg-red-700 rounded-md mt-2"
+                                    className="text-black text-md flex items-center gap-x-4 cursor-pointer p-2 hover:bg-[#d8d8d8] rounded-md mt-2"
                                     onClick={() => {
                                         const updatedSubmenuStates = [...submenuStates];
                                         updatedSubmenuStates[index].submenuOpen =
@@ -94,7 +95,7 @@ export default function Mobilebar() {
                                                 <i class="fa-solid fa-video text-2xl block float-left"></i>
                                               ) :
                                                 menu.title === "โต๊ะ & เก้าอี้เกมมิ่ง" ? (
-                                                    <i class="fa-solid fa-gamepad text-2xl block float-left"></i>
+                                                    <i class="fa-solid fa-chair text-2xl block float-left"></i>
                                                 ) :
                                                     (
                                                         <i class="fa-solid fa-question text-2xl block float-left"></i>
@@ -113,9 +114,9 @@ export default function Mobilebar() {
                                         {menu.submenuItem.map((submenuItem, subIndex) => (
                                             <li
                                                 key={subIndex}
-                                                className="text-white text-sm flex items-center gap-x-4 cursor-pointer p-2 hover:bg-red-700 rounded-md mt-2 px-5"
+                                                className="text-black text-sm flex items-center gap-x-4 cursor-pointer p-2 hover:bg-[#d8d8d8] rounded-md mt-2 px-5"
                                             >
-                                                <Link to={submenuItem.path}>{submenuItem.title}</Link>
+                                                <Link to={currentPath === "/auction" ? `/auction${submenuItem.path}` : `/product${submenuItem.path}`}>{submenuItem.title}</Link>
                                             </li>
                                         ))}
                                     </ul>
@@ -191,7 +192,7 @@ export default function Mobilebar() {
                                                     <p className="text-m text-gray-700 font-medium truncate overflow-hidden w-44">Username</p>
                                                 </div>
 
-                                                <span className="text-s bg-red-100 text-red-600 px-2 py-1 rounded-full">
+                                                <span className="text-s font-medium bg-red-100 text-[#a51d2d] px-2 py-1 rounded-full">
                                                     {userRole}
                                                 </span>
 
@@ -202,17 +203,17 @@ export default function Mobilebar() {
                                             </div>
 
                                             <Link to="/topup" className="block p-3 text-sm font-medium text-gray-600 hover:bg-gray-100 text-left">
-                                                Topup
+                                                เติมเงิน
                                             </Link>
                                             <Link to="/my-orders" className="block p-3 text-sm font-medium text-gray-600 hover:bg-gray-100 text-left">
-                                                My Orders
+                                                การซื้อของฉัน
                                             </Link>
                                             <Link to="/edit-profile" className="block p-3 text-sm font-medium text-gray-600 hover:bg-gray-100 text-left">
-                                                Edit Profile
+                                                การตั้งค่า
                                             </Link>
                                             <div className="text-center mt-2">
                                                 <button
-                                                    className="p-2 text-sm text-white bg-red-500 rounded-xl hover:bg-red-600 w-60"
+                                                    className="p-2 text-sm text-white bg-[#e01b24] rounded-xl hover:bg-red-700  w-60"
                                                     onClick={() => setUserRole("guest")}
                                                 >
                                                     ลงชื่อออก
