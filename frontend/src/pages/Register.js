@@ -35,7 +35,7 @@ export default function Register() {
   }
   const validateConfirmPassword = () => {
     if (password !== confirmPassword) {
-      setConfirmPasswordError('Passwords do not match');
+      setConfirmPasswordError('Passwords don\'t match');
     } else {
       setConfirmPasswordError('');
     }
