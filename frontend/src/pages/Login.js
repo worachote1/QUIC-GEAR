@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { GoogleLogin } from '@react-oauth/google';
 import Swal from 'sweetalert2'
-import quicgearImage from '../quicgear.png'
+// import quicgearImage from '../quicgear.png'
 
 export default function Login() {
 
@@ -60,11 +60,13 @@ export default function Login() {
       })
   }
 
+  // sceen size 945x750
+
   return (
     <div>
       <div className="min-h-screen flex flex-col items-center ">
         {/* <div className="bg-white p-8 rounded shadow-xl w-full max-w-md"> */}
-        <img src={quicgearImage} style={{ width: '375px', height: '76px' }} />
+        {/* <img src={quicgearImage} style={{ width: '375px', height: '76px' }} /> */}
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900 mb-4">
             Login to your account
           </h2>
