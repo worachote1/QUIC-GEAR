@@ -1,5 +1,5 @@
 const asyncHandler = require('express-async-handler');
-const auctionProduct = require('../models/auctionProducts');
+const auctionProduct = require('../models/auctionProductsModel');
 
 //@desc Get all auctionProduct data
 //@route GET /api/auctionProducts

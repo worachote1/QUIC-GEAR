@@ -1,13 +1,16 @@
 import React, { useState } from 'react';
 import { brand, type, subType } from '../../../constant/productsConstants';
 import { formatNumberInput } from '../../../util/formatUtil';
+import axios from 'axios';
 import Swal from 'sweetalert2';
 
 export default function CreateProducts() {
   const checkEmptyREGEX = /^\s*$/gm;
   const checkDigitREGEX = /^\d+$/;
+  const [selectedSingleFile, setSelectedSingleFile] = useState("");
+  const [selectedMultipleFiles, setSelectedMultipleFiles] = useState([]);
   const [product, setProduct] = useState({
-    name: "", price: "", stock: "", brand: brand[0], type: type[0], subType : subType[type[0]][0],isWired: "", isRGB: "", description: "", imgPath: ""
+    name: "", price: "", stock: "", brand: brand[0], type: type[0], subType: subType[type[0]][0], isWired: "", isRGB: "", description: "", imgPath: "", subImgPath: []
   });
 
   const alertFormError = (err_msg) => {
@@ -22,10 +25,9 @@ export default function CreateProducts() {
     setProduct({ ...product, [name]: value })
   }
 
-  const handleFileChange = (e) => {
+  const handleSingleFileChange = (e) => {
     const file = e.target.files[0];
-    const fileName = file.name;
-    setProduct({ ...product, imgPath: fileName })
+    setSelectedSingleFile(file);
   };
 
   const validateForm = (product) => {
@@ -41,7 +43,7 @@ export default function CreateProducts() {
       return "Please select RGB/Non-RGB !";
     else if (checkEmptyREGEX.test(product.description))
       return "Description must not be empty !";
-    else if (!product.imgPath)
+    else if (!selectedSingleFile)
       return "Please select a file !";
     return "";
   }
@@ -52,6 +54,21 @@ export default function CreateProducts() {
     if (checkFormError)
       alertFormError(checkFormError);
     else {
+      // POST /upload for single and multiple file
+      // then POST /products
+
+      // POST /upload
+      const singleFileData = new FormData();
+      singleFileData.append('image', selectedSingleFile)
+      console.log(singleFileData)
+      axios.post(`${process.env.REACT_APP_QUIC_GEAR_API}/upload/single`, singleFileData)
+      .then((response) => {
+          console.log(response.data)
+      })
+      .catch((err) => {
+          console.log(err)
+      })
+
       // POST api to create product later
       console.log("create product success")
     }
@@ -59,8 +76,8 @@ export default function CreateProducts() {
   }
   return (
     <diV class=''>
-      <div class="w-7/12 mt-3 mx-auto">
-        <form>
+      <form className="" onSubmit={handleSubmitCreateProduct} encType='multipart/form-data'>
+        <div class="w-7/12 mt-3 mx-auto">
           <label for="dropzone-file" class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
             <div class="flex flex-col items-center justify-center pt-5 pb-6">
               <svg class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
@@ -69,15 +86,14 @@ export default function CreateProducts() {
               <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Click to upload</span> or drag and drop</p>
               <p class="text-xs text-gray-500 dark:text-gray-400">JPG, JEPG, PNG</p>
             </div>
-            <input id="dropzone-file" accept=".jpg,.jpeg,.png" type="file" class="hidden" onChange={handleFileChange} />
+            <input id="dropzone-file" accept=".jpg,.jpeg,.png" type="file" class="hidden" onChange={handleSingleFileChange} name='image' />
             {(product.imgPath) ? <p className='text-green-500'> {`${product.imgPath}`} </p> : <p className='text-red-500'>No file chosen</p>}
           </label>
-        </form>
-      </div>
+        </div>
 
-      <div className="flex items-center justify-center w-full">
-        <div className="p-8 rounded w-7/12">
-          <form className="" onSubmit={handleSubmitCreateProduct} >
+        <div className="flex items-center justify-center w-full">
+          <div className="p-8 rounded w-7/12">
+            {/* <form className="" onSubmit={handleSubmitCreateProduct} > */}
             <div>
               <label className="block mb-1 font-bold text-gray-500">Product Name</label>
               <input type="name" className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-300" name='name'
@@ -165,11 +181,11 @@ export default function CreateProducts() {
               <textarea type="text" name="description" value={product['description']} onChange={onChangeInput} className="w-full h-44 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-300"></textarea>
             </div>
             <button type="submit" className="w-full mt-2 bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 focus:outline-none focus:ring focus:ring-blue-300">Submit</button>
-          </form>
+            {/* </form> */}
+          </div>
         </div>
-      </div>
 
-
+      </form>
     </diV>
   )
 }

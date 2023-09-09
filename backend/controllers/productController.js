@@ -1,5 +1,5 @@
 const asyncHandler = require('express-async-handler');
-const product = require('../models/product');
+const product = require('../models/productModel');
 
 // Get all products => GET api/products
 const getAllProduct = asyncHandler(async (req, res) => {
@@ -28,16 +28,19 @@ const getSingleProduct = asyncHandler(async (req, res) => {
 // Create new product => POST api/products/create
 const createProduct = asyncHandler(async (req, res) => {
     try {
-        const { name,
-                price,
-                type,
-                brand,
-                isWireless,
-                isRGB,
-                imgPath,
-                stock,
-                rating,
-                description } = req.body;
+        const {
+            name,
+            price,
+            type,
+            subType,
+            imgPath,
+            subImgPath,
+            brand,
+            isWireless,
+            isRGB,
+            stock,
+            description
+        } = req.body;
 
         if(!name || !price || !type || !brand || !isWireless || 
             !isRGB || !imgPath || !stock || !rating || !description ) {
@@ -48,12 +51,13 @@ const createProduct = asyncHandler(async (req, res) => {
             name,
             price,
             type,
+            subType,
+            imgPath,
+            subImgPath,
             brand,
             isWireless,
             isRGB,
-            imgPath,
             stock,
-            rating,
             description
         });
 

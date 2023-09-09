@@ -69,7 +69,7 @@ export default function Topup() {
       alertTopupInvalid("invalid_amount");
     }
     else {
-      axios.post(`${process.env.REACT_APP_QUIC_GEAR_API}/genPromtpayQR`, {
+      axios.post(`${process.env.REACT_APP_QUIC_GEAR_API}/topup`, {
         amount: parseFloat(topupAmount)
       })
         .then(function (response) {
@@ -99,25 +99,26 @@ export default function Topup() {
     }
 
     //continue on post API 
-
+    // POST upload
+    // then POST transaction
   }
   
   return (
     <div class="min-h-screen flex items-center justify-center">
       <div className='mt-2'>
-        <div className="card card-compact w-96 bg-base-100 shadow-xl">
+        <div className="card card-compact w-96 bg-base-100">
           <figure><img src={qrPromtpayImgSrc} alt="Shoes" /></figure>
           <div className="card-body">
-            <h2 className="card-title">กรอกจํานวนเงิน (บาท)</h2>
-            <div>
+            <h2 className="card-title">กรอกจํานวนเงิน </h2>
+            <div className='flex flex-col'>
               <input type="text" placeholder="Type here" className="input input-bordered input-accent w-full" value={formatNumberInput(topupAmount)} onChange={(e) => amountFormHandler(e)} />
-              <button className="btn bg-blue-500 w-2/4 mt-2" onClick={handleGenQrpromtpay}>Generate QR Code</button>
+              <button className="btn btn-[#e6e6e6] w-2/4 mt-2 mx-auto" onClick={handleGenQrpromtpay}>สร้าง QR Code</button>
               <p className='text-red-500 mt-2'>*ยอดขั้นตํ่า : 100 THB</p>
               <div className="card-actions justify-around mt-2">
-                <button className="btn btn-primary" onClick={() => clickPlusAmount(100)}>+ 100</button>
-                <button className="btn btn-primary" onClick={() => clickPlusAmount(500)}>+ 500</button>
-                <button className="btn btn-primary" onClick={() => clickPlusAmount(900)}>+ 900</button>
-                <button className="btn btn-primary" onClick={() => clickPlusAmount(1000)}>+ 1000</button>
+                <button className="btn btn-[#e6e6e6]" onClick={() => clickPlusAmount(100)}>+ 100</button>
+                <button className="btn btn-[#e6e6e6]" onClick={() => clickPlusAmount(300)}>+ 300</button>
+                <button className="btn btn-[#e6e6e6]" onClick={() => clickPlusAmount(500)}>+ 500</button>
+                <button className="btn btn-[#e6e6e6]" onClick={() => clickPlusAmount(1000)}>+ 1000</button>
               </div>
             </div>
             <form className="" onSubmit={handleSubmitTopup}>
@@ -131,7 +132,7 @@ export default function Topup() {
                   type="file"
                   accept=".jpg,.jpeg,.png" onChange={handleFileChange} />
               </div>
-              <button className="btn bg-green-500 w-full mt-2" type='submit'>ยืนยัน</button>
+              <button className="btn bg-[#a51d2d] w-full mt-2 text-white rounded-full" type='submit'>ยืนยัน</button>
             </form>
           </div>
         </div>

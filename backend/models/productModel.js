@@ -14,6 +14,10 @@ const productSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    subType: {
+        type: String,
+        required: true
+    },
     brand: {
         type: String,
         required: true
@@ -30,13 +34,17 @@ const productSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    subImgPath: {
+        type: [String],
+        default: []
+    },
     stock: {
         type: Number,
         required: true
     },
     rating: {
         type: Number,
-        required: true
+        default: 0,
     },
     description: {
         type: String,
@@ -44,11 +52,11 @@ const productSchema = new mongoose.Schema({
     },
     totalOrder: {
         type: Number,
-        required: true
+        default: 0,
     },
     createdAt: {
         type: Date,
-        default: Date.now
+        default: Date.now,
     }
 });
 
