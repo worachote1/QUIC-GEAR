@@ -34,7 +34,6 @@ const createProduct = asyncHandler(async (req, res) => {
             type,
             subType,
             imgPath,
-            subImgPath,
             brand,
             isWireless,
             isRGB,
@@ -42,18 +41,12 @@ const createProduct = asyncHandler(async (req, res) => {
             description
         } = req.body;
 
-        if(!name || !price || !type || !brand || !isWireless || 
-            !isRGB || !imgPath || !stock || !rating || !description ) {
-            res.status(400).send('All data field must be valid.');
-        }
-
         const products = await product.create({
             name,
             price,
             type,
             subType,
             imgPath,
-            subImgPath,
             brand,
             isWireless,
             isRGB,
