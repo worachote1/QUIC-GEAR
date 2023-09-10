@@ -37,7 +37,7 @@ export default function CreateProducts() {
   const onChangeInput = (e) => {
     const { name, value } = e.target;
     setProduct({ ...product, [name]: value })
-  }
+  } 
 
   const handleFilesChange = (e) => {
     console.log(e.target.files)
