@@ -38,13 +38,9 @@ const createProduct = asyncHandler(async (req, res) => {
                 stock,
                 rating,
                 description,
-                totalOrder,
-                createdAt } = req.body;
-
-        if(!name || !price || !type || !brand || !isWireless || 
-            !isRGB || !imgPath || !stock || !rating || !description ) {
-            res.status(400).send('All data field must be valid.');
-        }
+                totalProductOrder,
+                createdAt,
+                subType } = req.body;
 
         const products = await product.create({
             name,
@@ -57,8 +53,9 @@ const createProduct = asyncHandler(async (req, res) => {
             stock,
             rating,
             description,
-            totalOrder,
-            createdAt
+            totalProductOrder,
+            createdAt,
+            subType
         });
 
         res.status(200).json(products);
