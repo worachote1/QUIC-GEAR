@@ -4,9 +4,9 @@ export const type = ["Headphone", "Mouse", "Keyboard", "Streaming", "Table&Chair
 
 export const subType =
 {
-    "Headphone": ["TrueWireless", "Wireless", "Fullsize", "InEar", "Earbud", "SoundCard", "Accessory"],
+    "Headphone": ["TrueWireless", "Wireless", "Fullsize", "InEar", "Earbud", "Sound Card", "Accessory"],
     "Mouse": ["Mouse", "Mousepad", "Accessory"],
-    "Keyboard": ["RubberDome", "Mechanical", "WristRest"],
+    "Keyboard": ["Rubber dome", "Mechanical", "Wrist Rest"],
     "Streaming": ["Webcam", "Microphone", "Accessory"],
     "Table&Chair": ["Table", "Chair"],
 };

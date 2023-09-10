@@ -2,19 +2,33 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import { formatNumberInput } from '../../util/formatUtil';
+import { defaultPrompayImg } from '../../constant/transactionsConstant';
+import { Link, useNavigate } from 'react-router-dom';
 
 export default function Topup() {
+
+  const navigate = useNavigate();
   const validExtensions = ['jpg', 'jpeg', 'png'];
   const [selectedFile, setSelectedFile] = useState(null);
-
-  const defaultPrompayImg = "https://www.thaiichr.org/wp-content/uploads/2022/11/%E0%B8%9E%E0%B8%A3%E0%B9%89%E0%B8%AD%E0%B8%A1%E0%B9%80%E0%B8%9E%E0%B8%A2%E0%B9%8C-1.png";
   const [topupAmount, setTopupAmount] = useState('');
   const [qrPromtpayImgSrc, setqrPromtpayImgSrc] = useState(defaultPrompayImg);
-  console.log(process.env.REACT_APP_QUIC_GEAR_API)
+
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     setSelectedFile(file);
   };
+
+  const alertTopupSuccess = () => {
+    Swal.fire(
+      'Congratulations!',
+      'Your top-up was successful. Please wait for the admin to update your coin balance.',
+      'success'
+    )
+    .then((res) => {
+      if (res.isConfirmed)
+        navigate('/');
+    })
+  }
 
   const alertTopupInvalid = (err_status) => {
     //Topup invalid : amount < 100
@@ -64,25 +78,24 @@ export default function Topup() {
   }
 
   // POST api to create promtpay qr
-  const handleGenQrpromtpay = () => {
+  const handleGenQrpromtpay = async () => {
     if (topupAmount === '' || parseInt(topupAmount) < 100 || isNaN(topupAmount)) {
       alertTopupInvalid("invalid_amount");
     }
     else {
-      axios.post(`${process.env.REACT_APP_QUIC_GEAR_API}/genPromtpayQR`, {
-        amount: parseFloat(topupAmount)
-      })
-        .then(function (response) {
-          setqrPromtpayImgSrc(response.data.res_url)
+      try {
+        const topup_res = await axios.post(`${process.env.REACT_APP_QUIC_GEAR_API}/topup`, {
+          amount: parseFloat(topupAmount)
         })
-        .catch(function (error) {
-          console.log(error);
-        });
+        setqrPromtpayImgSrc(topup_res.data.res_url)
+      } catch (err) {
+        console.error(err)
+      }
     }
   }
 
   // POST api to create new transaction 
-  const handleSubmitTopup = (event) => {
+  const handleSubmitTopup = async (event) => {
     event.preventDefault();
     if (topupAmount === '' || parseInt(topupAmount) < 100 || isNaN(topupAmount)) {
       alertTopupInvalid("invalid_amount");
@@ -98,29 +111,44 @@ export default function Topup() {
       return;
     }
 
-    //continue on post API 
-
+    try {
+      // POST upload
+      const singleFileData = new FormData();
+      singleFileData.append('image', selectedFile);
+      const uploadSingleFile_res = await axios.post(`${process.env.REACT_APP_QUIC_GEAR_API}/upload/single`, singleFileData);
+      // then POST transaction
+      const createTransactions = await axios.post(`${process.env.REACT_APP_QUIC_GEAR_API}/transactions/create`, {
+        transactionType: "topup",
+        imgPath: uploadSingleFile_res.data.path,
+        userID: 6,
+        amount: topupAmount
+      });
+      alertTopupSuccess();
+    }
+    catch (err) {
+      console.error(err);
+    }
   }
-  
+
   return (
     <div class="min-h-screen flex items-center justify-center">
       <div className='mt-2'>
-        <div className="card card-compact w-96 bg-base-100 shadow-xl">
+        <div className="card card-compact w-96 bg-base-100">
           <figure><img src={qrPromtpayImgSrc} alt="Shoes" /></figure>
           <div className="card-body">
-            <h2 className="card-title">กรอกจํานวนเงิน (บาท)</h2>
-            <div>
-              <input type="text" placeholder="Type here" className="input input-bordered input-accent w-full" value={formatNumberInput(topupAmount)} onChange={(e) => amountFormHandler(e)} />
-              <button className="btn bg-blue-500 w-2/4 mt-2" onClick={handleGenQrpromtpay}>Generate QR Code</button>
+            <h2 className="card-title">กรอกจํานวนเงิน </h2>
+            <div className='flex flex-col'>
+              <input type="text" placeholder="Type here" className="input input-bordered w-full" value={formatNumberInput(topupAmount)} onChange={(e) => amountFormHandler(e)} />
+              <button className="btn btn-[#e6e6e6] w-2/4 mt-2 mx-auto" onClick={handleGenQrpromtpay}>สร้าง QR Code</button>
               <p className='text-red-500 mt-2'>*ยอดขั้นตํ่า : 100 THB</p>
               <div className="card-actions justify-around mt-2">
-                <button className="btn btn-primary" onClick={() => clickPlusAmount(100)}>+ 100</button>
-                <button className="btn btn-primary" onClick={() => clickPlusAmount(500)}>+ 500</button>
-                <button className="btn btn-primary" onClick={() => clickPlusAmount(900)}>+ 900</button>
-                <button className="btn btn-primary" onClick={() => clickPlusAmount(1000)}>+ 1000</button>
+                <button className="btn btn-[#e6e6e6]" onClick={() => clickPlusAmount(100)}>+ 100</button>
+                <button className="btn btn-[#e6e6e6]" onClick={() => clickPlusAmount(300)}>+ 300</button>
+                <button className="btn btn-[#e6e6e6]" onClick={() => clickPlusAmount(500)}>+ 500</button>
+                <button className="btn btn-[#e6e6e6]" onClick={() => clickPlusAmount(1000)}>+ 1000</button>
               </div>
             </div>
-            <form className="" onSubmit={handleSubmitTopup}>
+            <form className="" onSubmit={handleSubmitTopup} encType='multipart/form-data'>
               <div class="proof-of-payment mt-2">
                 <label
                   for="formFile"
@@ -131,7 +159,7 @@ export default function Topup() {
                   type="file"
                   accept=".jpg,.jpeg,.png" onChange={handleFileChange} />
               </div>
-              <button className="btn bg-green-500 w-full mt-2" type='submit'>ยืนยัน</button>
+              <button className="btn bg-[#a51d2d] w-full mt-2 text-white rounded-full" type='submit'>ยืนยัน</button>
             </form>
           </div>
         </div>

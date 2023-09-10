@@ -1,14 +1,31 @@
 import React, { useState } from 'react';
 import { brand, type, subType } from '../../../constant/productsConstants';
 import { formatNumberInput } from '../../../util/formatUtil';
+import axios from 'axios';
 import Swal from 'sweetalert2';
+import { Link, useNavigate } from 'react-router-dom';
 
 export default function CreateProducts() {
+
+  const navigate = useNavigate();
   const checkEmptyREGEX = /^\s*$/gm;
   const checkDigitREGEX = /^\d+$/;
+  const [selectedMultipleFiles, setSelectedMultipleFiles] = useState([]);
   const [product, setProduct] = useState({
-    name: "", price: "", stock: "", brand: brand[0], type: type[0], subType : subType[type[0]][0],isWired: "", isRGB: "", description: "", imgPath: ""
+    name: "", price: "", stock: "", brand: brand[0], type: type[0], subType: subType[type[0]][0], isWireless: null, isRGB: null, description: "", imgPath: []
   });
+
+  const alertCreatedProductSuccess = () => {
+    Swal.fire(
+      'Success! ',
+      ' Your product has been created.',
+      'success'
+    )
+    .then((res) => {
+      if (res.isConfirmed)
+        window.location.reload();
+    })
+  }
 
   const alertFormError = (err_msg) => {
     Swal.fire({
@@ -22,10 +39,9 @@ export default function CreateProducts() {
     setProduct({ ...product, [name]: value })
   }
 
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    const fileName = file.name;
-    setProduct({ ...product, imgPath: fileName })
+  const handleFilesChange = (e) => {
+    console.log(e.target.files)
+    setSelectedMultipleFiles([...e.target.files])
   };
 
   const validateForm = (product) => {
@@ -35,32 +51,51 @@ export default function CreateProducts() {
       return "Price must be only number !";
     else if (checkEmptyREGEX.test(product.stock) || !checkDigitREGEX.test(product.stock))
       return "Stock of product must be only number !";
-    else if (!product.isWired)
+    else if (!product.isWireless)
       return "Please select Wired/Wireless !";
     else if (!product.isRGB)
       return "Please select RGB/Non-RGB !";
     else if (checkEmptyREGEX.test(product.description))
       return "Description must not be empty !";
-    else if (!product.imgPath)
-      return "Please select a file !";
+    else if (!selectedMultipleFiles.length)
+      return "Please select a file!";
+    else if (selectedMultipleFiles.length > 5)
+      return "Cannot upload more than five files !";
     return "";
   }
 
-  const handleSubmitCreateProduct = (e) => {
+  const handleSubmitCreateProduct = async (e) => {
     e.preventDefault();
     const checkFormError = validateForm(product);
     if (checkFormError)
       alertFormError(checkFormError);
     else {
-      // POST api to create product later
-      console.log("create product success")
+      try {
+        // POST /upload for single and multiple file
+        // then POST /products
+
+        // POST /upload
+        const multipleFileData = new FormData();
+        for (let i = 0; i < selectedMultipleFiles.length; i++)
+          multipleFileData.append('images', selectedMultipleFiles[i])
+        const uploadMultiple_res = await axios.post(`${process.env.REACT_APP_QUIC_GEAR_API}/upload/multiple`, multipleFileData)
+        // console.log(uploadMultiple_res.data)
+        const imgPathData = uploadMultiple_res.data.map((item) => item.path)
+        const updatedProduct = {...product, imgPath : [...imgPathData]};
+        setProduct(updatedProduct)
+        // POST api to create product          
+        const createProduct = await axios.post(`${process.env.REACT_APP_QUIC_GEAR_API}/products/create`, updatedProduct) 
+        alertCreatedProductSuccess();
+      }
+      catch (err) {
+        console.error(err)
+      }
     }
-    console.log(product)
   }
   return (
     <diV class=''>
-      <div class="w-7/12 mt-3 mx-auto">
-        <form>
+      <form className="" onSubmit={handleSubmitCreateProduct} encType='multipart/form-data'>
+        <div class="w-7/12 mt-3 mx-auto">
           <label for="dropzone-file" class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
             <div class="flex flex-col items-center justify-center pt-5 pb-6">
               <svg class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
@@ -69,15 +104,14 @@ export default function CreateProducts() {
               <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Click to upload</span> or drag and drop</p>
               <p class="text-xs text-gray-500 dark:text-gray-400">JPG, JEPG, PNG</p>
             </div>
-            <input id="dropzone-file" accept=".jpg,.jpeg,.png" type="file" class="hidden" onChange={handleFileChange} />
-            {(product.imgPath) ? <p className='text-green-500'> {`${product.imgPath}`} </p> : <p className='text-red-500'>No file chosen</p>}
+            <input id="dropzone-file" accept=".jpg,.jpeg,.png" type="file" class="hidden" onChange={handleFilesChange} name='images' multiple />
+            {(selectedMultipleFiles.length) ? <p className='text-green-500'> {`${selectedMultipleFiles.map((item) => item.name)}`} </p> : <p className='text-red-500'>No file chosen</p>}
           </label>
-        </form>
-      </div>
+        </div>
 
-      <div className="flex items-center justify-center w-full">
-        <div className="p-8 rounded w-7/12">
-          <form className="" onSubmit={handleSubmitCreateProduct} >
+        <div className="flex items-center justify-center w-full">
+          <div className="p-8 rounded w-7/12">
+            {/* <form className="" onSubmit={handleSubmitCreateProduct} > */}
             <div>
               <label className="block mb-1 font-bold text-gray-500">Product Name</label>
               <input type="name" className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-300" name='name'
@@ -138,11 +172,11 @@ export default function CreateProducts() {
               <label className="block mb-1 font-bold text-gray-500">Wired/Wireless</label>
               <div className='flex mt-2'>
                 <div class="flex items-center mr-4">
-                  <input type="radio" value="wired" name="isWired" onChange={onChangeInput} class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                  <input type="radio" value={false} name="isWireless" onChange={onChangeInput} class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                   <label class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Wired</label>
                 </div>
                 <div class="flex items-center">
-                  <input type="radio" value="wireless" name="isWired" onChange={onChangeInput} class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                  <input type="radio" value={true} name="isWireless" onChange={onChangeInput} class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                   <label class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Wireless</label>
                 </div>
               </div>
@@ -151,11 +185,11 @@ export default function CreateProducts() {
               <label className="block mb-1 font-bold text-gray-500">RGB</label>
               <div className='flex mt-2'>
                 <div class="flex items-center mr-4">
-                  <input type="radio" value="isRGB" name="isRGB" onChange={onChangeInput} class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                  <input type="radio" value={true} name="isRGB" onChange={onChangeInput} class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                   <label class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Yes</label>
                 </div>
                 <div class="flex items-center">
-                  <input type="radio" value="isNotRGB" name="isRGB" onChange={onChangeInput} class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                  <input type="radio" value={false} name="isRGB" onChange={onChangeInput} class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                   <label class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">No</label>
                 </div>
               </div>
@@ -165,11 +199,11 @@ export default function CreateProducts() {
               <textarea type="text" name="description" value={product['description']} onChange={onChangeInput} className="w-full h-44 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-300"></textarea>
             </div>
             <button type="submit" className="w-full mt-2 bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 focus:outline-none focus:ring focus:ring-blue-300">Submit</button>
-          </form>
+            {/* </form> */}
+          </div>
         </div>
-      </div>
 
-
+      </form>
     </diV>
   )
 }

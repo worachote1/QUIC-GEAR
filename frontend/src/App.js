@@ -1,5 +1,6 @@
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 import Navbar from "./components/Navbar";
+import Mobilebar from "./components/Mobilebar";
 import Footer from "./components/Footer";
 import Home from "./pages/Home";
 import Register from "./pages/auth/Register";
@@ -25,20 +26,19 @@ import NotFound from "./util/not_found/NotFound";
 function App() {
   return (
     <div className="App">
-      <Navbar />
       <BrowserRouter>
+        <Navbar />
         <Routes>
           <Route path='/' element={<Home />} />
           <Route path='/login' element={<Login />} />
           <Route path='/register' element={<Register />} />
           <Route path='/cart' element={<Cart />} />
-          <Route path='/product/:id' element={<Product />} />
+          <Route path='/product' element={<Product />} />
           <Route path='/auction' element={<Auction />} />
           <Route path='/auction/:id' element={<Auction />} />
           <Route path='/topup' element={<Topup />} />
 
           {/* Admin Routes */}
-          {/* these routes are protected */}
           <Route path='/admin' element={<Admin />} />
           <Route path='/admin/check_auctions' element={<CheckAuctions />} />
           <Route path='/admin/check_auctions/:id' element={<DetailAuction />} />
@@ -53,6 +53,7 @@ function App() {
           <Route path="*" element={<NotFound />} />
         </Routes>
         <Footer />
+        <Mobilebar />
       </BrowserRouter>
     </div>
   );
