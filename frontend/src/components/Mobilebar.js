@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link , useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 const categories = [
     {
@@ -91,15 +91,15 @@ export default function Mobilebar() {
                                             menu.title === "คีย์บอร์ดเกมมิ่ง" ? (
                                                 <i class="fa-solid fa-keyboard text-2xl block float-left"></i>
                                             ) :
-                                            menu.title === "อุปกรณ์สตรีมเกม" ? (
-                                                <i class="fa-solid fa-video text-2xl block float-left"></i>
-                                              ) :
-                                                menu.title === "โต๊ะ & เก้าอี้เกมมิ่ง" ? (
-                                                    <i class="fa-solid fa-chair text-2xl block float-left"></i>
+                                                menu.title === "อุปกรณ์สตรีมเกม" ? (
+                                                    <i class="fa-solid fa-video text-2xl block float-left"></i>
                                                 ) :
-                                                    (
-                                                        <i class="fa-solid fa-question text-2xl block float-left"></i>
-                                                    )}
+                                                    menu.title === "โต๊ะ & เก้าอี้เกมมิ่ง" ? (
+                                                        <i class="fa-solid fa-chair text-2xl block float-left"></i>
+                                                    ) :
+                                                        (
+                                                            <i class="fa-solid fa-question text-2xl block float-left"></i>
+                                                        )}
                                     </span>
                                     <span
                                         className={`text-base font-medium flex-1 duration-200 ${!open && "hidden"
@@ -112,12 +112,14 @@ export default function Mobilebar() {
                                 {menu.submenu && submenuStates[index].submenuOpen && open && (
                                     <ul>
                                         {menu.submenuItem.map((submenuItem, subIndex) => (
-                                            <li
-                                                key={subIndex}
-                                                className="text-black text-sm flex items-center gap-x-4 cursor-pointer p-2 hover:bg-[#d8d8d8] rounded-md mt-2 px-5"
-                                            >
-                                                <Link to={currentPath === "/auction" ? `/auction${submenuItem.path}` : `/product${submenuItem.path}`}>{submenuItem.title}</Link>
-                                            </li>
+                                            <Link to={currentPath === "/auction" ? `/auction${submenuItem.path}` : `/product${submenuItem.path}`}>
+                                                <li
+                                                    key={subIndex}
+                                                    className="text-black text-sm flex items-center gap-x-4 cursor-pointer p-2 hover:bg-[#d8d8d8] rounded-md mt-2 px-5"
+                                                >
+                                                    {submenuItem.title}
+                                                </li>
+                                            </Link>
                                         ))}
                                     </ul>
                                 )}

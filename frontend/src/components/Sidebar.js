@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link , useLocation} from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 const categories = [
   {
@@ -118,12 +118,12 @@ export default function Sidebar() {
                 <ul>
                   {menu.submenuItem.map((submenuItem, subIndex) => (
                     <Link to={currentPath === "/auction" ? `/auction${submenuItem.path}` : `/product${submenuItem.path}`}>
-                    <li
-                      key={subIndex}
-                      className="text-black text-sm flex items-center gap-x-4 cursor-pointer p-2 hover:bg-[#d8d8d8] rounded-md mt-2 px-5"
-                    >
-                      {submenuItem.title}
-                    </li>
+                      <li
+                        key={subIndex}
+                        className="text-black text-sm flex items-center gap-x-4 cursor-pointer p-2 hover:bg-[#d8d8d8] rounded-md mt-2 px-5"
+                      >
+                        {submenuItem.title}
+                      </li>
                     </Link>
                   ))}
                 </ul>
