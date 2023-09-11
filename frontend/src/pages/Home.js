@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Sidebar from '../components/Sidebar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft, faChevronRight, faDotCircle } from '@fortawesome/free-solid-svg-icons';
+import { Link } from 'react-router-dom'
 import HotProductCard from '../components/HotProductCard';
 import NewProductCard from '../components/NewProductCard';
 import { productData } from '../constant/productData';
@@ -109,9 +110,11 @@ export default function Home() {
           >
             <p className='text-2xl font-semibold mb-2 md:text-left'>สินค้าใหม่</p>
           </div>
-          <a href="/auction" class='bg-gray-200 w-full max-w-[350px] h-[100px] rounded-md p-4 my-2 mx-5 flex items-center justify-center hover:bg-red-700/40 shadow-md transition duration-300'>
-            <p class='text-2xl font-semibold mb-2 md:text-left'>ประมูลสินค้ามือสอง</p>
-          </a>
+          <Link to={'/auction'}>
+            <a class='bg-gray-200 w-full max-w-[350px] h-[100px] rounded-md p-4 my-2 mx-5 flex items-center justify-center hover:bg-red-700/40 shadow-md transition duration-300'>
+              <p class='text-2xl font-semibold mb-2 md:text-left'>ประมูลสินค้ามือสอง</p>
+            </a>
+          </Link>
         </div>
 
 

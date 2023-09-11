@@ -25,7 +25,7 @@ export const SideBarCtegories =  [
       title: "คีย์บอร์ดเกมมิ่ง",
       submenu: true,
       submenuItem: [
-        { title: "คีย์บอร์ด RubberDome", path: "?search=Keyboard/RubberDome" },
+        { title: "คีย์บอร์ด Rubber Dome", path: "?search=Keyboard/RubberDome" }, // Keyboard/RubberDome
         { title: "คีย์บอร์ด Mechanical", path: "?search=Keyboard/Mechanical" },
         { title: "ที่่รองข้อมือคีย์บอร์ดเกมมิ่ง", path: "?search=Keyboard/WristRest" },
       ],

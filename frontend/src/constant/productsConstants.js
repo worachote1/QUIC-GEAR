@@ -6,7 +6,7 @@ export const subType =
 {
     "Headphone": ["TrueWireless","Wireless","Fullsize","InEar","Earbud","SoundCard","Accessory"],
     "Mouse": ["Mouse","Mousepad","Accessory"],
-    "Keyboard": ["Rubber dome", "Mechanical", "Wrist Rest"],
+    "Keyboard": ["RubberDome", "Mechanical", "WristRest"],
     "Streaming": ["Webcam", "Microphone", "Accessory"],
     "Table&Chair": ["Table", "Chair"],
 };

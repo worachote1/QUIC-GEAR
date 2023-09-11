@@ -8,6 +8,8 @@ import Login from "./pages/auth/Login";
 import Topup from "./pages/topup/Topup";
 import Cart from "./pages/Cart";
 import Auction from "./pages/auction/Auction";
+import AuctionDetail from "./pages/auction/AuctionDetail";
+import AuctionCreate from "./pages/auction/AuctionCreate";
 import Product from "./pages/Product";
 
 import Admin from "./pages/admin/Admin";
@@ -35,7 +37,8 @@ function App() {
           <Route path='/cart' element={<Cart />} />
           <Route path='/product' element={<Product />} />
           <Route path='/auction' element={<Auction />} />
-          <Route path='/auction/:id' element={<Auction />} />
+          <Route path='/auction/:id' element={<AuctionDetail />} />
+          <Route path='/auction_create/' element={<AuctionCreate />} />
           <Route path='/topup' element={<Topup />} />
 
           {/* Admin Routes */}

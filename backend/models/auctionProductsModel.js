@@ -39,6 +39,10 @@ const auctionProductSchema = new mongoose.Schema({
                 type: String,
                 required: true
             },
+            subType: {
+                type: String,
+                required: true
+            },
             isWireless: {
                 type: Boolean,
                 required: true,

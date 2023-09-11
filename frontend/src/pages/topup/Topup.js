@@ -116,10 +116,13 @@ export default function Topup() {
       const singleFileData = new FormData();
       singleFileData.append('image', selectedFile);
       const uploadSingleFile_res = await axios.post(`${process.env.REACT_APP_QUIC_GEAR_API}/upload/single`, singleFileData);
+      console.log("ab")
+      console.log(uploadSingleFile_res);
       // then POST transaction
-      const createTransactions = await axios.post(`${process.env.REACT_APP_QUIC_GEAR_API}/transactions/create`, {
+      // process.env.REACT_APP_QUIC_GEAR_API}/transactions/create
+      const createTransactions = await axios.post(`${'http://192.168.10.43:5000/api'}/transactions/create`, {
         transactionType: "topup",
-        imgPath: uploadSingleFile_res.data.path,
+        imgPath: `/var/Data1/Apps/QUIC-GEAR/backend/uploads/${uploadSingleFile_res.data.filename}`,
         userID: 6,
         amount: topupAmount
       });

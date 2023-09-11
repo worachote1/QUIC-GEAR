@@ -4,9 +4,10 @@ import { productData } from "../../constant/productData";
 import ProductCard from "../../components/ProductCard";
 import Sidebar from "../../components/Sidebar";
 import AuctionCard from "../../components/AuctionCard";
-
+import { testAuctionsData } from "../../constant/testDataForAdmin";
 
 const Auction = () => {
+  console.log(testAuctionsData)
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const searchQuery = searchParams.get("search");
@@ -35,12 +36,12 @@ const Auction = () => {
     const brandsSet = new Set();
     const tempFilteredProducts = [];
 
-    productData.forEach((item) => {
+    testAuctionsData.forEach((item) => {
 
       const nameIncludesQuery = (searchQuery) ? item.product.name.toLowerCase().includes(searchQuery.toLowerCase()) : "";
       const brandIncludesQuery = (searchQuery) ? item.product.brand.toLowerCase().includes(searchQuery.toLowerCase()) : "";
       const typeIncludesQuery = (searchQuery) ? item.product.type.toLowerCase().includes(searchQuery.toLowerCase()) : "";
-      const subtypeIncludesQuery = (searchQuery) ? item.product.subtype.toLowerCase().includes(searchQuery.toLowerCase()) : "";
+      const subtypeIncludesQuery = (searchQuery) ? item.product.subType.toLowerCase().includes(searchQuery.toLowerCase()) : "";
       if (searchQuery === null || nameIncludesQuery || brandIncludesQuery || typeIncludesQuery || subtypeIncludesQuery) {
         tempFilteredProducts.push(item);
         brandsSet.add(item.product.brand);
@@ -52,20 +53,19 @@ const Auction = () => {
   }, [searchQuery]);
 
   useEffect(() => {
-    let filteredByBrand = productData;
-
+    let filteredByBrand = testAuctionsData;
+    // console.log("prn")
+    // console.log(productData[0])
+    // console.log(testAuctionsData[0])
     if (selectedFilter === "newArrival") {
       // Sort products by createdAt in ascending order (newest first)
-      filteredByBrand.sort((a, b) => new Date(b.product.createAt) - new Date(a.product.createAt));
-    } else if (selectedFilter === "bestSelling") {
-      // Sort products by totalOrder in descending order (highest first)
-      filteredByBrand.sort((a, b) => b.product.totalOrders - a.product.totalOrders);
+      filteredByBrand.sort((a, b) => new Date(b.createAt) - new Date(a.createAt));
     } else if (selectedFilter === "priceLowToHigh") {
       // Sort products by price in ascending order (low to high)
-      filteredByBrand.sort((a, b) => getPriceValue(a.product.price) - getPriceValue(b.product.price));
+      filteredByBrand.sort((a, b) =>a.startPrice - b.startPrice);
     } else if (selectedFilter === "priceHighToLow") {
       // Sort products by price in descending order (high to low)
-      filteredByBrand.sort((a, b) => getPriceValue(b.product.price) - getPriceValue(a.product.price));
+      filteredByBrand.sort((a, b) => b.startPrice - a.startPrice);
     }
 
     if (selectedBrands !== null) {
@@ -99,13 +99,9 @@ const Auction = () => {
     if (searchQuery !== null) {
       // Preprocess search words to replace '&' with 'and'
       const searchWords = searchQuery.toLowerCase().replace('&', 'and').split(' ');
-      console.log("prn search query type")
-      console.log(testsearchType)
-      console.log("prn search query subtype")
-      console.log(testsearchSubType)
       filteredByBrand = filteredByBrand.filter((item) => {
         // Preprocess product data to replace '&' with 'and'
-        const typeSubtype = `${item.product.type.toLowerCase().replace('&', 'and')}/${item.product.subtype.toLowerCase().replace('&', 'and')}`;
+        const typeSubtype = `${item.product.type.toLowerCase().replace('&', 'and')}/${item.product.subType.toLowerCase().replace('&', 'and')}`;
         return searchWords.every((word) => {
           const isExactMatch =
             item.product.name.toLowerCase().includes(word) ||
@@ -123,7 +119,7 @@ const Auction = () => {
     }
 
     filteredByBrand = filteredByBrand.filter((item) => {
-      const productPrice = getPriceValue(item.product.price);
+      const productPrice = item.startPrice;
       const minPriceValid = isNaN(minPrice) || minPrice === "" || productPrice >= parseFloat(minPrice);
       const maxPriceValid = isNaN(maxPrice) || maxPrice === "" || productPrice <= parseFloat(maxPrice);
       return minPriceValid && maxPriceValid;
@@ -326,12 +322,11 @@ const Auction = () => {
 
         </div>
       </div>
-
+       
       <div className='flex flex-col flex-1'>
-        <div className="md:flex md:w-1/2 lg:w-screen justify-center items-center mt-8 mr-[150px] md:mr-[500px] lg:mr-[150px]">
+        <div className="md:flex md:w-1/2 lg:w-screen justify-center items-center mt-8 mr-[150px] md:mr-[500px] lg:mr-[150px] ">
           <div className="grid grid-cols-1 lg:grid-cols-4 md:grid-cols-1 gap-4 md:gap-2">
             <div className="flex-col mt-6 md:mr-32 lg:mr-16">
-
               ผลการค้นหา ({filteredProducts.length} รายการ)
               <div className="">
                 <i class="fa-solid fa-sliders text-2xl block float-left hover:cursor-pointer" onClick={() => setOpen(!open)}></i>
@@ -357,15 +352,11 @@ const Auction = () => {
           </div>
         </div>
 
-
-
-        <div className="md:flex justify-center items-center mt-8">
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-2">
-
-            {/* {filteredProducts.map((item) => (
-                          <ProductCard key={item.id} product={item.product} />
-                      ))} */}
-            
+        <div className="flex flex-col justify-center items-center mt-8 ">
+          {/* <div className="self-start">
+                  <button>create your auction</button>
+          </div> */}
+          <div className="flex flex-wrap justify-center sm:w-full md:w-2/3">
             {
               filteredProducts.map((item, Idx) => {
                 return <AuctionCard key={Idx} AuctionItem={item}/>

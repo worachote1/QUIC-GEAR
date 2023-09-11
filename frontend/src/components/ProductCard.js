@@ -16,7 +16,7 @@ const ProductCard = ({ product }) => {
       </div>
       <p className='text-xl font-semibold mb-1 h-14 overflow-hidden'>{name}</p>
       <p className='text-lg font-medium mb-1'>{price} บาท</p>
-
+      
       <div className='flex items-center'>
         <div className='text-yellow-400 mr-1'>
           {getStarRating(rating)}
