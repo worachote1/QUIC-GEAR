@@ -1,18 +1,12 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
-import { genNavBarCategories } from "../util/navBarModule";
+import { Link, useLocation } from "react-router-dom";
+import { SideBarCtegories } from "../constant/sideBarConstants";
 
 export default function Sidebar() {
-
-  const path = window.location.pathname;
-  const pathSegments = path.split('/');
-  // Get the first non-empty path segment
-  const firstPathComponent = pathSegments.find(segment => segment.length > 0);
-  const categories = genNavBarCategories(firstPathComponent);
-
+  const currentPath = useLocation().pathname;
   const [open, setOpen] = useState(true);
   const [submenuStates, setSubmenuStates] = useState(
-    categories.map((menu) => ({
+    SideBarCtegories.map((menu) => ({
       submenuOpen: false,
     }))
   );
@@ -20,21 +14,21 @@ export default function Sidebar() {
   return (
     <div>
       <div
-        className={`fixed bg-red-800/90 h-screen pt-5 pt-8 ${open ? "w-72" : "w-20"
+        className={`fixed bg-[#ebebeb] border-r-4 border-[dbdbdb] h-screen pt-5 pt-8 ${open ? "w-72" : "w-20"
           } duration-300`}
       >
         <i
-          className={`fa-solid fa-caret-left bg-white text-red-500 text-3xl rounded-full absolute -right-5 top-1 w-10 border-2 border-red-500 text-center cursor-pointer ${!open ? "rotate-180" : ""
+          className={`fa-solid fa-caret-left bg-white text-black-500 text-3xl rounded-full absolute -right-5 top-1 w-10 border-2 border-slate-500 text-center cursor-pointer ${!open ? "rotate-180" : ""
             }`}
           onClick={() => { setOpen(!open); }}
 
         ></i>
         <ul className="pt-2">
-          {categories.map((menu, index) => (
+          {SideBarCtegories.map((menu, index) => (
             <>
               <li
                 key={index}
-                className="text-white text-md flex items-center gap-x-4 cursor-pointer p-2 hover:bg-red-700 rounded-md mt-2"
+                className="text-black text-md flex items-center gap-x-4 cursor-pointer p-2 hover:bg-[#d8d8d8] rounded-md mt-2"
                 onClick={() => {
                   const updatedSubmenuStates = [...submenuStates];
                   updatedSubmenuStates[index].submenuOpen =
@@ -75,10 +69,10 @@ export default function Sidebar() {
               {menu.submenu && submenuStates[index].submenuOpen && open && (
                 <ul>
                   {menu.submenuItem.map((submenuItem, subIndex) => (
-                    <Link to={submenuItem.path}>
+                    <Link to={currentPath === "/auction" ? `/auction${submenuItem.path}` : `/product${submenuItem.path}`}>
                       <li
                         key={subIndex}
-                        className="text-white text-sm flex items-center gap-x-4 cursor-pointer p-2 hover:bg-red-700 rounded-md mt-2 px-5"
+                        className="text-black text-sm flex items-center gap-x-4 cursor-pointer p-2 hover:bg-[#d8d8d8] rounded-md mt-2 px-5"
                       >
                         {submenuItem.title}
                       </li>

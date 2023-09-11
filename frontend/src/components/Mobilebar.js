@@ -1,20 +1,14 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
-import { genNavBarCategories } from "../util/navBarModule";
+import { Link, useLocation } from "react-router-dom";
+import { SideBarCtegories } from "../constant/sideBarConstants";
 
 export default function Mobilebar() {
-
-    const path = window.location.pathname;
-    const pathSegments = path.split('/');
-    // Get the first non-empty path segment
-    const firstPathComponent = pathSegments.find(segment => segment.length > 0);
-    const categories = genNavBarCategories(firstPathComponent);
-    
+    const currentPath = useLocation().pathname;
     const [open, setOpen] = useState(false);
     const [userRole, setUserRole] = useState("admin"); {/*guest,user,admin*/ }
     const [profileMenuActive, setProfileMenuActive] = useState(false);
     const [submenuStates, setSubmenuStates] = useState(
-        categories.map((menu) => ({
+        SideBarCtegories.map((menu) => ({
             submenuOpen: false,
         }))
     );
@@ -25,14 +19,14 @@ export default function Mobilebar() {
         <div>
             <div>
                 <div
-                    className={`fixed top-20 md:top-10 mt-6 bg-red-800/90 h-screen pt-5 pt-8 w-72 duration-300 ${open ? "opacity-100 lg:hidden" : "opacity-0 invisible lg:hidden"}`}
+                    className={`fixed top-20 md:top-10 mt-6 bg-[#ebebeb] h-screen pt-5 pt-8 w-72 duration-300 ${open ? "opacity-100 lg:hidden" : "opacity-0 invisible lg:hidden"}`}
                 >
                     <ul className="pt-2">
-                        {categories.map((menu, index) => (
+                        {SideBarCtegories.map((menu, index) => (
                             <>
                                 <li
                                     key={index}
-                                    className="text-white text-md flex items-center gap-x-4 cursor-pointer p-2 hover:bg-red-700 rounded-md mt-2"
+                                    className="text-black text-md flex items-center gap-x-4 cursor-pointer p-2 hover:bg-[#d8d8d8] rounded-md mt-2"
                                     onClick={() => {
                                         const updatedSubmenuStates = [...submenuStates];
                                         updatedSubmenuStates[index].submenuOpen =
@@ -53,7 +47,7 @@ export default function Mobilebar() {
                                                     <i class="fa-solid fa-video text-2xl block float-left"></i>
                                                 ) :
                                                     menu.title === "โต๊ะ & เก้าอี้เกมมิ่ง" ? (
-                                                        <i class="fa-solid fa-gamepad text-2xl block float-left"></i>
+                                                        <i class="fa-solid fa-chair text-2xl block float-left"></i>
                                                     ) :
                                                         (
                                                             <i class="fa-solid fa-question text-2xl block float-left"></i>
@@ -70,10 +64,10 @@ export default function Mobilebar() {
                                 {menu.submenu && submenuStates[index].submenuOpen && open && (
                                     <ul>
                                         {menu.submenuItem.map((submenuItem, subIndex) => (
-                                            <Link to={submenuItem.path}>
+                                            <Link to={currentPath === "/auction" ? `/auction${submenuItem.path}` : `/product${submenuItem.path}`}>
                                                 <li
                                                     key={subIndex}
-                                                    className="text-white text-sm flex items-center gap-x-4 cursor-pointer p-2 hover:bg-red-700 rounded-md mt-2 px-5"
+                                                    className="text-black text-sm flex items-center gap-x-4 cursor-pointer p-2 hover:bg-[#d8d8d8] rounded-md mt-2 px-5"
                                                 >
                                                     {submenuItem.title}
                                                 </li>
@@ -152,7 +146,7 @@ export default function Mobilebar() {
                                                     <p className="text-m text-gray-700 font-medium truncate overflow-hidden w-44">Username</p>
                                                 </div>
 
-                                                <span className="text-s bg-red-100 text-red-600 px-2 py-1 rounded-full">
+                                                <span className="text-s font-medium bg-red-100 text-[#a51d2d] px-2 py-1 rounded-full">
                                                     {userRole}
                                                 </span>
 
@@ -163,17 +157,17 @@ export default function Mobilebar() {
                                             </div>
 
                                             <Link to="/topup" className="block p-3 text-sm font-medium text-gray-600 hover:bg-gray-100 text-left">
-                                                Topup
+                                                เติมเงิน
                                             </Link>
                                             <Link to="/my-orders" className="block p-3 text-sm font-medium text-gray-600 hover:bg-gray-100 text-left">
-                                                My Orders
+                                                การซื้อของฉัน
                                             </Link>
                                             <Link to="/edit-profile" className="block p-3 text-sm font-medium text-gray-600 hover:bg-gray-100 text-left">
-                                                Edit Profile
+                                                การตั้งค่า
                                             </Link>
                                             <div className="text-center mt-2">
                                                 <button
-                                                    className="p-2 text-sm text-white bg-red-500 rounded-xl hover:bg-red-600 w-60"
+                                                    className="p-2 text-sm text-white bg-[#e01b24] rounded-xl hover:bg-red-700  w-60"
                                                     onClick={() => setUserRole("guest")}
                                                 >
                                                     ลงชื่อออก
