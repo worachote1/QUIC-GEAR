@@ -7,7 +7,7 @@ import Register from "./pages/auth/Register";
 import Login from "./pages/auth/Login";
 import Topup from "./pages/topup/Topup";
 import Cart from "./pages/Cart";
-import Auction from "./pages/Auction";
+import Auction from "./pages/auction/Auction";
 import Product from "./pages/Product";
 
 import Admin from "./pages/admin/Admin";
