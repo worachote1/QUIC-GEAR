@@ -8,6 +8,7 @@ const Product = () => {
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
     const searchQuery = searchParams.get("search");
+    const [priceExpanded, setpriceExpanded] = useState(false);
     const [selectedFilter, setSelectedFilter] = useState("newArrival");
     const [filteredProducts, setFilteredProducts] = useState([]);
     const [brands, setBrands] = useState(new Set());
@@ -15,6 +16,11 @@ const Product = () => {
     const [selectedRGB, setSelectedRGB] = useState("All");
     const [selectedWireless, setSelectedWireless] = useState("All");
     const [open, setOpen] = useState(false);
+    const [minPrice, setMinPrice] = useState("");
+    const [maxPrice, setMaxPrice] = useState("");
+    const toggleExpand = () => {
+        setpriceExpanded(!priceExpanded);
+    };
     const handleFilterChange = (filter) => {
         setSelectedFilter(filter);
     };
@@ -89,7 +95,7 @@ const Product = () => {
         if (searchQuery !== null) {
             // Preprocess search words to replace '&' with 'and'
             const searchWords = searchQuery.toLowerCase().replace('&', 'and').split(' ');
-        
+
             filteredByBrand = filteredByBrand.filter((item) => {
                 // Preprocess product data to replace '&' with 'and'
                 const typeSubtype = `${item.product.type.toLowerCase().replace('&', 'and')}/${item.product.subtype.toLowerCase().replace('&', 'and')}`;
@@ -98,19 +104,26 @@ const Product = () => {
                         item.product.name.toLowerCase().includes(word) ||
                         item.product.brand.toLowerCase().includes(word) ||
                         typeSubtype === word; // Exact match for "Type/Subtype"
-        
+
                     if (isExactMatch) {
                         return true;
                     }
-        
+
                     const typeAndSubtypeWords = typeSubtype.split('/'); // Split "Type/Subtype"
                     return typeAndSubtypeWords.includes(word); // Check for individual type/subtype words
                 });
             });
         }
 
+        filteredByBrand = filteredByBrand.filter((item) => {
+            const productPrice = getPriceValue(item.product.price);
+            const minPriceValid = isNaN(minPrice) || minPrice === "" || productPrice >= parseFloat(minPrice);
+            const maxPriceValid = isNaN(maxPrice) || maxPrice === "" || productPrice <= parseFloat(maxPrice);
+            return minPriceValid && maxPriceValid;
+        });
+
         setFilteredProducts(filteredByBrand);
-    }, [selectedBrands, selectedRGB, selectedWireless, searchQuery, selectedFilter]);
+    }, [selectedBrands, selectedRGB, selectedWireless, searchQuery, selectedFilter, minPrice, maxPrice]);
 
 
     const handleBrandCheckboxChange = (brand) => {
@@ -139,9 +152,39 @@ const Product = () => {
                 <div className="relative">
                     <i className="fa-solid fa-xmark absolute top-2 right-2 cursor-pointer text-2xl" onClick={() => setOpen(!open)}></i>
                 </div>
+
                 <div className="py-4 px-6">
                     <p className="text-lg font-semibold mb-2">ตัวกรอง</p>
-                    <div>
+                    <div className="flex items-center cursor-pointer" onClick={toggleExpand}>
+                        <p className="text-m font-medium mt-4">ช่วงราคา</p>
+                        <i
+                            className={`absolute right-2 mt-4 fas fa-chevron-${priceExpanded ? 'up' : 'down'}`}
+                        ></i>
+                    </div>
+                    {priceExpanded && (
+                        <div className="mt-4 flex space-x-2">
+                            <div className="flex-1">
+                                <input
+                                    type="number"
+                                    placeholder="ราคาต่ำสุด"
+                                    value={minPrice}
+                                    onChange={(e) => setMinPrice(e.target.value)}
+                                    className="border border-gray-400 rounded-md p-2 w-full"
+                                />
+                            </div>
+                            <div className="flex-1">
+                                <input
+                                    type="number"
+                                    placeholder="ราคาสูงสุด"
+                                    value={maxPrice}
+                                    onChange={(e) => setMaxPrice(e.target.value)}
+                                    className="border border-gray-400 rounded-md p-2 w-full"
+                                />
+                            </div>
+                        </div>
+                    )}
+
+                    <div className="mt-4">
                         <p className="text-m font-medium mb-1">แบรนด์</p>
                         <div className="space-y-2">
                             <label htmlFor="brand-all" className="cursor-pointer flex items-center">
@@ -272,9 +315,9 @@ const Product = () => {
                             </label>
                         </div>
                     </div>
+
                 </div>
             </div>
-
 
             <div className='flex flex-col flex-1'>
                 <div className="md:flex md:w-1/2 lg:w-screen justify-center items-center mt-8 mr-[150px] md:mr-[500px] lg:mr-[150px]">
@@ -318,7 +361,7 @@ const Product = () => {
                 </div>
 
             </div>
-        </div>
+        </div >
     );
 };
 
