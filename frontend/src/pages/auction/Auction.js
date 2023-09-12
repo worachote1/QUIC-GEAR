@@ -3,8 +3,10 @@ import { useLocation } from "react-router-dom";
 import { productData } from "../../constant/productData";
 import ProductCard from "../../components/ProductCard";
 import Sidebar from "../../components/Sidebar";
+import { FaBusinessTime } from 'react-icons/fa';
 import AuctionCard from "../../components/AuctionCard";
 import { testAuctionsData } from "../../constant/testDataForAdmin";
+import { Link } from 'react-router-dom';
 
 const Auction = () => {
   console.log(testAuctionsData)
@@ -62,7 +64,7 @@ const Auction = () => {
       filteredByBrand.sort((a, b) => new Date(b.createAt) - new Date(a.createAt));
     } else if (selectedFilter === "priceLowToHigh") {
       // Sort products by price in ascending order (low to high)
-      filteredByBrand.sort((a, b) =>a.startPrice - b.startPrice);
+      filteredByBrand.sort((a, b) => a.startPrice - b.startPrice);
     } else if (selectedFilter === "priceHighToLow") {
       // Sort products by price in descending order (high to low)
       filteredByBrand.sort((a, b) => b.startPrice - a.startPrice);
@@ -322,9 +324,9 @@ const Auction = () => {
 
         </div>
       </div>
-       
+
       <div className='flex flex-col flex-1'>
-        <div className="md:flex md:w-1/2 lg:w-screen justify-center items-center mt-8 mr-[150px] md:mr-[500px] lg:mr-[150px] ">
+        <div className="md:flex md:w-1/2 lg:w-screen justify-center items-center mt-8 mr-[150px] md:mr-[500px] lg:mr-[150px">
           <div className="grid grid-cols-1 lg:grid-cols-4 md:grid-cols-1 gap-4 md:gap-2">
             <div className="flex-col mt-6 md:mr-32 lg:mr-16">
               ผลการค้นหา ({filteredProducts.length} รายการ)
@@ -350,16 +352,25 @@ const Auction = () => {
 
             </div>
           </div>
+
         </div>
 
         <div className="flex flex-col justify-center items-center mt-8 ">
-          {/* <div className="self-start">
-                  <button>create your auction</button>
-          </div> */}
-          <div className="flex flex-wrap justify-center sm:w-full md:w-2/3">
+          <div className="flex flex-wrap justify-start sm:w-full md:w-2/3 ">
+            <div className='sm:mx-4 md:mx-48'>
+              <button className='mt-3  border border-red-500 bg-white text-red-500 font-bold px-4 py-2 rounded-full hover:bg-red-500 hover:text-white transition duration-300 your-custom-class'>
+                <div className='flex justify-center items-center p-2 text-lg'>  <span className='mr-2'> {<FaBusinessTime size={20} />} </span> สร้างการประมูล </div>
+              </button>
+            </div>
+          </div>
+        </div>
+
+
+        <div className="flex flex-col justify-center items-center mt-8 ">
+          <div className="flex flex-wrap justify-center sm:w-full md:w-2/3 ">
             {
               filteredProducts.map((item, Idx) => {
-                return <AuctionCard key={Idx} AuctionItem={item}/>
+                return <AuctionCard key={Idx} AuctionItem={item} />
               })
             }
           </div>

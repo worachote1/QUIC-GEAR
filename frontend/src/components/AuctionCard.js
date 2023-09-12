@@ -1,9 +1,26 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ImHammer2 } from 'react-icons/im';
-import {formatNumberInput} from '../util/formatUtil'
+import { formatNumberInput } from '../util/formatUtil'
+import { calculateTimeRemaining } from '../util/auctionModule/countdown';
+import { displayCountDownDate } from '../util/auctionModule/displayCountDownDate';
 
 export default function AuctionCard({ AuctionItem }) {
+
+  const [timeRemaining, setTimeRemaining] = useState(calculateTimeRemaining());
+  useEffect(() => {
+    const timer = setInterval(() => {
+      const remaining = calculateTimeRemaining(AuctionItem.end_auction_date);
+      setTimeRemaining(remaining);
+
+      if (remaining.total <= 0) {
+        clearInterval(timer);
+      }
+    }, 1000);
+
+    return () => clearInterval(timer); // Cleanup the timer on unmount
+  }, []);
+
   return (
     // lg:w-[210px] md:w-[210px] w-[170px]
     <div className='flex flex-col  bg-white w-96 rounded-md p-4 my-2 mx-2 md:mx-4 relative shadow-md transition duration-300'>
@@ -14,7 +31,7 @@ export default function AuctionCard({ AuctionItem }) {
       <div className='flex flex-col'>
         <p className='text-xl font-semibold mb-1 overflow-hidden mt-2 h-20'>{AuctionItem.product.name}</p>
         <p className='text-lg font-medium  text-right mt-2'><span className='text-red-500'> {formatNumberInput(AuctionItem.startPrice)} </span>บาท</p>
-        <p className='text-lg font-medium  text-right'><span className='text-gray-500'> เวลาที่เหลือ</span></p>
+        <p className='text-lg font-medium  text-right'><span className='text-gray-500'> {displayCountDownDate(timeRemaining.days, timeRemaining.hours, timeRemaining.minutes, timeRemaining.seconds)} </span></p>
       </div>
       <Link to={`/auction/${AuctionItem.id}`}>
         <div className='flex justify-center '>

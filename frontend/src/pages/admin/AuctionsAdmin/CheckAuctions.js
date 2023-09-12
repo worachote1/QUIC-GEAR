@@ -183,7 +183,7 @@ export default function CheckAuctions() {
               Seller
             </th>
             <th scope="col" class="px-6 py-3">
-              Create At
+              End Date
             </th>
             <th scope="col" class="px-6 py-3">
               Status
@@ -216,7 +216,7 @@ export default function CheckAuctions() {
                 </div>
               </td>
               <td class="px-6 py-4">
-                {item["createAt"]}
+                {item["end_auction_date"].toLocaleString()}
               </td>
               <td class="px-6 py-4">
                 {

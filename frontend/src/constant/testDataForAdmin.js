@@ -716,7 +716,7 @@ export const testAuctionsData = [
     "startPrice" : 700,
     "butOutPrice" : 2500,
     "start_auction_date" : "test start date",
-    "end_auction_date" : "test end date",
+    "end_auction_date" : new Date(2023, 8, 16, 22, 30, 0, 0),
     "auctionStatus" : "completed",
     "createAt": new Date().toLocaleString()
   },
@@ -740,7 +740,7 @@ export const testAuctionsData = [
     "startPrice" : 2700,
     "butOutPrice" : 4500,
     "start_auction_date" : "test start date",
-    "end_auction_date" : "test end date",
+    "end_auction_date" : new Date(2023, 8, 17, 23, 30, 0, 0),
     "auctionStatus" : "completed",
     "createAt": new Date().toLocaleString()
   },
@@ -764,7 +764,7 @@ export const testAuctionsData = [
     "startPrice" : 7700,
     "butOutPrice" : 8500,
     "start_auction_date" : "test start date",
-    "end_auction_date" : "test end date",
+    "end_auction_date" : new Date(2023, 8, 16, 11, 30, 0, 0),
     "auctionStatus" : "waiting approved",
     "createAt": new Date().toLocaleString()
   },
@@ -788,7 +788,7 @@ export const testAuctionsData = [
     "startPrice" : 7700,
     "butOutPrice" : 8500,
     "start_auction_date" : "test start date",
-    "end_auction_date" : "test end date",
+    "end_auction_date" : new Date(2023, 8, 17, 12, 44, 0, 0),
     "auctionStatus" : "waiting approved",
     "createAt": new Date().toLocaleString()
   },
@@ -812,7 +812,7 @@ export const testAuctionsData = [
     "startPrice" : 3490,
     "butOutPrice" : 3790,
     "start_auction_date" : "test start date",
-    "end_auction_date" : "test end date",
+    "end_auction_date" : new Date(2023, 8, 18, 15, 30, 0, 0),
     "auctionStatus" : "waiting approved",
     "createAt": new Date().toLocaleString()
   },
@@ -836,7 +836,7 @@ export const testAuctionsData = [
     "startPrice" : 2590,
     "butOutPrice" : 2900,
     "start_auction_date" : "test start date",
-    "end_auction_date" : "test end date",
+    "end_auction_date" : new Date(2023, 8, 19, 9, 42, 0, 0),
     "auctionStatus" : "in progress",
     "createAt": new Date().toLocaleString()
   },
@@ -860,7 +860,7 @@ export const testAuctionsData = [
     "startPrice" : 3500,
     "butOutPrice" : 3890,
     "start_auction_date" : "test start date",
-    "end_auction_date" : "test end date",
+    "end_auction_date" : new Date(2023, 8, 12, 23, 42, 0, 0),
     "auctionStatus" : "in progress",
     "createAt": new Date().toLocaleString()
   },
@@ -884,7 +884,7 @@ export const testAuctionsData = [
     "startPrice" : 7200,
     "butOutPrice" : 9990,
     "start_auction_date" : "test start date",
-    "end_auction_date" : "test end date",
+    "end_auction_date" : new Date(2023, 8, 13, 14, 30, 0, 0),
     "auctionStatus" : "in progress",
     "createAt": new Date().toLocaleString()
   },
@@ -908,7 +908,7 @@ export const testAuctionsData = [
     "startPrice" : 2700,
     "butOutPrice" : 3200,
     "start_auction_date" : "test start date",
-    "end_auction_date" : "test end date",
+    "end_auction_date" : new Date(2023, 8, 17, 17, 30, 0, 0),
     "auctionStatus" : "in progress",
     "createAt": new Date().toLocaleString()
   },
@@ -932,7 +932,7 @@ export const testAuctionsData = [
     "startPrice" : 3500,
     "butOutPrice" : 4200,
     "start_auction_date" : "test start date",
-    "end_auction_date" : "test end date",
+    "end_auction_date" : new Date(2023, 8, 15, 11, 30, 0, 0),
     "auctionStatus" : "in progress",
     "createAt": new Date().toLocaleString()
   },
@@ -956,7 +956,7 @@ export const testAuctionsData = [
     "startPrice" : 4190,
     "butOutPrice" : 4700,
     "start_auction_date" : "test start date",
-    "end_auction_date" : "test end date",
+    "end_auction_date" : new Date(2023, 8, 15, 9, 30, 0, 0),
     "auctionStatus" : "in progress",
     "createAt": new Date().toLocaleString()
   },
@@ -980,7 +980,7 @@ export const testAuctionsData = [
     "startPrice" : 1900,
     "butOutPrice" : 2390,
     "start_auction_date" : "test start date",
-    "end_auction_date" : "test end date",
+    "end_auction_date" : new Date(2023, 8, 14, 21, 30, 0, 0),
     "auctionStatus" : "in progress",
     "createAt": new Date().toLocaleString()
   },
