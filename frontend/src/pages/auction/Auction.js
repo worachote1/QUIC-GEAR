@@ -355,17 +355,17 @@ const Auction = () => {
 
         </div>
 
-        <div className="flex flex-col justify-center items-center mt-8 ">
-          <div className="flex flex-wrap justify-start sm:w-full md:w-2/3 ">
-            <div className='sm:mx-4 md:mx-48'>
+        <div className="flex flex-col justify-center items-center mt-8">
+          <div className="flex justify-start sm:w-full md:w-2/3 ">
+            <Link className='sm:mx-4 md:mx-48' to={'/auction_create/'}>
               <button className='mt-3  border border-red-500 bg-white text-red-500 font-bold px-4 py-2 rounded-full hover:bg-red-500 hover:text-white transition duration-300 your-custom-class'>
                 <div className='flex justify-center items-center p-2 text-lg'>  <span className='mr-2'> {<FaBusinessTime size={20} />} </span> สร้างการประมูล </div>
               </button>
-            </div>
+            </Link>
           </div>
         </div>
 
-
+ 
         <div className="flex flex-col justify-center items-center mt-8 ">
           <div className="flex flex-wrap justify-center sm:w-full md:w-2/3 ">
             {

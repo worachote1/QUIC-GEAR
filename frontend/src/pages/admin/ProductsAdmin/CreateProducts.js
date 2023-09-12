@@ -111,7 +111,6 @@ export default function CreateProducts() {
 
         <div className="flex items-center justify-center w-full">
           <div className="p-8 rounded w-7/12">
-            {/* <form className="" onSubmit={handleSubmitCreateProduct} > */}
             <div>
               <label className="block mb-1 font-bold text-gray-500">Product Name</label>
               <input type="name" className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-300" name='name'
@@ -199,7 +198,6 @@ export default function CreateProducts() {
               <textarea type="text" name="description" value={product['description']} onChange={onChangeInput} className="w-full h-44 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-300"></textarea>
             </div>
             <button type="submit" className="w-full mt-2 bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 focus:outline-none focus:ring focus:ring-blue-300">Submit</button>
-            {/* </form> */}
           </div>
         </div>
 

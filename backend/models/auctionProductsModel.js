@@ -10,61 +10,57 @@ const auctionProductSchema = new mongoose.Schema({
         required: true
     },
     start_auction_date: {
-        type: Number,
+        type: String,
         required: true
     },
     end_auction_date: {
-        type: Number,
+        type: String,
         required: true
     },
     auctionStatus: {
         type: String,
-        required: true
+        default: "waiting approved"
     },
-    createAt: {
-        type: String,
-        required: true
+    createdAt: {
+        type: Date,
+        default: Date.now
     },
-    productItem: [
-        {
-            name: {
-                type: String,
-                required: true
-            },
-            brand: {
-                type: String,
-                required: true
-            },
-            type: {
-                type: String,
-                required: true
-            },
-            subType: {
-                type: String,
-                required: true
-            },
-            isWireless: {
-                type: Boolean,
-                required: true,
-            },
-            isRGB: {
-                type: Boolean,
-                required: true
-            },
-            description: {
-                type: String,
-                required: true
-            },
-            imgPath: {
-                type: String,
-                required: true
-            },
-            subType: {
-                type: String,
-                required: true
-            }
-        }
-    ],
+    productItem:
+    {
+        name: {
+            type: String,
+            required: true
+        },
+        brand: {
+            type: String,
+            required: true
+        },
+        type: {
+            type: String,
+            required: true
+        },
+        subType: {
+            type: String,
+            required: true
+        },
+        isWireless: {
+            type: Boolean,
+            required: true,
+        },
+        isRGB: {
+            type: Boolean,
+            required: true
+        },
+        description: {
+            type: String,
+            required: true
+        },
+        imgPath: {
+            type: [String],
+            required: true
+        },
+    }
+    ,
     user_seller: [
         {
             id: {
@@ -82,10 +78,10 @@ const auctionProductSchema = new mongoose.Schema({
         }
     ],
     userBidder: {
-        type: [String],
-        required: true
+        type: [],
+        default: []
     }
-    
+
 });
 
 module.exports = mongoose.model('auctionProducts', auctionProductSchema);
