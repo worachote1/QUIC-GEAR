@@ -8,29 +8,53 @@ export default function Login() {
 
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
-  const [nameError, setNameError] = useState('');
-  const [passwordError, setPasswordError] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState('');
+  const [isNameFocused, setNameFocused] = useState(false);
+  const [isPasswordFocused, setPasswordFocused] = useState(false);
 
   const navigate = useNavigate();
 
-  const validateName = () => {
-    if ((/^\s*$/gm).test(userName)) {
-      setNameError("Can't be empty");
-    } else {
-      setNameError('');
+  const validateNamePassword = () => {
+    const testName = (/^\s*$/gm).test(userName);
+    const testPassword =(/^\s*$/gm).test(password);
+    if(testName&&testPassword){
+      setError("Name and Password can't be empty");
     }
-  }
-  const validatePassword = () => {
-    if ((/^\s*$/gm).test(password)) {
-      setPasswordError("Can't be empty");
+    else if (testName) {
+      setError("Name can't be empty");
+    }
+    else if (testPassword) {
+      setError("Password can't be empty");
     } else {
-      setPasswordError('');
+      setError('');
     }
   }
 
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+  const inputType = showPassword ? 'text' : 'password';
+
+  const handleNameFocus = () => {
+    setNameFocused(true);
+  };
+  const handleNameBlur = () => {
+    setNameFocused(false);
+    validateNamePassword();
+  };
+
+  const handlePasswordFocus = () => {
+    setPasswordFocused(true);
+  };
+  const handlePasswordBlur = () => {
+    setPasswordFocused(false);
+    validateNamePassword();
+  };
+
   const handleLogIn = (event) => {
     event.preventDefault();
-    if(nameError !== '' || passwordError !== ''){
+    if(error !== ''){
       return
     }
     // if login success redirecct to main page
@@ -60,95 +84,133 @@ export default function Login() {
       })
   }
 
-  // sceen size 945x750
-
   return (
     <div>
       <div className="min-h-screen flex flex-col items-center ">
         {/* <div className="bg-white p-8 rounded shadow-xl w-full max-w-md"> */}
-        {/* <img src={quicgearImage} style={{ width: '375px', height: '76px' }} /> */}
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900 mb-4">
+        <img 
+          className="mt-6 mb-4"
+          src="https://media.discordapp.net/attachments/1008605866624303204/1146757863205769276/quicgear.png?width=1440&height=288" 
+          style={{ width: '375px', height: '76px' }} 
+        />
+          {/* <h2 className="mt-6 mb-4 text-center text-3xl font-extrabold text-gray-900 ">
             Login to your account
-          </h2>
+          </h2> */}
           <form className="space-y-4" onSubmit={handleLogIn}>
             <div>
-              <input type="username" className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-300" placeholder="Username or Email address"
-                onChange={(e) => setUserName(e.target.value)}
-                onBlur={validateName}
-              />
-              <div className='name-error text-red-500/75 font-bold'>
-                {nameError}
-              </div>
-            </div>
-            <div>
-              <input type="password" className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-300" placeholder="Password"
-                onChange={(e) => setPassword(e.target.value)}
-                onBlur={validatePassword}
-              />
-              <div className='name-error text-red-500/75 font-bold'>
-                {passwordError}
-              </div>
-            </div>
-
-            <div className="flex items-center justify-between ">
-              <div className="flex items-center">
-                <input
-                  id="remember-me"
-                  name="remember-me"
-                  type="checkbox"
-                  className="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded"
+              <div class="flex justify-end items-center relative">
+                <input type="username" className="w-96 mb-0.5 px-4 py-2 border border-gray-300 rounded-t-lg focus:outline-none focus:ring focus:ring-[#a51d2d]" placeholder="อีเมล"
+                  onChange={(e) => setUserName(e.target.value)}
+                  onFocus={handleNameFocus}
+                  onBlur={handleNameBlur}
                 />
-                <label htmlFor="remember-me" className="ml-2 block text-gray-500">
-                  Remember me
-                </label>
+                {!isNameFocused&&(
+                    <svg
+                    class="absolute mr-3"
+                    fill="none"
+                    width="15"
+                    height="15"
+                    xmlns="http://www.w3.org/2000/svg"
+                    id="screenshot-8e07e746-003b-8095-8003-0e0d7d517558"
+                    version="1.1"
+                    viewBox="4610.5 191.248 21.251 21.252"
+                  >
+                    <g id="shape-8e07e746-003b-8095-8003-0e0d7d517558">
+                      <g className="fills" id="fills-8e07e746-003b-8095-8003-0e0d7d517558">
+                        <path
+                          rx="0"
+                          ry="0"
+                          fill="#2e3436"
+                          d="M4627.416,191.248C4626.549,191.260,4625.664,191.594,4624.879,192.379L4611.379,205.879C4610.816,206.441,4610.500,207.203,4610.500,208.000L4610.500,212.500L4615.000,212.500C4615.797,212.500,4616.559,212.184,4617.121,211.621L4630.621,198.121C4633.305,195.438,4630.744,191.535,4627.785,191.266C4627.662,191.248,4627.539,191.248,4627.416,191.248ZM4624.750,196.656L4626.344,198.250L4615.750,208.844L4614.156,207.250ZM4624.750,196.656"
+                        ></path>
+                      </g>
+                    </g>
+                  </svg>
+                )}
+                
               </div>
-              <div>
-                <a href="#" className="text-blue-500 hover:underline">
-                  Forgot your password?
-                </a>
+              
+              <div class="flex justify-end items-center relative">
+                  <input type={inputType} className="w-full px-4 py-2 border border-gray-300 rounded-b-lg focus:outline-none focus:ring focus:ring-[#a51d2d]" placeholder="รหัสผ่าน"
+                  onChange={(e) => setPassword(e.target.value)}
+                  onFocus={handlePasswordFocus}
+                  onBlur={handlePasswordBlur}
+                />
+                {!isPasswordFocused&&(
+                      <svg
+                      class="absolute mr-9"
+                      fill="none"
+                      width="15"
+                      height="15"
+                      xmlns="http://www.w3.org/2000/svg"
+                      id="screenshot-8e07e746-003b-8095-8003-0e0d7d517558"
+                      version="1.1"
+                      viewBox="4610.5 191.248 21.251 21.252"
+                    >
+                      <g id="shape-8e07e746-003b-8095-8003-0e0d7d517558">
+                        <g className="fills" id="fills-8e07e746-003b-8095-8003-0e0d7d517558">
+                          <path
+                            rx="0"
+                            ry="0"
+                            fill="#2e3436"
+                            d="M4627.416,191.248C4626.549,191.260,4625.664,191.594,4624.879,192.379L4611.379,205.879C4610.816,206.441,4610.500,207.203,4610.500,208.000L4610.500,212.500L4615.000,212.500C4615.797,212.500,4616.559,212.184,4617.121,211.621L4630.621,198.121C4633.305,195.438,4630.744,191.535,4627.785,191.266C4627.662,191.248,4627.539,191.248,4627.416,191.248ZM4624.750,196.656L4626.344,198.250L4615.750,208.844L4614.156,207.250ZM4624.750,196.656"
+                          ></path>
+                        </g>
+                      </g>
+                    </svg>
+                  )}
+                  <svg
+                    class="absolute mr-3" 
+                    xmlnsXlink="http://www.w3.org/1999/xlink"
+                    fill="none"
+                    width="15"
+                    xmlns="http://www.w3.org/2000/svg"
+                    style={{ WebkitPrintColorAdjust: 'exact' }}
+                    id="screenshot-8e07e746-003b-8095-8003-0e0d7d518976"
+                    version="1.1"
+                    viewBox="4609.393 263 23.215 18"
+                    height="15"
+                    onClick={togglePasswordVisibility}
+                  >
+                    <g id="shape-8e07e746-003b-8095-8003-0e0d7d518976">
+                      <g className="fills" id="fills-8e07e746-003b-8095-8003-0e0d7d518976">
+                        <path
+                          rx="0"
+                          ry="0"
+                          style={{ fill: '#2e3436', fillOpacity: 1 }}
+                          d="M4621.000,263.000C4615.527,263.006,4610.752,266.715,4609.393,272.012C4610.764,277.303,4615.539,280.994,4621.000,281.000C4626.473,280.994,4631.248,277.285,4632.607,271.982C4631.236,266.697,4626.461,263.006,4621.000,263.000ZZM4621.000,266.000C4624.316,266.000,4627.000,268.684,4627.000,272.000C4627.000,275.316,4624.316,278.000,4621.000,278.000C4617.684,278.000,4615.000,275.316,4615.000,272.000C4615.000,268.684,4617.684,266.000,4621.000,266.000ZZM4621.000,266.000"
+                        ></path>
+                      </g>
+                    </g>
+                  </svg>
               </div>
-            </div>
 
-            <button type="submit" className="w-full bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 focus:outline-none focus:ring focus:ring-blue-300"
-            >
-              Log In
-            </button>
-          </form>
-          <div className="mt-4 flex items-center justify-center">
-            <span className="text-gray-500 mr-2">Don't have an account?</span>
-            <Link
-              to={`/register`}>
-              <a className="text-blue-500 hover:underline">
-                Register
-              </a>
-            </Link>
-          </div>
-            
-            
-          <div class="mt-6">
-            <div class="relative">
-              <div class="absolute inset-0 flex items-center">
-                <div class="w-full border-t border-gray-300"></div>
-              </div>
-              <div class="relative flex justify-center text-sm">
-                <span class="px-2 bg-gray-100 text-gray-500">
-                  Or continue with
-                </span>
+              <div className='name-error text-red-500/75 font-bold'>
+                {error}
               </div>
             </div>
-            <div class="mt-6 grid grid-cols-1 gap-3">
-            </div>
-            <div>
-              <a href="#"
-                class="w-full flex items-center justify-center px-8 py-3 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50"
-                // onClick={hanleGoogleSignIn}
+            <div class="flex justify-center pt-7">
+                <button type="submit" className="text-sm items-center w-44 bg-[#a51d2d] text-white py-2 px-4 rounded-full hover:bg-[#910919] "
               >
-                <img class="h-6 w-6" src="https://www.svgrepo.com/show/355037/google.svg"
-                  alt="" />
-              </a>
+                ลงชื่อเข้าใช้
+              </button>
             </div>
-          </div>
+            
+          </form>
 
+          <div class="flex justify-center py-4">
+                <button href="/register" className="text-sm items-center w-44 bg-[#00000014] text-black py-2 px-4 rounded-full hover:bg-[#00000029] "
+              >
+                ลงชื่อเข้าใช้ด้วย Google
+              </button>
+          </div>   
+
+          <div class="flex justify-center">
+                <button href="/register" className="text-sm items-center w-44 bg-[#00000014] text-black py-2 px-4 rounded-full hover:bg-[#00000029] "
+              >
+                ฉันต้องการสมัครสมาชิก
+              </button>
+          </div>    
         {/* </div> */}
       </div>
     </div>
