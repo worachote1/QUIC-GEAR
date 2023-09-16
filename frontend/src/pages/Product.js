@@ -320,7 +320,7 @@ const Product = () => {
             </div>
 
             <div className='flex flex-col flex-1'>
-                <div className="md:flex md:w-1/2 lg:w-screen justify-center items-center mt-8 mr-[150px] md:mr-[500px] lg:mr-[150px]">
+            <div className="md:flex md:w-1/2 lg:w-[95%] justify-center items-center mt-8 mr-[150px] md:mr-[500px] lg:mr-[150px]">
                     <div className="grid grid-cols-1 lg:grid-cols-4 md:grid-cols-1 gap-4 md:gap-2">
                         <div className="flex-col mt-6 md:mr-32 lg:mr-16">
 
