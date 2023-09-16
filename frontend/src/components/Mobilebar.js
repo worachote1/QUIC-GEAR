@@ -4,6 +4,8 @@ import { SideBarCtegories } from "../constant/sideBarConstants";
 
 export default function Mobilebar() {
     const currentPath = useLocation().pathname;
+    const location = useLocation();
+    const isCartPage = location.pathname === "/cart";
     const [open, setOpen] = useState(false);
     const [userRole, setUserRole] = useState("admin"); {/*guest,user,admin*/ }
     const [profileMenuActive, setProfileMenuActive] = useState(false);
@@ -15,6 +17,9 @@ export default function Mobilebar() {
     const clickProfileDropdown = () => {
         setProfileMenuActive(!profileMenuActive);
     };
+    if (isCartPage) {
+        return null;
+      }
     return (
         <div>
             <div>
