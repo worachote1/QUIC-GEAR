@@ -35,22 +35,48 @@ export default function CartItem({ menuObj, callbackUpdate , cur_Total}) {
         });
     }
     return (
-        <div class="flex flex-col md:flex-row border-b border-gray-400 py-4 ">
-            <div class="flex-shrink-0 rounded-lg">
-                <img src={menuObj.imgPath} alt="Product image" class="w-72 h-44 object-cover rounded-lg" />
-            </div>
-            <div class="mt-4 md:mt-0 md:ml-6">
-                <h2 class="font-bold text-2xl md:text-3xl" style={{ fontFamily: "'Noto Serif Thai', serif" }}>{menuObj.itemName}</h2>
-                <div class="mt-4 flex items-center text-2xl">
-                    <span class="mr-2 text-gray-600 ">Quantity:</span>
-                    <div class="flex items-center">
-                        <button class="bg-red-500 rounded-l-lg px-2 py-1 text-white" onClick={() => handle_ClickVote(menuObj.id, -1)}>-</button>
-                        <span class="mx-2 text-gray-600 ">{displayQuantity}</span>
-                        <button class="bg-green-500 rounded-r-lg px-2 py-1 text-white" onClick={() => handle_ClickVote(menuObj.id, 1)}>+</button>
-                    </div>
-                    <span class="md:ml-8 ml-auto font-bold">{menuObj.itemPrice * displayQuantity} Bath</span>
-                </div>
-            </div>
+        <div class="shadow-md py-4 rounded-lg mt-2">
+    <div className="flex">
+      <div class="rounded-lg">
+        <img
+          src={menuObj.imgPath}
+          alt="Product image"
+          class="w-44 h-36 object-cover rounded-lg"
+        />
+      </div>
+      <div class="mt-4 mt-0 ml-6">
+        <h2
+          class="font-bold text-2xl md:text-3xl"
+        >
+          {menuObj.itemName}
+        </h2>
+        <div class="mt-4 flex items-center text-2xl">
+            <div>
+          <span class="font-bold text-red-700">
+          ฿
+            {menuObj.itemPrice * displayQuantity} 
+          </span>
+          </div>
         </div>
-    )
+      </div>
+      </div>
+      <div class="flex items-end justify-end mr-6">
+            <span class="flex rounded w-28 h-8 bg-[#F1F1F1] justify-between items-center">
+              {displayQuantity}
+            </span>
+            <button
+              class="flex rounded w-6 h-8 bg-[#F1F1F1] hover:bg-[#DEDEDE] justify-center items-center"
+              onClick={() => handle_ClickVote(menuObj.id, -1)}
+            >
+              -
+            </button>
+            <button
+              class="flex rounded w-6 h-8 bg-[#F1F1F1] hover:bg-[#DEDEDE] justify-center items-center"
+              onClick={() => handle_ClickVote(menuObj.id, 1)}
+            >
+              +
+            </button>
+          </div>
+    </div>
+  );
 }

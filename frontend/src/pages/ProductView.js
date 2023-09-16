@@ -1,4 +1,4 @@
-import { useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft, faChevronRight, faDotCircle } from '@fortawesome/free-solid-svg-icons';
 import React, { useState, useEffect } from 'react';
@@ -73,13 +73,13 @@ export default function ProductView() {
       // 
       if (cur_CartData.find(obj => obj.id === id) === undefined) {
         cur_CartData.push(temp_obj)
-        
+
       }
-      else{
+      else {
         cur_CartData[itemIndex].quantity += amount;
       }
       sessionStorage.setItem("currrent_cartItem", JSON.stringify(cur_CartData))
-        // window.location.reload()
+      // window.location.reload()
     }
     Swal.fire("เพิ่มสินค้าลงรถเข็น", `${itemName} จำนวน ${amount} ชิ้น`, "success");
   }
@@ -92,29 +92,32 @@ export default function ProductView() {
   }
 
   return (
-    <div className='flex flex-col flex-1 lg:ml-[70px]'>
+    <div className='flex flex-col flex-1 lg:ml-[200px]'>
       <div class='flex flex-col justify-center'>
-        <div class='flex p-8'>
+        <div class='flex h-full w-5/6 m-auto relative p-8 hidden lg:block'>
+          <p className='font-Prompt text-sm px-11 text-black'>
+            <Link to="/" >หน้าแรก</Link> {'>'}
+            <Link to={`/product?search=${product.subtype}`} > {product.subtype}</Link> {'>'}
+            <Link to={`/product?search=${product.name}`} className='font-bold'> {product.name}</Link>
+          </p>
         </div>
-        <div class='flex justify-center gap-x-8 h-96'>
-          <div class='flex justify-center h-full w-3/6 m-auto relative'>
-            <div class='h-full w-3/6 relative group'>
-              <div
-                style={{ backgroundImage: `url(${productImages[currentIndex].url})` }}
-                className='w-full h-full rounded-lg bg-center bg-cover duration-500'
-              >
-              </div>
-              {/* Left Arrow */}
-              <div className='hidden group-hover:block absolute top-[50%] -translate-x-0 translate-y-[-50%] left-5 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer'>
-                <FontAwesomeIcon icon={faChevronLeft} onClick={prevSlide} size={30} />
-              </div>
-              {/* Right Arrow */}
-              <div className='hidden group-hover:block absolute top-[50%] -translate-x-0 translate-y-[-50%] right-5 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer'>
-                <FontAwesomeIcon icon={faChevronRight} onClick={nextSlide} size={30} />
-              </div>
+        <div class='flex flex-col sm:flex-row gap-x-8 h-auto sm:h-96'>
+          <div class='w-full sm:w-1/2 md:w-1/3 lg:w-1/3 relative group mx-auto'>
+            <div
+              style={{ backgroundImage: `url(${productImages[currentIndex].url})` }}
+              class='w-full h-96 sm:h-full rounded-lg bg-center bg-contain bg-no-repeat duration-500'
+            >
+            </div>
+            {/* Left Arrow */}
+            <div class='hidden group-hover:block absolute top-[50%] -translate-x-0 translate-y-[-50%] left-5 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer'>
+              <FontAwesomeIcon icon={faChevronLeft} onClick={prevSlide} size={30} />
+            </div>
+            {/* Right Arrow */}
+            <div class='hidden group-hover:block absolute top-[50%] -translate-x-0 translate-y-[-50%] right-5 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer'>
+              <FontAwesomeIcon icon={faChevronRight} onClick={nextSlide} size={30} />
             </div>
           </div>
-          <div class='flex flex-col justify-start box-border h-full w-3/6'>
+          <div class='flex flex-col justify-start mt-4 sm:w-3/6 md:w-[450px] lg:w-3/6'>
             <p class='flex font-Prompt text-3xl font-bold'>{product.name}</p>
             <p class='flex py-4 font-Prompt text-sm'>Product ID: {product.id}</p>
             <p class='flex font-Prompt text-3xl text-[#a51d2d] font-bold'>{product.price} บาท</p>
@@ -147,9 +150,9 @@ export default function ProductView() {
           </div>
         </div>
         <div class='flex w-full h-full justify-center p-16'>
-          <div class='flex flex-col w-3/4 text-sm items-start'>
+          <div class='flex flex-col w-full sm:w-3/4 text-sm items-start'>
             Product Description
-            <p class='flex w-3/4 py-4 text-left'>
+            <p class='flex w-full py-4 text-left'>
               Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old.
             </p>
           </div>

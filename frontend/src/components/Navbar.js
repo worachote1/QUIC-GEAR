@@ -5,6 +5,9 @@ export default function Navbar() {
     const [userRole, setUserRole] = useState("admin"); {/*guest,user,admin*/ }
     const [profileMenuActive, setProfileMenuActive] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
+    const [showCartItemCount, setCartItemCount] = useState((sessionStorage.getItem("currrent_cartItem") !== null)
+        ? JSON.parse(sessionStorage.getItem("currrent_cartItem")).length
+        : 0)
     const navigate = useNavigate();
 
     const clickProfileDropdown = () => {
@@ -57,7 +60,10 @@ export default function Navbar() {
                             <i className="fas fa-heart" style={{ fontSize: '1.25rem' }}></i>
                         </Link>
                         <Link to="/cart" className="btn border-white text-black rounded-full hover:bg-[#d8d8d8] mr-2" id="cart_btn">
-                            <i className="fas fa-cart-shopping" style={{ fontSize: '1.25rem' }}></i>
+                            <div className='flex'>
+                                <i className="fas fa-cart-shopping" style={{ fontSize: '1.25rem' }}></i>
+                                {showCartItemCount !== 0 ? <div className="badge badge-secondary" style={{ backgroundColor: '#a51d2d', color: 'white' }}>{showCartItemCount}</div> : ""}
+                            </div>
                         </Link>
                         {userRole === "admin" && (
                             <Link to="/admin" className="btn border-white text-black rounded-full hover:bg-[#d8d8d8] mr-2">
