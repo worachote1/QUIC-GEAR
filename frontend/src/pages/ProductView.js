@@ -81,7 +81,22 @@ export default function ProductView() {
       sessionStorage.setItem("currrent_cartItem", JSON.stringify(cur_CartData))
       // window.location.reload()
     }
-    Swal.fire("เพิ่มสินค้าลงรถเข็น", `${itemName} จำนวน ${amount} ชิ้น`, "success");
+    Swal.fire({
+      title: "เพิ่มสินค้าลงรถเข็น",
+      text: `${itemName} จำนวน ${amount} ชิ้น`,
+      icon: "success",
+      showCancelButton: true,
+      confirmButtonColor: "#ebebeb",
+      cancelButtonColor: "#a51d2d",
+      confirmButtonText: "<span class='text-black'>ไปที่รถเข็น</span>",
+      cancelButtonText: "เลือกสินค้าเพิ่มเติม",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        window.location.href = "/cart"; // ไปหน้าตะกร้า
+      } else {
+        // ช้อปปิ้งต่อ - ไม่ต้องทำอะไร
+      }
+    });
   }
 
 
@@ -134,10 +149,11 @@ export default function ProductView() {
             </div>
             <div class='flex flex-row gap-x-3 py-3'>
               <p class='flex w-24 h-6'>จำนวน</p>
-              <p class='flex rounded w-28 h-6 bg-[#F1F1F1] justify-between items-center'>
-                <button class='flex rounded w-6 h-6 bg-[#F1F1F1] hover:bg-[#DEDEDE] justify-center items-center' onClick={minusAmount}>-</button>
-                {amount}
-                <button class='flex rounded w-6 h-6 bg-[#F1F1F1] hover:bg-[#DEDEDE] justify-center items-center' onClick={plusAmount}>+</button>
+              <p class='flex rounded w-28 h-6 bg-[#F1F1F1] justify-between items-center'>{amount}
+                <div class='flex'>
+                  <button class='flex rounded w-6 h-6 bg-[#F1F1F1] hover:bg-[#DEDEDE] font-bold justify-center items-center' onClick={minusAmount}>-</button>
+                  <button class='flex rounded w-6 h-6 bg-[#F1F1F1] hover:bg-[#DEDEDE] font-bold justify-center items-center' onClick={plusAmount}>+</button>
+                </div>
               </p>
               <p class='flex text-xs justify-center items-center'>มีสินค้าทั้งหมด 27 ชิ้น </p>
             </div>
