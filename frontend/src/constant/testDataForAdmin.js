@@ -716,7 +716,7 @@ export const testAuctionsData = [
     "startPrice" : 700,
     "butOutPrice" : 2500,
     "start_auction_date" : "test start date",
-    "end_auction_date" : new Date(2023, 8, 16, 22, 30, 0, 0),
+    "end_auction_date" : new Date(2023, 8, 17, 22, 30, 0, 0),
     "auctionStatus" : "completed",
     "createAt": new Date().toLocaleString()
   },
@@ -740,7 +740,7 @@ export const testAuctionsData = [
     "startPrice" : 2700,
     "butOutPrice" : 4500,
     "start_auction_date" : "test start date",
-    "end_auction_date" : new Date(2023, 8, 17, 23, 30, 0, 0),
+    "end_auction_date" : new Date(2023, 8, 18, 23, 30, 0, 0),
     "auctionStatus" : "completed",
     "createAt": new Date().toLocaleString()
   },
@@ -764,7 +764,7 @@ export const testAuctionsData = [
     "startPrice" : 7700,
     "butOutPrice" : 8500,
     "start_auction_date" : "test start date",
-    "end_auction_date" : new Date(2023, 8, 16, 11, 30, 0, 0),
+    "end_auction_date" : new Date(2023, 8, 18, 11, 30, 0, 0),
     "auctionStatus" : "waiting approved",
     "createAt": new Date().toLocaleString()
   },
