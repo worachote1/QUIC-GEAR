@@ -30,13 +30,12 @@ const AuctionViews = () => {
         const newArrayIndex = arrayIndex.map((index) => {
             let newIndex = index - 1;
             if (newIndex < 0) {
-                newIndex = slides.length;
+                newIndex = slides.length-1;
             }
             return newIndex;
         });
 
         setArrayIndex(newArrayIndex);
-        console.log(newArrayIndex);
     };
 
     const [arrayIndex, setArrayIndex] = useState([0, 1, 2]); // ให้ arrayIndex มีค่าเริ่มต้นเป็น [0, 1, 2]
