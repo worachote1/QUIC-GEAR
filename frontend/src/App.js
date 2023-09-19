@@ -1,11 +1,11 @@
 import React from 'react';
-import AuctionViews from './components/auctionViews';
+import AuctionViews from './pages/auctionViews.js';
 
 function App() {
 
   return (
     <div className="App">
-      <AuctionViews></AuctionViews>
+      <AuctionViews/>
     </div>
   );
 }
