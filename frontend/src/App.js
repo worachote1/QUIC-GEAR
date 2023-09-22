@@ -10,6 +10,7 @@ import Auction from "./pages/Auction";
 import Cart from "./pages/Cart";
 import Mobilebar from "./components/Mobilebar";
 import Product from "./pages/Product";
+import EditProfile from "./pages/EditProfile";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
           <Route path='/auction' element={<Auction />} />
           <Route path='/cart' element={<Cart />} />
           <Route path='/product' element={<Product />} />
+          <Route path='/edit-profile' element={<EditProfile />} />
         </Routes>
         <Footer />
         <Mobilebar />

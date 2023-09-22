@@ -2,27 +2,28 @@ import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { GoogleLogin } from '@react-oauth/google';
 import Swal from 'sweetalert2'
-// import quicgearImage from '../quicgear.png'
 
 export default function Login() {
 
-  const [userName, setUserName] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+
   const [error, setError] = useState('');
+
   const [isNameFocused, setNameFocused] = useState(false);
   const [isPasswordFocused, setPasswordFocused] = useState(false);
 
   const navigate = useNavigate();
 
   const validateNamePassword = () => {
-    const testName = (/^\s*$/gm).test(userName);
+    const testName = (/^\s*$/gm).test(email);
     const testPassword =(/^\s*$/gm).test(password);
     if(testName&&testPassword){
-      setError("Name and Password can't be empty");
+      setError("Email and Password can't be empty");
     }
     else if (testName) {
-      setError("Name can't be empty");
+      setError("Email can't be empty");
     }
     else if (testPassword) {
       setError("Password can't be empty");
@@ -59,7 +60,7 @@ export default function Login() {
     }
     // if login success redirecct to main page
     // and create current user login in session
-    fetch(`http://test.techtransthai.org:5000/api/user/login/?username=${userName}&password=${password}`)
+    fetch(`http://test.techtransthai.org:5000/api/user/login/?email=${email}&password=${password}`)
       .then((res) => {
         if (res.ok) {
           return res.json();
@@ -70,7 +71,7 @@ export default function Login() {
       })
       .then((data) => {
         console.log(data.loginStatus);
-        sessionStorage.setItem('current_user', userName);
+        sessionStorage.setItem('current_user', email);
         navigate("/");
       })
       .catch((err) => {
@@ -99,8 +100,8 @@ export default function Login() {
           <form className="space-y-4" onSubmit={handleLogIn}>
             <div>
               <div class="flex justify-end items-center relative">
-                <input type="username" className="w-96 mb-0.5 px-4 py-2 border border-gray-300 rounded-t-lg focus:outline-none focus:ring focus:ring-[#a51d2d]" placeholder="อีเมล"
-                  onChange={(e) => setUserName(e.target.value)}
+                <input type="email" className="w-96 mb-0.5 px-4 py-2 border border-gray-300 rounded-t-lg focus:outline-none focus:ring focus:ring-[#a51d2d]" placeholder="อีเมล"
+                  onChange={(e) => setEmail(e.target.value)}
                   onFocus={handleNameFocus}
                   onBlur={handleNameBlur}
                 />
@@ -206,8 +207,7 @@ export default function Login() {
           </div>   
 
           <div class="flex justify-center">
-                <button href="/register" className="text-sm items-center w-44 bg-[#00000014] text-black py-2 px-4 rounded-full hover:bg-[#00000029] "
-              >
+              <button href="/register" className="text-sm items-center w-44 bg-[#00000014] text-black py-2 px-4 rounded-full hover:bg-[#00000029] ">
                 ฉันต้องการสมัครสมาชิก
               </button>
           </div>    
