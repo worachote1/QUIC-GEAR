@@ -7,9 +7,9 @@ import { FaBusinessTime } from 'react-icons/fa';
 import AuctionCard from "../../components/AuctionCard";
 import { testAuctionsData } from "../../constant/testDataForAdmin";
 import { Link } from 'react-router-dom';
+import axios from "axios";
 
 const Auction = () => {
-  console.log(testAuctionsData)
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const searchQuery = searchParams.get("search");
@@ -25,6 +25,10 @@ const Auction = () => {
   const [open, setOpen] = useState(false);
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
+
+  // store fecth result of those auctions with In Progress status
+  const [auctionsAvailable, setAuctionsAvailable] = useState([])
+
   const toggleExpand = () => {
     setpriceExpanded(!priceExpanded);
   };
@@ -34,31 +38,60 @@ const Auction = () => {
   const getPriceValue = (price) => {
     return parseFloat(price.replace(/[^\d.]/g, ''));
   };
+
+  const handleBrandCheckboxChange = (brand) => {
+    if (selectedBrands === null) {
+      setSelectedBrands([brand]);
+    } else if (selectedBrands.includes(brand)) {
+      setSelectedBrands(
+        selectedBrands.filter((selectedBrand) => selectedBrand !== brand)
+      );
+    } else {
+      setSelectedBrands([...selectedBrands, brand]);
+    }
+  };
+
+  const getAuctionsData = async () => {
+    const allAuctionsData = await axios.get(`${process.env.REACT_APP_QUIC_GEAR_API}/auctionProducts`)
+    const res_allAuctionsData = allAuctionsData.data;
+    const currentDate = new Date();
+    const availableAuctions = res_allAuctionsData?.filter((item) => {
+      // new Date(item.start_auction_date) >= currentDate && item.auctionStatus === "in progess"
+      // just test (it use to be in progess which is auction that confirm by admin)
+      return new Date(item.start_auction_date) >= currentDate && item.auctionStatus === "waiting approved" 
+  })
+    console.log(res_allAuctionsData)
+    console.log(availableAuctions)
+    setAuctionsAvailable(availableAuctions)
+  }
+
+  useEffect(() => {
+    getAuctionsData()
+  },[])
+  
+
   useEffect(() => {
     const brandsSet = new Set();
     const tempFilteredProducts = [];
 
-    testAuctionsData.forEach((item) => {
+      auctionsAvailable.forEach((item) => {
 
-      const nameIncludesQuery = (searchQuery) ? item.product.name.toLowerCase().includes(searchQuery.toLowerCase()) : "";
-      const brandIncludesQuery = (searchQuery) ? item.product.brand.toLowerCase().includes(searchQuery.toLowerCase()) : "";
-      const typeIncludesQuery = (searchQuery) ? item.product.type.toLowerCase().includes(searchQuery.toLowerCase()) : "";
-      const subtypeIncludesQuery = (searchQuery) ? item.product.subType.toLowerCase().includes(searchQuery.toLowerCase()) : "";
+      const nameIncludesQuery = (searchQuery) ? item.productItem.name.toLowerCase().includes(searchQuery.toLowerCase()) : "";
+      const brandIncludesQuery = (searchQuery) ? item.productItem.brand.toLowerCase().includes(searchQuery.toLowerCase()) : "";
+      const typeIncludesQuery = (searchQuery) ? item.productItem.type.toLowerCase().includes(searchQuery.toLowerCase()) : "";
+      const subtypeIncludesQuery = (searchQuery) ? item.productItem.subType.toLowerCase().includes(searchQuery.toLowerCase()) : "";
       if (searchQuery === null || nameIncludesQuery || brandIncludesQuery || typeIncludesQuery || subtypeIncludesQuery) {
         tempFilteredProducts.push(item);
-        brandsSet.add(item.product.brand);
+        brandsSet.add(item.productItem.brand);
       }
     });
 
     setFilteredProducts(tempFilteredProducts);
     setBrands(brandsSet);
-  }, [searchQuery]);
+  }, [searchQuery, auctionsAvailable]);
 
   useEffect(() => {
-    let filteredByBrand = testAuctionsData;
-    // console.log("prn")
-    // console.log(productData[0])
-    // console.log(testAuctionsData[0])
+    let filteredByBrand = auctionsAvailable;
     if (selectedFilter === "newArrival") {
       // Sort products by createdAt in ascending order (newest first)
       filteredByBrand.sort((a, b) => new Date(b.createAt) - new Date(a.createAt));
@@ -128,20 +161,10 @@ const Auction = () => {
     });
 
     setFilteredProducts(filteredByBrand);
-  }, [selectedBrands, selectedRGB, selectedWireless, searchQuery, selectedFilter, minPrice, maxPrice]);
+  }, [selectedBrands, selectedRGB, selectedWireless, searchQuery, selectedFilter, minPrice, maxPrice, auctionsAvailable]);
 
 
-  const handleBrandCheckboxChange = (brand) => {
-    if (selectedBrands === null) {
-      setSelectedBrands([brand]);
-    } else if (selectedBrands.includes(brand)) {
-      setSelectedBrands(
-        selectedBrands.filter((selectedBrand) => selectedBrand !== brand)
-      );
-    } else {
-      setSelectedBrands([...selectedBrands, brand]);
-    }
-  };
+
 
   return (
 

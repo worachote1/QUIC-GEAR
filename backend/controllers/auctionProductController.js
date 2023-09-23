@@ -9,6 +9,25 @@ const getAllAuctionProducts = asyncHandler(async (req, res) => {
     res.status(200).json(auctionProducts);
 });
 
+//@desc Get single auctionProduct by id
+//@route GET /api/auctionProducts/:id
+const getSingleAuctionProduct = asyncHandler(async (req, res) => {
+    try {
+        const auctionProductId = req.params.id;
+
+        const targetAuctionProduct = await auctionProduct.findById(auctionProductId);
+
+        if(!targetAuctionProduct) {
+            return res.status(404).send('Auction ID not found!');
+        }
+
+        res.status(200).json(targetAuctionProduct);
+
+    } catch(err) {
+        console.log(err);
+    }
+});
+
 //@desc Create new auctionProduct
 //@route POST /api/auctionProducts/create
 
@@ -78,5 +97,5 @@ const updateAuctionProducts = asyncHandler(async (req, res) => {
 });
 
 module.exports = {
-    getAllAuctionProducts, createAuctionProducts, deleteAuctionProducts, updateAuctionProducts
+    getAllAuctionProducts, getSingleAuctionProduct, createAuctionProducts, deleteAuctionProducts, updateAuctionProducts
 };
