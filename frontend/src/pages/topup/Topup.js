@@ -122,7 +122,7 @@ export default function Topup() {
       // process.env.REACT_APP_QUIC_GEAR_API}/transactions/create
       const createTransactions = await axios.post(`${process.env.REACT_APP_QUIC_GEAR_API}/transactions/create`, {
         transactionType: "topup",
-        imgPath: uploadSingleFile_res.data.path,
+        imgPath: uploadSingleFile_res.data.filename,
         userID: 6,
         amount: parseInt(topupAmount)
       });

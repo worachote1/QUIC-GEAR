@@ -4,6 +4,11 @@ import { formatNumberInput } from '../../util/formatUtil';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import { Link, useNavigate } from 'react-router-dom';
+import { DemoContainer, DemoItem } from '@mui/x-date-pickers/internals/demo';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
+import dayjs from 'dayjs';
 
 export default function AuctionCreate() {
 
@@ -51,7 +56,7 @@ export default function AuctionCreate() {
     const productObjectKeys = Object.keys(product)
     if (productObjectKeys.includes(name))
       setProduct({ ...product, [name]: value })
-    else
+    else if (name !== "start_auction_date" && name !== "end_auction_date")
       setAuctionData({ ...auctionData, [name]: value })
   }
 
@@ -99,21 +104,37 @@ export default function AuctionCreate() {
           multipleFileData.append('images', selectedMultipleFiles[i])
         const uploadMultiple_res = await axios.post(`${process.env.REACT_APP_QUIC_GEAR_API}/upload/multiple`, multipleFileData)
         // console.log(uploadMultiple_res.data)
-        const imgPathData = uploadMultiple_res.data.map((item) => item.path)
-        const updatedProduct = { ...product, imgPath: [...imgPathData] };
+        const imgNameData = uploadMultiple_res.data.map((item) => item.filename)
+        const updatedProduct = { ...product, imgPath: [...imgNameData] };
         setProduct(updatedProduct)
-        const updatedAuctionData = { ...auctionData, startPrice: parseInt(auctionData.startPrice), buyOutPrice: parseInt(auctionData.buyOutPrice), productItem: { ...updatedProduct } }
+        const updatedAuctionData = {
+          ...auctionData, 
+          startPrice: parseInt(auctionData.startPrice),
+          buyOutPrice: parseInt(auctionData.buyOutPrice),
+          productItem: { ...updatedProduct }
+        }
         // POST api to create auction          
         console.log("lasted updated auction data : ")
         console.log(updatedAuctionData)
         const createAuction = await axios.post(`${process.env.REACT_APP_QUIC_GEAR_API}/auctionProducts/create`, updatedAuctionData)
         alertCreatedProductSuccess();
       }
-      catch (err) { 
+      catch (err) {
         console.error(err)
       }
     }
   }
+
+  const testDateTimePicker = (e) => {
+    console.log("testprn")
+    // console.log(e)
+    const selectedDate = e.$d.toString()
+    console.log(selectedDate)
+  }
+
+  // console.log(dayjs())
+  // console.log(dayjs().$d)
+  // console.log(new Date())
   return (
     <diV class=''>
       <form className="" onSubmit={handleSubmitCreateProduct} encType='multipart/form-data'>
@@ -218,14 +239,20 @@ export default function AuctionCreate() {
             </div>
             {/* find some thing like date picker later... */}
             <div className='mt-2'>
-              <label className="block mb-1 font-bold text-gray-500">start_auction_date</label>
-              <input name="start_auction_date" className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-300"
-                onChange={onChangeInput} />
+              <label className="block mb-1 font-bold text-gray-500">Start Auction Date</label>
+              <DateTimePicker
+                views={['year', 'month', 'day', 'hours', 'minutes']}
+                name="start_auction_date"
+                onChange={(e) => setAuctionData({...auctionData , start_auction_date: e.$d.toString()})}
+              />
             </div>
             <div className='mt-2'>
-              <label className="block mb-1 font-bold text-gray-500">end_auction_date</label>
-              <input name="end_auction_date" className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-300"
-                onChange={onChangeInput} />
+              <label className="block mb-1 font-bold text-gray-500">End Auction Date</label>
+              <DateTimePicker
+                views={['year', 'month', 'day', 'hours', 'minutes']}
+                name="end_auction_date"
+                onChange={(e) => setAuctionData({...auctionData , end_auction_date: e.$d.toString()})}
+              />
             </div>
 
             <div className='mt-2'>
@@ -235,8 +262,8 @@ export default function AuctionCreate() {
             <button type="submit" className="w-full mt-2 bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 focus:outline-none focus:ring focus:ring-blue-300">Submit</button>
 
           </div>
-        </div>
 
+        </div>
       </form>
     </diV>
   )

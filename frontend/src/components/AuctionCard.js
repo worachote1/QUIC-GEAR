@@ -30,7 +30,6 @@ export default function AuctionCard({ AuctionItem }) {
         <img src={AuctionItem.product.imgPath} alt={AuctionItem.product.name} className='w-full h-[200px] object-cover mb-2' />
 
       </div>
-   
 
       <div className='flex flex-col'>
         <p className='text-xl font-semibold mb-1 overflow-hidden mt-2 h-20'>{AuctionItem.product.name}</p>
@@ -38,9 +37,11 @@ export default function AuctionCard({ AuctionItem }) {
         <p className='text-lg font-medium  text-right'><span className='text-gray-500'> {displayCountDownDate(timeRemaining.days, timeRemaining.hours, timeRemaining.minutes, timeRemaining.seconds)} </span></p>
       </div>
 
-      <button className='mt-3 w-full border border-red-500 bg-white text-red-500 font-bold px-4 py-2 rounded-md hover:bg-red-500 hover:text-white transition duration-300 your-custom-class'>
-        <div className='flex justify-center items-center p-1'>  <span className='mr-2'> {<ImHammer2 size={20} />} </span> ประมูลทันที </div>
-      </button>
+      <Link to={`/auction/${AuctionItem.id}`}>
+        <button className='mt-3 w-full border border-red-500 bg-white text-red-500 font-bold px-4 py-2 rounded-md hover:bg-red-500 hover:text-white transition duration-300 your-custom-class'>
+          <div className='flex justify-center items-center p-1'>  <span className='mr-2'> {<ImHammer2 size={20} />} </span> ประมูลทันที </div>
+        </button>
+      </Link>
 
     </div>
   )
