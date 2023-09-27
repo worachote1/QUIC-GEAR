@@ -87,10 +87,10 @@ export default function Login() {
 
   return (
     <div>
-      <div className="min-h-screen flex flex-col items-center ">
+      <div className="min-h-[75vh] flex flex-col items-center justify-center">
         {/* <div className="bg-white p-8 rounded shadow-xl w-full max-w-md"> */}
         <img 
-          className="mt-6 mb-4"
+          className="mb-16"
           src="https://media.discordapp.net/attachments/1008605866624303204/1146757863205769276/quicgear.png?width=1440&height=288" 
           style={{ width: '375px', height: '76px' }} 
         />
@@ -98,7 +98,7 @@ export default function Login() {
             Login to your account
           </h2> */}
           <form className="space-y-4" onSubmit={handleLogIn}>
-            <div>
+            <div className='mb-16'>
               <div class="flex justify-end items-center relative">
                 <input type="email" className="w-96 mb-0.5 px-4 py-2 border border-gray-300 rounded-t-lg focus:outline-none focus:ring focus:ring-[#a51d2d]" placeholder="อีเมล"
                   onChange={(e) => setEmail(e.target.value)}
@@ -190,7 +190,7 @@ export default function Login() {
                 {error}
               </div>
             </div>
-            <div class="flex justify-center pt-7">
+            <div class="flex justify-center pt-7 ">
                 <button type="submit" className="text-sm items-center w-44 bg-[#a51d2d] text-white py-2 px-4 rounded-full hover:bg-[#910919] "
               >
                 ลงชื่อเข้าใช้
@@ -199,7 +199,7 @@ export default function Login() {
             
           </form>
 
-          <div class="flex justify-center py-4">
+          <div class="flex justify-center py-8">
                 <button href="/register" className="text-sm items-center w-44 bg-[#00000014] text-black py-2 px-4 rounded-full hover:bg-[#00000029] "
               >
                 ลงชื่อเข้าใช้ด้วย Google

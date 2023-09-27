@@ -220,15 +220,15 @@ export default function UserSettings() {
                 <form className="space-y-4 mt-4" onSubmit={handleSubmitRegister}>
                 <div>
                     <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="file_input">Upload Profile</label>
-                    <input class="w-96 mb-0.5 px-4 py-2 border border-gray-300 rounded-t-lg focus:outline-none focus:ring focus:ring-indigo-300" 
+                    <input class="w-96 mb-0.5 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-indigo-300" 
                         accept="image/*" 
                         id="file_input" 
                         type="file" 
                         onChange={handleImageChange}
                     />
-                    
+                    <label class="block mb-2 mt-2 text-sm font-medium text-gray-900 dark:text-white">Email</label>
                     <div class="flex justify-end items-center relative">
-                        <input type="email" className="w-96 mb-0.5 px-4 py-2 border border-gray-300 focus:outline-none focus:ring focus:ring-indigo-300"
+                        <input type="email" className="w-96 mb-0.5 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-indigo-300"
                             placeholder="อีเมล" value={email} 
                             onChange={(e) => setEmail(e.target.value)} 
                             onFocus={handleEmailFocus}
@@ -258,8 +258,9 @@ export default function UserSettings() {
                             </svg>
                         )}
                     </div>
+                    <label class="block mb-2 mt-2 text-sm font-medium text-gray-900 dark:text-white">Username</label>
                     <div class="flex justify-end items-center relative">
-                        <input type="username" className="w-96 mb-0.5 px-4 py-2 border border-gray-300 focus:outline-none focus:ring focus:ring-indigo-300"
+                        <input type="username" className="w-96 mb-0.5 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-indigo-300"
                             placeholder="ชื่อผู้ใช้" value={name} 
                             onChange={(e) => setName(e.target.value)} 
                             onFocus={handleNameFocus}
@@ -289,8 +290,9 @@ export default function UserSettings() {
                             </svg>
                         )}
                     </div>
+                    <label class="block mb-2 mt-2 text-sm font-medium text-gray-900 dark:text-white">Password</label>
                     <div class="flex justify-end items-center relative">
-                        <input type={inputType} className="w-96 mb-0.5 px-4 py-2 border border-gray-300 focus:outline-none focus:ring focus:ring-indigo-300"
+                        <input type={inputType} className="w-96 mb-0.5 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-indigo-300"
                             placeholder="รหัสผ่าน" value={password} 
                             onChange={(e) => setPassword(e.target.value)} 
                             onFocus={handlePasswordFocus}
@@ -344,8 +346,9 @@ export default function UserSettings() {
                             </g>
                         </svg>
                     </div>
+                    <label class="block mb-2 mt-2 text-sm font-medium text-gray-900 dark:text-white">Confirm Password</label>
                     <div class="flex justify-end items-center relative">
-                        <input type={inputConfirmType} className="w-96 mb-0.5 px-4 py-2 border border-gray-300 focus:outline-none focus:ring focus:ring-indigo-300"
+                        <input type={inputConfirmType} className="w-96 mb-0.5 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-indigo-300"
                             placeholder="ยืนยันรหัสผ่าน" value={confirmPassword} 
                             onChange={(e) => setConfirmPassword(e.target.value)} 
                             onFocus={handleConfirmPasswordFocus}
@@ -399,15 +402,16 @@ export default function UserSettings() {
                             </g>
                         </svg>
                     </div>
-
+                    <label class="block mb-2 mt-2 text-sm font-medium text-gray-900 dark:text-white">Address</label>
                     <div class="flex justify-end items-center relative">
-                        <textarea type="text" className="w-96 mb-0.5 px-4 py-2 border border-gray-300 focus:outline-none focus:ring focus:ring-indigo-300"
+                        <textarea type="text" className="w-96 mb-0.5 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-indigo-300"
                             placeholder="ที่อยู่" value={address} 
                             onChange={(e) => setAddress(e.target.value)} 
                         />
                     </div>
+                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Phone</label>
                     <div class="flex justify-end items-center relative">
-                        <input type="text" className="w-96 mb-0.5 px-4 py-2 border border-gray-300 focus:outline-none focus:ring focus:ring-indigo-300"
+                        <input type="text" className="w-96 mb-0.5 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-indigo-300"
                             placeholder="โทรศัพท์" value={phone} 
                             pattern="[0-9-]*"
                             onChange={(e) => setPhone(e.target.value)} 
@@ -438,8 +442,9 @@ export default function UserSettings() {
                             </svg>
                         )}
                     </div>
+                    <label class="block mb-2 mt-2 text-sm font-medium text-gray-900 dark:text-white">Bank Name</label>
                     <div class="flex justify-end items-center relative">
-                        <input type="text" className="w-96 mb-0.5 px-4 py-2 border border-gray-300 focus:outline-none focus:ring focus:ring-indigo-300"
+                        <input type="text" className="w-96 mb-0.5 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-indigo-300"
                             placeholder="ธนาคาร" value={bankName} 
                             onChange={(e) => setBankName(e.target.value)} 
                             onFocus={handleBankNameFocus}
@@ -469,8 +474,9 @@ export default function UserSettings() {
                             </svg>
                         )}
                     </div>
+                    <label class="block mb-2 mt-2 text-sm font-medium text-gray-900 dark:text-white">Bank Account Number</label>
                     <div class="flex justify-end items-center relative">
-                        <input type="text" className="w-96 mb-0.5 px-4 py-2 border border-gray-300 focus:outline-none focus:ring focus:ring-indigo-300"
+                        <input type="text" className="w-96 mb-0.5 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-indigo-300"
                             placeholder="เลขบัญชี" value={bankAccountNumber} 
                             onChange={(e) => setBankAccountNumber(e.target.value)} 
                             onFocus={handleBankAccountNumberFocus}
@@ -500,8 +506,9 @@ export default function UserSettings() {
                             </svg>
                         )}
                     </div>
+                    <label class="block mb-2 mt-2 text-sm font-medium text-gray-900 dark:text-white">Bank Account Name</label>
                     <div class="flex justify-end items-center relative">
-                        <input type="text" className="w-96 mb-0.5 px-4 py-2 border rounded-b-lg border-gray-300 focus:outline-none focus:ring focus:ring-indigo-300"
+                        <input type="text" className="w-96 mb-0.5 px-4 py-2 border rounded-lg border-gray-300 focus:outline-none focus:ring focus:ring-indigo-300"
                             placeholder="ชื่อบัญชี" value={bankAccountName} 
                             onChange={(e) => setBankAccountName(e.target.value)} 
                             onFocus={handleBankAccountNameFocus}

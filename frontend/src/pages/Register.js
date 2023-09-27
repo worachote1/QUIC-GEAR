@@ -132,15 +132,15 @@ export default function Register() {
   };
 
   return (
-        <div className="min-h-screen flex flex-col items-center">
+        <div className="min-h-[75vh] flex flex-col items-center justify-center">
           {/* <div className="bg-white shadow-xl p-8 rounded w-full max-w-md"> */}
           <img 
-            className="mt-6 mb-4"
+            className="mt-6 mb-8"
             src="https://media.discordapp.net/attachments/1008605866624303204/1146757863205769276/quicgear.png?width=1440&height=288" 
             style={{ width: '375px', height: '76px' }} 
           />
             <form className="space-y-4" onSubmit={handleSubmitRegister}>
-              <div>
+              <div className='mb-8'>
                 <div class="flex justify-end items-center relative">
                   <input type="email" className="w-96 mb-0.5 px-4 py-2 border border-gray-300 rounded-t-lg focus:outline-none focus:ring focus:ring-indigo-300"
                     placeholder="อีเมล" value={email} 
