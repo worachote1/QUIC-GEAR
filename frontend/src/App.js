@@ -14,6 +14,8 @@ import ProductView from "./pages/ProductView";
 import { CartProvider } from "./components/CartContext";
 import AuctionView from "./pages/AuctionView";
 import AuctionViews from "./pages/AuctionViews";
+import MyOrder from "./pages/MyOrder";
+import MyOrdersList from "./pages/MyOrdersList";
 
 function App() {
   return (
@@ -33,6 +35,8 @@ function App() {
             <Route path='/productview' element={<ProductView />} />
             <Route path='/auctionview' element={<AuctionView />} />
             <Route path='/auctionviews' element={<AuctionViews />} />
+            <Route path='/myorder/:id' element={<MyOrder />} />
+            <Route path='/myorderlist' element={<MyOrdersList />} />
           </Routes>
           <Footer />
           <Mobilebar />

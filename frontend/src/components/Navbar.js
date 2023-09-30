@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { Route, Link, useNavigate } from 'react-router-dom';
+import { useCart } from "./CartContext";
 
 export default function Navbar() {
     const [userRole, setUserRole] = useState("admin"); {/*guest,user,admin*/ }
     const [profileMenuActive, setProfileMenuActive] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
-    const [showCartItemCount, setCartItemCount] = useState((sessionStorage.getItem("currrent_cartItem") !== null)
-        ? JSON.parse(sessionStorage.getItem("currrent_cartItem")).length
-        : 0)
+    
     const navigate = useNavigate();
-
+    const { cart } = useCart();
     const clickProfileDropdown = () => {
         setProfileMenuActive(!profileMenuActive);
     };
@@ -62,7 +61,7 @@ export default function Navbar() {
                         <Link to="/cart" className="btn border-white text-black rounded-full hover:bg-[#d8d8d8] mr-2" id="cart_btn">
                             <div className='flex'>
                                 <i className="fas fa-cart-shopping" style={{ fontSize: '1.25rem' }}></i>
-                                {showCartItemCount !== 0 ? <div className="badge badge-secondary" style={{ backgroundColor: '#a51d2d', color: 'white' }}>{showCartItemCount}</div> : ""}
+                                {cart.length !== 0 ? <div className="badge badge-secondary" style={{ backgroundColor: '#a51d2d', color: 'white' }}>{cart.length}</div> : ""}
                             </div>
                         </Link>
                         {userRole === "admin" && (
@@ -111,8 +110,11 @@ export default function Navbar() {
                                             <Link to="/topup" className="block p-3 text-sm font-medium text-gray-600 hover:bg-gray-100 text-left">
                                                 เติมเงิน
                                             </Link>
-                                            <Link to="/my-orders" className="block p-3 text-sm font-medium text-gray-600 hover:bg-gray-100 text-left">
+                                            <Link to="/myorderlist" className="block p-3 text-sm font-medium text-gray-600 hover:bg-gray-100 text-left">
                                                 การซื้อของฉัน
+                                            </Link>
+                                            <Link to="/myauctionlist" className="block p-3 text-sm font-medium text-gray-600 hover:bg-gray-100 text-left">
+                                                การประมูลของฉัน
                                             </Link>
                                             <Link to="/edit-profile" className="block p-3 text-sm font-medium text-gray-600 hover:bg-gray-100 text-left">
                                                 การตั้งค่า

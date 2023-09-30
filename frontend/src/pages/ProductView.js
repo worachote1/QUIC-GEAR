@@ -4,11 +4,12 @@ import { faChevronLeft, faChevronRight, faDotCircle } from '@fortawesome/free-so
 import React, { useState, useEffect } from 'react';
 import { productData } from '../constant/productData';
 import Swal from 'sweetalert2';
+import { useCart } from '../components/CartContext';
 export default function ProductView() {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const id = searchParams.get('id');
-
+  const { addToCart } = useCart();
   const [product, setProduct] = useState(null);
 
   useEffect(() => {
@@ -81,6 +82,7 @@ export default function ProductView() {
       sessionStorage.setItem("currrent_cartItem", JSON.stringify(cur_CartData))
       // window.location.reload()
     }
+    addToCart(temp_obj);
     Swal.fire({
       title: "เพิ่มสินค้าลงรถเข็น",
       text: `${itemName} จำนวน ${amount} ชิ้น`,

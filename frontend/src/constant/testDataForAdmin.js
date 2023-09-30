@@ -305,7 +305,7 @@ export const testOrderData = [
         "name" : "test item1",
         "quantity" : 5,
         "price" : 1200,
-        "imgPath" : "test.png",
+        "imgPath" : "https://mercular.s3.ap-southeast-1.amazonaws.com/images/products/2020/08/razer-blackwidow-v3-tkl-optical-mechanical-gaming-keyboard-en-th-yellow-icon.jpg",
         "brand" : "Razer",
         "type" : "keyboard"
       },
@@ -314,7 +314,7 @@ export const testOrderData = [
         "name" : "test item2",
         "quantity" : 2,
         "price" : 1200,
-        "imgPath" : "test.png",
+        "imgPath" : "https://mercular.s3.ap-southeast-1.amazonaws.com/images/products/2020/08/razer-blackwidow-v3-tkl-optical-mechanical-gaming-keyboard-en-th-yellow-icon.jpg",
         "brand" : "Razer",
         "type" : "keyboard"
       }
@@ -403,7 +403,7 @@ export const testOrderData = [
         "type" : "keyboard"
       },
     ],
-    "orderStatus" : "completed",
+    "orderStatus" : "",
     "shippingInfo" : "KMITL ECC",
     "totalPrice" : 2300,
     "createAt": new Date().toLocaleString()
