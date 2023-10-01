@@ -7,6 +7,7 @@ import { calculateTimeRemaining } from '../../util/auctionModule/countdown';
 import { useParams, Link } from 'react-router-dom';
 import {ThreeDots} from 'react-loader-spinner';
 import axios from "axios";
+import { formatNumberInput } from "../../util/formatUtil";
 
 const AuctionDetail = () => {
 
@@ -16,14 +17,6 @@ const AuctionDetail = () => {
     const [arrayIndex, setArrayIndex] = useState([0, 1, 2]); // ให้ arrayIndex(ที่ใช้ใน small img-carousel section) มีค่าเริ่มต้นเป็น [0, 1, 2]
     const [hoverIndex, setHoverIndex] = useState(0);
     const [slides, setSlides] = useState([]);
-    // const slides = [
-    //     'https://mercular.s3.ap-southeast-1.amazonaws.com/images/products/2021/01/logitech-g-pro-x-superlight-wireless-gaming-mouse-white-icon.jpg',
-    //     'https://mercular.s3.ap-southeast-1.amazonaws.com/images/products/2021/01/Logitech%20G%20Pro%20X%20Superlight%20Wireless%20Gaming%20Mouse.jpg',
-    //     'https://cdn.discordapp.com/attachments/696053498739163146/1147254999613722654/Logitech-G-Pro-X-Superlight-21.png',
-    //     'https://cdn.discordapp.com/attachments/696053498739163146/1147255092014223510/Logitech-G-Pro-X-Superlight-31.png',
-    //     'https://cdn.discordapp.com/attachments/696053498739163146/1147255223186882681/Logitech-G-Pro-X-Superlight-41.png',
-    //     'https://cdn.discordapp.com/attachments/696053498739163146/1147255245752246363/logitech-g-pro-x-superlight-wireless-gaming-mouse-white-lifestyle.png'
-    // ];
 
     const prevSlide = () => {
         const newArrayIndex = arrayIndex.map((index) => {
@@ -99,17 +92,17 @@ const AuctionDetail = () => {
 
 
     return (
-        <div class='bg-[#FAFAFA] w-full h-full'>
+        <div class=''>
             {singleAuctionData && timeRemaining ? (
                 // <div class='bg-[#FAFAFA] w-full h-full'>
                 <div class='flex flex-col justify-center'>
                     <div class="flex lg:flex-row flex-col justify-center">
                         <div class='flex justify-center lg:justify-end h-full relative lg:w-3/6 '>
-                            <div class='h-full w-full lg:w-3/6 lg:mr-16'>
+                            <div class='h-[300px] w-full lg:w-3/6 lg:mr-16 '>
                                 <img
 
                                     src={`/uploads/${slides[hoverIndex]}`}
-                                    class=' w-full h-full rounded-3xl duration-500 bg-center object-cover'
+                                    class=' w-full h-full rounded-3xl duration-500 bg-center object-contain'
                                 />
                             </div>
                             {/* Left Arrows */}
@@ -148,7 +141,7 @@ const AuctionDetail = () => {
                                             <li key={index} className="p-2 overflow-hidden">
                                                 <div className="border rounded-2xl overflow-hidden">
                                                     <img
-                                                        className={`h-28 w-44 rounded-md overflow-hidden object-cover ${hoverIndex === index ? 'border-2 rounded-2xl border-rose-600' : ''}`}
+                                                        className={`h-28 w-44 rounded-md overflow-hidden object-contain ${hoverIndex === index ? 'border-2 rounded-2xl border-rose-600' : ''}`}
                                                         onMouseEnter={() => setHoverIndex(index)}
                                                         src={`/uploads/${slides[index]}`}
                                                         alt=""
@@ -169,10 +162,10 @@ const AuctionDetail = () => {
                         </div>
                         <div class='flex flex-col lg:flex-row box-border gap-x-3 py-3 justify-start items-center w-4/6 lg:w-3/6 h-full '>
                             <button class='flex  rounded-full w-full lg:w-48 h-11 bg-[#F1F1F1] hover:bg-[#DEDEDE] justify-center items-center text-md font-Prompt lg:mb-0 mb-4'>
-                                ประมูลขั้นต่ำ <span> <AiOutlineDollarCircle class='text-xl ml-1' /> </span> {singleAuctionData?.startPrice}
+                                ประมูลขั้นต่ำ <span> <AiOutlineDollarCircle class='text-xl ml-1' /> </span> {formatNumberInput(singleAuctionData?.startPrice)}
                             </button>
                             <button class='flex rounded-full w-full lg:w-48 h-11 bg-[#A51D2D] hover:bg-[#841724] justify-center items-center text-white font-Prompt'>
-                                ซื้อทันที <span> <AiOutlineDollarCircle class='text-xl ml-1' /> </span> {singleAuctionData?.buyOutPrice}
+                                ซื้อทันที <span> <AiOutlineDollarCircle class='text-xl ml-1' /> </span> {formatNumberInput(singleAuctionData?.buyOutPrice)}
                             </button>
                         </div>
                     </div>

@@ -56,9 +56,9 @@ const Auction = () => {
     const res_allAuctionsData = allAuctionsData.data;
     const currentDate = new Date();
     const availableAuctions = res_allAuctionsData?.filter((item) => {
-      // new Date(item.start_auction_date) >= currentDate && item.auctionStatus === "in progess"
+      // item.auctionStatus === "in progess"
       // just test (it use to be in progess which is auction that confirm by admin)
-      return new Date(item.start_auction_date) >= currentDate && item.auctionStatus === "waiting approved" 
+      return new Date(item.end_auction_date) >= currentDate && new Date(item.start_auction_date) <= currentDate && item.auctionStatus === "in progress" 
   })
     console.log(res_allAuctionsData)
     console.log(availableAuctions)
@@ -76,10 +76,10 @@ const Auction = () => {
 
       auctionsAvailable.forEach((item) => {
 
-      const nameIncludesQuery = (searchQuery) ? item.productItem.name.toLowerCase().includes(searchQuery.toLowerCase()) : "";
-      const brandIncludesQuery = (searchQuery) ? item.productItem.brand.toLowerCase().includes(searchQuery.toLowerCase()) : "";
-      const typeIncludesQuery = (searchQuery) ? item.productItem.type.toLowerCase().includes(searchQuery.toLowerCase()) : "";
-      const subtypeIncludesQuery = (searchQuery) ? item.productItem.subType.toLowerCase().includes(searchQuery.toLowerCase()) : "";
+      const nameIncludesQuery = (searchQuery) ? item?.productItem.name.toLowerCase().includes(searchQuery.toLowerCase()) : "";
+      const brandIncludesQuery = (searchQuery) ? item?.productItem.brand.toLowerCase().includes(searchQuery.toLowerCase()) : "";
+      const typeIncludesQuery = (searchQuery) ? item?.productItem.type.toLowerCase().includes(searchQuery.toLowerCase()) : "";
+      const subtypeIncludesQuery = (searchQuery) ? item?.productItem.subType.toLowerCase().includes(searchQuery.toLowerCase()) : "";
       if (searchQuery === null || nameIncludesQuery || brandIncludesQuery || typeIncludesQuery || subtypeIncludesQuery) {
         tempFilteredProducts.push(item);
         brandsSet.add(item.productItem.brand);
@@ -105,16 +105,16 @@ const Auction = () => {
 
     if (selectedBrands !== null) {
       filteredByBrand = filteredByBrand.filter((item) =>
-        selectedBrands.includes(item.product.brand)
+        selectedBrands.includes(item.productItem.brand)
       );
     }
 
     if (selectedRGB !== null) {
       filteredByBrand = filteredByBrand.filter((item) => {
         if (selectedRGB === "Yes") {
-          return item.product.isRGB === true;
+          return item.productItem.isRGB === true;
         } else if (selectedRGB === "No") {
-          return item.product.isRGB === false;
+          return item.productItem.isRGB === false;
         }
         return true;
       });
@@ -123,9 +123,9 @@ const Auction = () => {
     if (selectedWireless !== null) {
       filteredByBrand = filteredByBrand.filter((item) => {
         if (selectedWireless === "Yes") {
-          return item.product.isWireless === true;
+          return item.productItem.isWireless === true;
         } else if (selectedWireless === "No") {
-          return item.product.isWireless === false;
+          return item.productItem.isWireless === false;
         }
         return true;
       });
@@ -136,11 +136,11 @@ const Auction = () => {
       const searchWords = searchQuery.toLowerCase().replace('&', 'and').split(' ');
       filteredByBrand = filteredByBrand.filter((item) => {
         // Preprocess product data to replace '&' with 'and'
-        const typeSubtype = `${item.product.type.toLowerCase().replace('&', 'and')}/${item.product.subType.toLowerCase().replace('&', 'and')}`;
+        const typeSubtype = `${item.productItem.type.toLowerCase().replace('&', 'and')}/${item.productItem.subType.toLowerCase().replace('&', 'and')}`;
         return searchWords.every((word) => {
           const isExactMatch =
-            item.product.name.toLowerCase().includes(word) ||
-            item.product.brand.toLowerCase().includes(word) ||
+            item.productItem.name.toLowerCase().includes(word) ||
+            item.productItem.brand.toLowerCase().includes(word) ||
             typeSubtype === word; // Exact match for "Type/Subtype"
 
           if (isExactMatch) {

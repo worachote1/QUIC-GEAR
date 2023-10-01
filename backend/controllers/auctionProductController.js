@@ -33,13 +33,14 @@ const getSingleAuctionProduct = asyncHandler(async (req, res) => {
 
 const createAuctionProducts = asyncHandler(async (req, res) => {
     try {
-        const { startPrice, buyOutPrice, start_auction_date, end_auction_date, productItem, user_seller } = req.body;
+        // const { startPrice, buyOutPrice, start_auction_date, end_auction_date, productItem, user_seller } = req.body;
 
         //Create object from data
-        const auctionProducts = await auctionProduct.create({
-            startPrice, buyOutPrice, start_auction_date, end_auction_date, productItem, user_seller
-        });
+        // const auctionProducts = await auctionProduct.create({
+        //     startPrice, buyOutPrice, start_auction_date, end_auction_date, productItem, user_seller
+        // });
 
+        const auctionProducts = await auctionProduct.create(req.body);
         res.status(200).json(auctionProducts);
 
     } catch (err) {

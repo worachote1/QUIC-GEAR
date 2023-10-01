@@ -53,7 +53,7 @@ export default function Admin() {
   }, [selectedTask])
 
   return (
-    <div className="min-h-screen max-w-[1640px] mx-auto mt-5" >
+    <div className="min-h-screen max-w-[1640px] mx-auto mt-5 overflow-hidden" >
       <div className="flex flex-col justify-center">
         <div className="dropdown">
           <label tabIndex={0} className={`btn m-1 text-white ${taskBGColor[selectedTask]}`}> {selectedTask} <span className='ml-1'> {<AiFillCaretDown size={20} />} </span></label>

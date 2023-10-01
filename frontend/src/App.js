@@ -7,16 +7,17 @@ import Footer from "./components/Footer";
 import Home from "./pages/Home";
 import Register from "./pages/auth/Register";
 import Login from "./pages/auth/Login";
+import EditProfile from './pages/auth/EditProfile';
 import Topup from "./pages/topup/Topup";
 import Cart from "./pages/Cart";
 import Auction from "./pages/auction/Auction";
 import AuctionDetail from "./pages/auction/AuctionDetail";
 import AuctionCreate from "./pages/auction/AuctionCreate";
-import Product from "./pages/Product";
+import Product from "./pages/product/Product";
 
 import Admin from "./pages/admin/Admin";
 import CheckAuctions from "./pages/admin/AuctionsAdmin/CheckAuctions";
-import DetailAuction from "./pages/admin/AuctionsAdmin/DetailAuction";
+
 import CheckOrders from "./pages/admin/OrdersAdmin/CheckOrders";
 import DetailOrder from "./pages/admin/OrdersAdmin/DetailOrder";
 import CheckTransactions from "./pages/admin/TransactionsAdmin/CheckTransactions";
@@ -26,6 +27,7 @@ import CreateProducts from "./pages/admin/ProductsAdmin/CreateProducts";
 import UpdateProducts from "./pages/admin/ProductsAdmin/UpdateProducts";
 
 import NotFound from "./util/not_found/NotFound";
+import CheckAuctionDetail from './pages/admin/AuctionsAdmin/CheckAutionDetail';
 
 function App() {
   return (
@@ -37,8 +39,10 @@ function App() {
             <Route path='/' element={<Home />} />
             <Route path='/login' element={<Login />} />
             <Route path='/register' element={<Register />} />
+            <Route path='/edit-profile/:id' element={<EditProfile />} /> 
             <Route path='/cart' element={<Cart />} />
             <Route path='/product' element={<Product />} />
+            {/* <Route path='/product/:id' element={<ProductDetail />} /> */}
             <Route path='/auction' element={<Auction />} />
             <Route path='/auction/:id' element={<AuctionDetail />} />
             <Route path='/auction_create/' element={<AuctionCreate />} />
@@ -47,7 +51,7 @@ function App() {
             {/* Admin Routes */}
             <Route path='/admin' element={<Admin />} />
             <Route path='/admin/check_auctions' element={<CheckAuctions />} />
-            <Route path='/admin/check_auctions/:id' element={<DetailAuction />} />
+            <Route path='/admin/check_auctions/:id' element={<CheckAuctionDetail/>} />
             <Route path='/admin/check_orders' element={<CheckOrders />} />
             <Route path='/admin/check_orders/:id' element={<DetailOrder />} />
             <Route path='/admin/check_transactions' element={<CheckTransactions />} />
@@ -59,7 +63,7 @@ function App() {
             <Route path="*" element={<NotFound />} />
           </Routes>
           <Footer />
-          <Mobilebar />
+          {/* <Mobilebar /> */}
         </BrowserRouter>
       </div>
     </LocalizationProvider>
