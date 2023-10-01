@@ -28,6 +28,7 @@ import UpdateProducts from "./pages/admin/ProductsAdmin/UpdateProducts";
 
 import NotFound from "./util/not_found/NotFound";
 import CheckAuctionDetail from './pages/admin/AuctionsAdmin/CheckAutionDetail';
+import MyFavProducts from './pages/product/MyFavProducts';
 
 function App() {
   return (
@@ -42,6 +43,7 @@ function App() {
             <Route path='/edit-profile/:id' element={<EditProfile />} /> 
             <Route path='/cart' element={<Cart />} />
             <Route path='/product' element={<Product />} />
+            <Route path='/fav_product/:id' element={<MyFavProducts />} />
             {/* <Route path='/product/:id' element={<ProductDetail />} /> */}
             <Route path='/auction' element={<Auction />} />
             <Route path='/auction/:id' element={<AuctionDetail />} />

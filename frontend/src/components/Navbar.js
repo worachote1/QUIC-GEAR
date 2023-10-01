@@ -53,7 +53,7 @@ export default function Navbar() {
                         <Link to="/auction" className="btn border-white text-black rounded-full hover:bg-[#d8d8d8] mr-2" id="auction_btn">
                             <i className="fa-solid fa-building-columns" style={{ fontSize: '1.25rem' }}></i>
                         </Link>
-                        <Link to="/favorite" className="btn border-white text-black rounded-full hover:bg-[#d8d8d8] mr-2" id="fav_btn">
+                        <Link to={`/fav_product/${2}`} className="btn border-white text-black rounded-full hover:bg-[#d8d8d8] mr-2" id="fav_btn">
                             <i className="fas fa-heart" style={{ fontSize: '1.25rem' }}></i>
                         </Link>
                         <Link to="/cart" className="btn border-white text-black rounded-full hover:bg-[#d8d8d8] mr-2" id="cart_btn">
