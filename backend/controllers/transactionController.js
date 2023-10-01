@@ -1,5 +1,5 @@
 const asyncHandler = require('express-async-handler');
-const transaction = require('../models/transactions');
+const transaction = require('../models/transactionsModel');
 
 //@desc Get all transactions data
 //@route GET /api/transactions

@@ -51,7 +51,6 @@ const AuctionViews = () => {
         });
 
         setArrayIndex(newArrayIndex);
-        console.log(newArrayIndex);
     };
 
     const mobilePrevImg = () => {

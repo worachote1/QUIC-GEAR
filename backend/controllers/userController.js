@@ -1,5 +1,5 @@
 const asyncHandler = require('express-async-handler');
-const user = require('../models/user');
+const user = require('../models/userModel');
 const sendToken = require('../utils/jwtToken');
 
 // Get all users => GET api/users

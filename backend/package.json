@@ -20,6 +20,7 @@
     "express-async-handler": "^1.2.0",
     "jsonwebtoken": "^9.0.1",
     "mongoose": "^7.4.5",
+    "multer": "^1.4.5-lts.1",
     "nodemon": "^3.0.1",
     "promptpay-qr": "^0.5.0",
     "qrcode": "^1.5.3",
