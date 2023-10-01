@@ -112,9 +112,9 @@ const AuctionViews = () => {
                                 <ul id="slider" class='flex w-full max-w-screen-xl mx-auto'>
                                     {arrayIndex.map((index) => (
                                         <li key={index} className="p-2 overflow-hidden">
-                                            <div className="border rounded-2xl overflow-hidden">
+                                            <div className={`border-2 rounded-2xl overflow-hidden ${hoverIndex === index ? 'border-2 rounded-2xl border-rose-600' : ''}`}>
                                                 <img
-                                                    className={`h-28 w-full rounded-md overflow-hidden ${hoverIndex === index ? 'border-2 rounded-2xl border-rose-600' : ''}`}
+                                                    className={`h-28 w-full rounded-md overflow-hidden`}
                                                     onMouseEnter={() => setHoverIndex(index)}
                                                     src={slides[index].url}
                                                     alt=""

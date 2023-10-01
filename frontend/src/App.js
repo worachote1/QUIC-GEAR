@@ -26,8 +26,12 @@ import CheckUsers from "./pages/admin/UsersAdmin/CheckUsers";
 import CreateProducts from "./pages/admin/ProductsAdmin/CreateProducts";
 import UpdateProducts from "./pages/admin/ProductsAdmin/UpdateProducts";
 
+import AuctionViews from "./pages/auctionViews";
+import ProductView from './pages/productView';
+
 import NotFound from "./util/not_found/NotFound";
 import CheckAuctionDetail from './pages/admin/AuctionsAdmin/CheckAutionDetail';
+import { CartProvider } from './components/CartContext';
 
 function App() {
 
@@ -35,36 +39,40 @@ function App() {
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <div className="App">
         <BrowserRouter>
-          <Navbar />
-          <Routes>
-            <Route path='/' element={<Home />} />
-            <Route path='/login' element={<Login />} />
-            <Route path='/register' element={<Register />} />
-            <Route path='/edit-profile/:id' element={<EditProfile />} /> 
-            <Route path='/cart' element={<Cart />} />
-            <Route path='/product' element={<Product />} />
-            {/* <Route path='/product/:id' element={<ProductDetail />} /> */}
-            <Route path='/auction' element={<Auction />} />
-            <Route path='/auction/:id' element={<AuctionDetail />} />
-            <Route path='/auction_create/' element={<AuctionCreate />} />
-            <Route path='/topup' element={<Topup />} />
+          <CartProvider>
+            <Navbar />
+            <Routes>
+              <Route path='/' element={<Home />} />
+              <Route path='/login' element={<Login />} />
+              <Route path='/register' element={<Register />} />
+              <Route path='/edit-profile/:id' element={<EditProfile />} /> 
+              <Route path='/cart' element={<Cart />} />
+              <Route path='/product' element={<Product />} />
+              {/* <Route path='/product/:id' element={<ProductDetail />} /> */}
+              <Route path='/auction' element={<Auction />} />
+              <Route path='/auction/:id' element={<AuctionDetail />} />
+              <Route path='/auction_create/' element={<AuctionCreate />} />
+              <Route path='/topup' element={<Topup />} />
+              <Route path='/auctionviews' element={<AuctionViews />} />
+              <Route path='/productview' element={<ProductView />} />
 
-            {/* Admin Routes */}
-            <Route path='/admin' element={<Admin />} />
-            <Route path='/admin/check_auctions' element={<CheckAuctions />} />
-            <Route path='/admin/check_auctions/:id' element={<CheckAuctionDetail/>} />
-            <Route path='/admin/check_orders' element={<CheckOrders />} />
-            <Route path='/admin/check_orders/:id' element={<DetailOrder />} />
-            <Route path='/admin/check_transactions' element={<CheckTransactions />} />
-            <Route path='/admin/check_products' element={<CheckProducts />} />
-            <Route path='/admin/create_products' element={<CreateProducts />} />
-            <Route path='/admin/update_products/:id' element={<UpdateProducts />} />
-            <Route path='/admin/check_users' element={<CheckUsers />} />
+              {/* Admin Routes */}
+              <Route path='/admin' element={<Admin />} />
+              <Route path='/admin/check_auctions' element={<CheckAuctions />} />
+              <Route path='/admin/check_auctions/:id' element={<CheckAuctionDetail/>} />
+              <Route path='/admin/check_orders' element={<CheckOrders />} />
+              <Route path='/admin/check_orders/:id' element={<DetailOrder />} />
+              <Route path='/admin/check_transactions' element={<CheckTransactions />} />
+              <Route path='/admin/check_products' element={<CheckProducts />} />
+              <Route path='/admin/create_products' element={<CreateProducts />} />
+              <Route path='/admin/update_products/:id' element={<UpdateProducts />} />
+              <Route path='/admin/check_users' element={<CheckUsers />} />
 
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-          <Footer />
-          {/* <Mobilebar /> */}
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+            <Footer />
+            {/* <Mobilebar /> */}
+          </CartProvider>
         </BrowserRouter>
       </div>
     </LocalizationProvider>
