@@ -1,8 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const { getAllAuctionProducts, getAuctionProducts, createAuctionProducts, deleteAuctionProducts,updateAuctionProducts}= require('../controllers/auctionProductController');
+const { getAllAuctionProducts, getSingleAuctionProduct,createAuctionProducts, deleteAuctionProducts,updateAuctionProducts}= require('../controllers/auctionProductController');
 
 router.route('/').get(getAllAuctionProducts);
+router.route('/:id').get(getSingleAuctionProduct);
 router.route('/create').post(createAuctionProducts);
 router.route('/delete/:id').delete(deleteAuctionProducts);
 router.route('/update/:id').put(updateAuctionProducts);
