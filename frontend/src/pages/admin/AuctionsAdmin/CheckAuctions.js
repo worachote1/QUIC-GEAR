@@ -73,7 +73,7 @@ export default function CheckAuctions() {
     const allAuctionsData = await axios.get(`${process.env.REACT_APP_QUIC_GEAR_API}/auctionProducts`)
     const res_allAuctionsData = allAuctionsData.data;
     console.log(res_allAuctionsData)
-    setAuctionData(res_allAuctionsData)
+    setAuctionData(res_allAuctionsData.slice().reverse())
   }
 
   useEffect(() => {
@@ -81,10 +81,10 @@ export default function CheckAuctions() {
   }, [])
 
   useEffect(() => {
-    setAuctionData(filteredAuctions.length > 0 ?
-      sortByType(filteredAuctions, sortOption).slice(firstRowIndexPage, lastRowIndexPage)
-      : sortByType(AuctionData, sortOption).slice(firstRowIndexPage, lastRowIndexPage));
-  }, [filteredAuctions, sortOption, currentPage, dataRowPerPage]);
+    setFilteredAuctions(filteredAuctions.length > 0 ?
+      sortByType(filteredAuctions, sortOption)
+      : sortByType(AuctionData, sortOption));
+  }, [filteredAuctions, sortOption, currentPage, dataRowPerPage, AuctionData]);
 
   return (
     <div>
@@ -208,7 +208,7 @@ export default function CheckAuctions() {
                   </tr>
                 </thead>
                 <tbody>
-                  {AuctionData?.slice().reverse().map((item, Idx) => (
+                  {filteredAuctions?.slice(firstRowIndexPage, lastRowIndexPage).map((item, Idx) => (
                     <tr key={Idx} class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                       <td class="px-6 py-2">
                         {item?._id}
@@ -233,7 +233,7 @@ export default function CheckAuctions() {
                         </div>
                       </td>
                       <td class="px-6 py-4">
-                        {item?.end_auction_date.toLocaleString()}
+                        {new Date(item?.createdAt).toLocaleString()}
                       </td>
                       <td class="px-6 py-4">
                         {
@@ -247,7 +247,7 @@ export default function CheckAuctions() {
                   ))}
                 </tbody>
               </table>
-              <AdminPagination totalDataRow={(!filteredAuctions?.length) ? AuctionData?.length : filteredAuctions?.length} dataRowPerPage={dataRowPerPage} currentPage={currentPage} setCurrentPage={setCurrentPage} />
+              <AdminPagination totalDataRow={filteredAuctions?.length} dataRowPerPage={dataRowPerPage} currentPage={currentPage} setCurrentPage={setCurrentPage} />
             </div >
           )
           : (
