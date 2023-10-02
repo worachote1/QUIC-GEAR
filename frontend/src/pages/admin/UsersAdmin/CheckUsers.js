@@ -22,8 +22,7 @@ export default function CheckUsers() {
 
   const getUsersData = async () => {
     const allUsersData = await axios.get(`${process.env.REACT_APP_QUIC_GEAR_API}/users`)
-    const res_allUsersData = allUsersData.data.filter((item) => { item.role === "user"});
-    console.log(res_allUsersData)
+    const res_allUsersData = allUsersData.data.filter((item) => item.role === "user");
     setUserData(res_allUsersData.slice().reverse())
 }
 

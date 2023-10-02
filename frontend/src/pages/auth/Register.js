@@ -99,14 +99,12 @@ export default function Register() {
       return;
     }
     try {
-      const registetAccount = await axios.post(`${process.env.REACT_APP_QUIC_GEAR_API}/users/register`, userData);
+      const registetAccount = await axios.post(`${process.env.REACT_APP_QUIC_GEAR_API}/users/register`, {...userData});
       alertRegisterSuccess();
     }
     catch (err) {
-      if (userData.password !== userData.confirmPassword)
-        alertFormError("Passwords do not match.")
-      else
-        alertFormError("Username already taken.")
+      const res_err = err.response.data
+      alertFormError(res_err.message)
     }
   }
 

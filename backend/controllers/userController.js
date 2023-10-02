@@ -129,7 +129,7 @@ const loginUser = asyncHandler(async (req, res) => {
     }
 
     if (password !== userFound.password) {
-        return res.status(400).json({ message: 'Invalid username or password.' });
+        return res.status(400).json({ message: 'incorrect password.' });
     }
 
     res.status(200).json(userFound);
