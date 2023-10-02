@@ -395,7 +395,7 @@ const Auction = () => {
       <div className="md:flex justify-center lg:mr-[550px] items-center mt-8">
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-2">
 
-          {filteredProducts.map((item) => (
+          {filteredProducts?.map((item) => (
             <AuctionCard AuctionItem={item} />
           ))}
         </div>

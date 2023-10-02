@@ -80,7 +80,7 @@ export default function CreateProducts() {
           multipleFileData.append('images', selectedMultipleFiles[i])
         const uploadMultiple_res = await axios.post(`${process.env.REACT_APP_QUIC_GEAR_API}/upload/multiple`, multipleFileData)
         // console.log(uploadMultiple_res.data)
-        const imgPathData = uploadMultiple_res.data.map((item) => item.path)
+        const imgPathData = uploadMultiple_res.data.map((item) => item.filename)
         const updatedProduct = {...product, imgPath : [...imgPathData]};
         setProduct(updatedProduct)
         // POST api to create product          

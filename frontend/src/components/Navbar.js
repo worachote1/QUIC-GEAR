@@ -48,7 +48,7 @@ export default function Navbar() {
                 </div>
 
                 <div className="w-full md:w-1/2 mt-4 md:mt-0 text-center md:text-right hidden lg:block">
-                    <div className="md:ml-auto flex justify-center md:justify-end">
+                    <div className="md:ml-auto flex justify-center items-center md:justify-end">
 
                         <Link to="/auction" className="btn border-white text-black rounded-full hover:bg-[#d8d8d8] mr-2" id="auction_btn">
                             <i className="fa-solid fa-building-columns" style={{ fontSize: '1.25rem' }}></i>
@@ -73,10 +73,12 @@ export default function Navbar() {
                                 >
                                     <Link to="/edit-profile" className="w-10 h-10 rounded-full bg-gray-300 overflow-hidden">
                                         <img
-                                            src="https://www.gzone-conan.com/wp-content/uploads/2019/05/25262960-6716-11e9-b3c5-246e963a41ed_03.jpg"
+                                            // https://www.gzone-conan.com/wp-content/uploads/2019/05/25262960-6716-11e9-b3c5-246e963a41ed_03.jpg   
+                                            src="https://media.istockphoto.com/id/1298261537/th/%E0%B9%80%E0%B8%A7%E0%B8%84%E0%B9%80%E0%B8%95%E0%B8%AD%E0%B8%A3%E0%B9%8C/%E0%B8%95%E0%B8%B1%E0%B8%A7%E0%B8%A2%E0%B8%B6%E0%B8%94%E0%B9%84%E0%B8%AD%E0%B8%84%E0%B8%AD%E0%B8%99%E0%B8%AB%E0%B8%B1%E0%B8%A7%E0%B9%82%E0%B8%9B%E0%B8%A3%E0%B9%84%E0%B8%9F%E0%B8%A5%E0%B9%8C%E0%B8%8A%E0%B8%B2%E0%B8%A2%E0%B8%A7%E0%B9%88%E0%B8%B2%E0%B8%87%E0%B9%80%E0%B8%9B%E0%B8%A5%E0%B9%88%E0%B8%B2.jpg?s=612x612&w=0&k=20&c=YlnFFQuxqyOE9gfuj7eKaHl0bjRpn22p2PPlc91YA48="
                                             alt="Profile"
                                             className="w-full h-full object-cover"
                                         />
+                               
                                     </Link>
 
                                 </div>

@@ -11,15 +11,13 @@ const userSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true,
-        select : false
     },
     imgPath: {
         type: String,
-        required: true
+        default : "default-avatar-1.jpg"
     },
     role: {
         type: String,
-        required: true,
         default: 'user'
     },
     email: {
@@ -28,11 +26,9 @@ const userSchema = new mongoose.Schema({
     },
     address: {
         type: String,
-        required: true
     },
     phone: {
         type: String,
-        required: true
     },
     bankAccount: {
         bank: {
@@ -47,14 +43,20 @@ const userSchema = new mongoose.Schema({
     },
     coins: {
         type: Number,
-        required: true
+        default : 0
     },
     isGoogleAccount: {
         type: Boolean
     },
+    favList: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'product' // the name you use when calling mongoose.model('product', productSchema)
+        }
+    ],
     createdAt: {
         type: Date,
-        default: Date.now
+        default: Date.now,
     }
 });
 

@@ -63,7 +63,7 @@ function App() {
             <Route path="*" element={<NotFound />} />
           </Routes>
           <Footer />
-          {/* <Mobilebar /> */}
+          <Mobilebar />
         </BrowserRouter>
       </div>
     </LocalizationProvider>
