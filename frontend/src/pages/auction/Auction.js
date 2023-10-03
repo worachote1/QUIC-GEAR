@@ -63,15 +63,18 @@ const Auction = () => {
     setAuctionsAvailable(availableAuctions)
 
     //update Expired Auction Item to completed(update auctionStatus)
-    const expiredAuctions = res_allAuctionsData?.filter((item) => {
-      return new Date(item.end_auction_date) <= currentDate && item.auctionStatus === "in progress" 
-  })
+  //   const expiredAuctions = res_allAuctionsData?.filter((item) => {
+  //     return new Date(item.end_auction_date) <= currentDate && item.auctionStatus === "in progress" 
+  // })
   }
 
   useEffect(() => {
     getAuctionsData()
   },[])
   
+  useEffect(() => {
+    setFilteredProducts(auctionsAvailable)
+  },[auctionsAvailable])
 
   useEffect(() => {
     const brandsSet = new Set();
@@ -91,7 +94,7 @@ const Auction = () => {
 
     setFilteredProducts(tempFilteredProducts);
     setBrands(brandsSet);
-  }, [searchQuery, auctionsAvailable]);
+  }, [searchQuery]);
 
   useEffect(() => {
     let filteredByBrand = auctionsAvailable;
@@ -164,7 +167,7 @@ const Auction = () => {
     });
 
     setFilteredProducts(filteredByBrand);
-  }, [selectedBrands, selectedRGB, selectedWireless, searchQuery, selectedFilter, minPrice, maxPrice, auctionsAvailable]);
+  }, [selectedBrands, selectedRGB, selectedWireless, searchQuery, selectedFilter, minPrice, maxPrice]);
 
 
 

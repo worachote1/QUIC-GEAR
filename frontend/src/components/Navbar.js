@@ -103,15 +103,14 @@ export default function Navbar() {
                                                 <p className="text-m text-gray-700 font-medium">QuicCoins <i className="fas fa-coins mr-1 text-l"></i></p>
                                                 <p className="text-m text-gray-700 font-medium truncate overflow-hidden">Coins Value</p>
                                             </div>
-
+                                            <Link to="/edit-profile" className="block p-3 text-sm font-medium text-gray-600 hover:bg-gray-100 text-left">
+                                                บัญชีของฉัน
+                                            </Link>
                                             <Link to="/topup" className="block p-3 text-sm font-medium text-gray-600 hover:bg-gray-100 text-left">
                                                 เติมเงิน
                                             </Link>
                                             <Link to="/my-orders" className="block p-3 text-sm font-medium text-gray-600 hover:bg-gray-100 text-left">
                                                 การซื้อของฉัน
-                                            </Link>
-                                            <Link to="/edit-profile" className="block p-3 text-sm font-medium text-gray-600 hover:bg-gray-100 text-left">
-                                                การตั้งค่า
                                             </Link>
                                             <div className="text-center mt-2">
                                                 <button

@@ -1,8 +1,4 @@
 const mongoose = require('mongoose');
-const validator = require('validator');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-
 const userSchema = new mongoose.Schema({
     username: {
         type: String,
@@ -14,7 +10,7 @@ const userSchema = new mongoose.Schema({
     },
     imgPath: {
         type: String,
-        default : "default-avatar-1.jpg"
+        default: "default-avatar-1.jpg"
     },
     role: {
         type: String,
@@ -26,24 +22,27 @@ const userSchema = new mongoose.Schema({
     },
     address: {
         type: String,
+        default: ''
     },
     phone: {
         type: String,
+        default: ''
     },
-    bankAccount: {
-        bank: {
-            type: String,
-        },
-        account_number: {
-            type: String,
-        },
-        account_name: {
-            type: String,
-        },
+    bank : {
+        type: String,
+        default: '',
+    },
+    account_number: {
+        type: String,
+        default: '',
+    },
+    account_name : {
+        type: String,
+        default: '',
     },
     coins: {
         type: Number,
-        default : 0
+        default: 0
     },
     isGoogleAccount: {
         type: Boolean

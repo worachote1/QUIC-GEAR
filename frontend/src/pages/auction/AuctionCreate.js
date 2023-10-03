@@ -94,6 +94,8 @@ export default function AuctionCreate() {
   const handleSubmitCreateProduct = async (e) => {
     e.preventDefault();
     const checkFormError = validateForm(product, auctionData);
+    console.log(product)
+    console.log(auctionData)
     if (checkFormError)
       alertFormError(checkFormError);
     else {
