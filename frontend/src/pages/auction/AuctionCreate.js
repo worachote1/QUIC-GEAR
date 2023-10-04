@@ -12,16 +12,13 @@ import dayjs from 'dayjs';
 
 export default function AuctionCreate() {
 
+  const current_user = JSON.parse(sessionStorage.getItem('current_user'));
   const navigate = useNavigate();
   const checkEmptyREGEX = /^\s*$/gm;
   const checkDigitREGEX = /^\d+$/;
   const [selectedMultipleFiles, setSelectedMultipleFiles] = useState([]);
   const [auctionData, setAuctionData] = useState({
-    user_seller: {
-      id: "1",
-      email: "test1@gmail.com",
-      username: "time_worachote",
-    },
+    user_seller: current_user._id,
     startPrice: "",
     buyOutPrice: "",
     start_auction_date: "",
@@ -66,8 +63,11 @@ export default function AuctionCreate() {
   };
 
   const validateForm = (product, auctionData) => {
-    console.log(auctionData)
-    console.log(product)
+    const startDate = new Date(auctionData.start_auction_date)
+    const endDate = new Date(auctionData.end_auction_date)
+    const currentDate = new Date();
+    const oneHourInMilliseconds = 60 * 60 * 1000;
+
     if (checkEmptyREGEX.test(product.name))
       return "Product name must not be empty !";
     else if (checkEmptyREGEX.test(auctionData.startPrice) || !checkDigitREGEX.test(auctionData.startPrice))
@@ -84,8 +84,16 @@ export default function AuctionCreate() {
       return "Please select RGB/Non-RGB !";
     else if (checkEmptyREGEX.test(auctionData.start_auction_date))
       return "Start date must not be empty !";
+    else if (startDate < currentDate)
+      return "Past dates are not valid for the start date !";
     else if (checkEmptyREGEX.test(auctionData.end_auction_date))
       return "End Date must not be empty !";
+    else if (endDate < currentDate)
+      return "Past dates are not valid for the end date !";
+    else if (startDate > endDate)
+      return "Start date must be earlier than the end date !";
+    else if (endDate.getTime() - startDate.getTime() < oneHourInMilliseconds)
+      return "The auction duration must be at least 1 hour !"
     else if (checkEmptyREGEX.test(product.description))
       return "Description must not be empty !";
     else if (!selectedMultipleFiles.length)

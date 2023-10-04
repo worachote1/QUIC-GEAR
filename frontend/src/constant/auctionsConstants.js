@@ -4,7 +4,7 @@ export const type = ["Headphone", "Mouse", "Keyboard", "Streaming", "Table&Chair
 
 export const status = ["completed", "waiting approved", "in progress", "declined"]
 
-export const auctionSortType = ["Newest","Oldest","Opening Bid: Hight-Low","Opening Bid: Low-Hight"]
+export const auctionSortType = ["Newest","Oldest","Bid: Hight-Low","Bid: Low-Hight"]
 
 export const SidebarAuctionCategories = [
     {

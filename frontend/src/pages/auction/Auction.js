@@ -54,12 +54,15 @@ const Auction = () => {
   const getAuctionsData = async () => {
     const allAuctionsData = await axios.get(`${process.env.REACT_APP_QUIC_GEAR_API}/auctionProducts`)
     const res_allAuctionsData = allAuctionsData.data;
-    const currentDate = new Date();
     //get auction products which should be displayed
     const availableAuctions = res_allAuctionsData?.filter((item) => {
       // just test (it use to be in progess which is auction that confirm by admin)
-      return new Date(item.end_auction_date) >= currentDate && new Date(item.start_auction_date) <= currentDate && item.auctionStatus === "in progress" 
+      const startDate = new Date(item.start_auction_date); 
+      const endDate = new Date(item.end_auction_date);
+      const currentDate = new Date();
+      return startDate <= currentDate && item.auctionStatus === "in progress" 
   })
+  console.log(availableAuctions)
     setAuctionsAvailable(availableAuctions)
 
     //update Expired Auction Item to completed(update auctionStatus)

@@ -43,7 +43,7 @@ export default function CheckUsers() {
           <div>
             <h2 class="text-2xl font-semibold leading-tight">Sort : </h2>
           </div>
-          <div className="dropdown ml-2">
+          <div className="dropdown ml-2 mr-5">
             <label tabIndex={0} className={`btn m-1 text-white bg-yellow-500 `} > {`${userSortType[sortOption]}`} <span className='ml-1'> {<AiFillCaretDown size={20} />} </span></label>
             <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
               {userSortType.map((item, Idx) => {
