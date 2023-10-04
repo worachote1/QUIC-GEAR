@@ -200,4 +200,4 @@ export default function CheckTransactions() {
       <AdminPagination totalDataRow={filteredTransactions.length} dataRowPerPage={dataRowPerPage} currentPage={currentPage} setCurrentPage={setCurrentPage} />
     </div>
   )
-}
+} 
