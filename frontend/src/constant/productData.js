@@ -71,7 +71,7 @@ export const productData = [
   {
     "id" : 5,
     "product" : {
-      "name" : "Anda Seat Kaiser",
+      "name" : "Anda Seat Kaiser44444444444444444444444444444444444444444444444444444444444444444444444444444444444",
       "brand" : "Anda Seat" , 
       "type" : "Table&Chair",
       "subtype" : "Chair",

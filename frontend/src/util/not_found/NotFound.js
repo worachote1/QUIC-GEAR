@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 
 export default function NotFound() {
     return (
-        <div className="flex items-center justify-center w-screen h-screen">
+        <div className="flex items-center justify-center w-screen h-screen ">
             <div className="px-4 lg:py-12">
                 <div className="lg:gap-4 lg:flex">
                     <div className="flex flex-col items-center justify-center md:py-24 lg:py-32">

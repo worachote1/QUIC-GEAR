@@ -2,9 +2,12 @@ import React, { useEffect, useState } from 'react';
 import Sidebar from '../components/Sidebar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft, faChevronRight, faDotCircle } from '@fortawesome/free-solid-svg-icons';
+import { Link } from 'react-router-dom'
 import HotProductCard from '../components/HotProductCard';
 import NewProductCard from '../components/NewProductCard';
 import { productData } from '../constant/productData';
+import axios from "axios";
+import ProductCard from '../components/ProductCard';
 
 export default function Home() {
   const slides = [
@@ -26,6 +29,8 @@ export default function Home() {
     },
   ];
 
+  const [allProducts, setAllProducts] = useState([]);
+  const [filteredProducts, setFilteredProducts] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedCategory, setSelectedCategory] = useState("bestSelling");
 
@@ -33,14 +38,14 @@ export default function Home() {
     setSelectedCategory(category);
   };
 
-  const filterProducts = () => {
+  const updateFilteredProducts = (productData) => {
     if (selectedCategory === "bestSelling") {
-      return productData
-        .sort((a, b) => b.product.totalOrders - a.product.totalOrders)
+      return [...productData]
+        .sort((a, b) => b.totalOrder - a.totalOrder)
         .slice(0, 10);
     } else if (selectedCategory === "newArrivals") {
-      return productData
-        .sort((a, b) => new Date(b.product.createAt) - new Date(a.product.createAt))
+      return [...productData]
+        .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
         .slice(0, 10);
     }
   };
@@ -58,6 +63,23 @@ export default function Home() {
     const newIndex = isLastSlide ? 0 : currentIndex + 1;
     setCurrentIndex(newIndex);
   };
+
+  const getAllProduts = async () => {
+    const allProducts = await axios.get(`${process.env.REACT_APP_QUIC_GEAR_API}/products`)
+    console.log(allProducts.data)
+    const res_allProducts = allProducts.data
+    setAllProducts([...res_allProducts])
+}
+
+useEffect(()=>{
+    getAllProduts();
+},[])
+
+useEffect(()=>{
+  const res_filteredProducts = updateFilteredProducts(allProducts)
+  console.log(res_filteredProducts)
+  setFilteredProducts(res_filteredProducts)
+},[allProducts, selectedCategory])
 
   useEffect(() => {
     const slideInterval = setInterval(() => {
@@ -109,17 +131,19 @@ export default function Home() {
           >
             <p className='text-2xl font-semibold mb-2 md:text-left'>สินค้าใหม่</p>
           </div>
-          <a href="/auction" class='bg-gray-200 w-full max-w-[350px] h-[100px] rounded-md p-4 my-2 mx-5 flex items-center justify-center hover:bg-red-700/40 shadow-md transition duration-300'>
-            <p class='text-2xl font-semibold mb-2 md:text-left'>ประมูลสินค้ามือสอง</p>
-          </a>
+          <Link to={'/auction'}>
+            <a class='bg-gray-200 w-full max-w-[350px] h-[100px] rounded-md p-4 my-2 mx-5 flex items-center justify-center hover:bg-red-700/40 shadow-md transition duration-300'>
+              <p class='text-2xl font-semibold mb-2 md:text-left'>ประมูลสินค้ามือสอง</p>
+            </a>
+          </Link>
         </div>
 
 
         {/* Product Card */}
         <div className='md:flex justify-center items-center mt-8'>
           <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-2'>
-            {filterProducts().map((product) => (
-              <ProductCardComponent key={product.id} product={product.product} />
+            {filteredProducts?.map((item) => (
+              <ProductCardComponent key={item._id} product={item} />
             ))}
           </div>
         </div>

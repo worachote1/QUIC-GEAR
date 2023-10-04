@@ -3,7 +3,7 @@ const multer = require('multer');
 const max_images = 5;
 const fileStorageEngine = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, `${__dirname}/../uploads`)
+        cb(null, `${__dirname}/../../frontend/public/uploads`)
     },
     filename: (req, file, cb) => {
         cb(null, Date.now() + '--' + file.originalname);
