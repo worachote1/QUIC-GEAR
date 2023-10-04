@@ -50,7 +50,8 @@ const userSchema = new mongoose.Schema({
     favList: [
         {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'product' // the name you use when calling mongoose.model('product', productSchema)
+            ref: 'product', // the name you use when calling mongoose.model('product', productSchema)
+            required: true
         }
     ],
     createdAt: {

@@ -72,8 +72,12 @@ export default function AuctionCreate() {
       return "Product name must not be empty !";
     else if (checkEmptyREGEX.test(auctionData.startPrice) || !checkDigitREGEX.test(auctionData.startPrice))
       return "Start Price must be only number !";
+    else if (parseInt(auctionData.startPrice) <= 0)
+      return "Start Price must be greater than 0 !"
     else if (checkEmptyREGEX.test(auctionData.buyOutPrice) || !checkDigitREGEX.test(auctionData.buyOutPrice))
       return "Buyout Price must be only number !";
+    else if (parseInt(auctionData.buyOutPrice) <= 0)
+      return "Buyout must be greater than 0 !"
     else if (!product.isWireless)
       return "Please select Wired/Wireless !";
     else if (!product.isRGB)

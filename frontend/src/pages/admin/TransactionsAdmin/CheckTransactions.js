@@ -3,10 +3,11 @@ import { testTransactionData, testImgSrc } from '../../../constant/testDataForAd
 import { formatNumberInput } from '../../../util/formatUtil';
 import { Link, useNavigate } from 'react-router-dom';
 import { status, type, transactionSortType } from '../../../constant/transactionsConstant';
-import { sortByType } from '../../../util/adminModule/adminTransaction';
+import { renderTransactionButtons, sortByType } from '../../../util/adminModule/adminTransaction';
 import { AiFillCaretDown } from 'react-icons/ai';
 import { BiSearch } from 'react-icons/bi'
 import AdminPagination from '../AdminPagination';
+import isEqual from 'lodash.isequal';
 import axios from 'axios';
 
 export default function CheckTransactions() {
@@ -54,18 +55,29 @@ export default function CheckTransactions() {
   const getTransactionsData = async () => {
     const allTransactionsData = await axios.get(`${process.env.REACT_APP_QUIC_GEAR_API}/transactions`)
     const res_allTransactionsData = allTransactionsData.data;
+    console.log(res_allTransactionsData)
     setTransactionsData(res_allTransactionsData.slice().reverse())
-}
-
-useEffect(() => {
-    getTransactionsData();
-}, [])
+  }
 
   useEffect(() => {
-    setFilteredTransactions(filteredTransactions.length > 0 
+    getTransactionsData();
+  }, [])
+
+  useEffect(() => {
+ /*
+    setFilteredTransactions(filteredTransactions.length > 0
       ? sortByType(filteredTransactions, sortOption)
       : sortByType(transactionsData, sortOption));
-  }, [sortOption,currentPage, dataRowPerPage, transactionsData]);
+      */
+
+      const sortedTransactions = filteredTransactions.length > 0
+      ? sortByType(filteredTransactions, sortOption)
+      : sortByType(transactionsData, sortOption);
+  // Only update the state if the new array is different from the previous one
+  if (!isEqual(sortedTransactions, filteredTransactions)) {
+      setFilteredTransactions(sortedTransactions);
+  }
+  }, [sortOption, transactionsData, transactionsData]);
 
   return (
     <div className='mx-2 mt-1'>
@@ -160,27 +172,26 @@ useEffect(() => {
           {filteredTransactions?.slice(firstRowIndexPage, lastRowIndexPage).map((item, Idx) => (
             <tr key={Idx} class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
               <td class="px-6 py-2">
-                {item["id"]}
+                {item._id}
               </td>
               <td scope="row" class="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white">
-                <img class="w-10 h-10 rounded-full" src={testImgSrc} alt="Jese image" />
+                <img class="w-10 h-10 rounded-full" src={`uploads/${item.userAccount.imgPath}`} alt="Jese image" />
                 <div class="pl-3">
-                  <div class="text-base font-semibold">test</div>
-                  <div class="font-normal text-gray-500">test user email ให้</div>
+                  <div class="text-base font-semibold">{item.userAccount.username}</div>
+                  <div class="font-normal text-gray-500">{item.userAccount.email}</div>
                 </div>
               </td>
               <td class="px-6 py-4">
                 {item["transactionType"]}
               </td>
               <td class="px-6 py-4">
-                {formatNumberInput(item["amount"])}
+                {formatNumberInput(item?.amount)}
               </td>
               <td class="px-6 py-4">
                 {new Date(item?.createdAt).toLocaleString()}
               </td>
               <td class="px-6 py-4">
-                {(item["transactionType"] === "topup" && item["transactionStatus"] !== "completed" ? <div> <button className="btn btn-outline btn-warning">Update coin</button> <button className="btn btn-outline btn-error">Decline</button><a className="link link-info ml-2">Check Proof of Payment</a> </div>
-                  : (item["transactionType"] === "withdraw" && item["transactionStatus"] !== "completed") ? <button className="btn btn-outline btn-primary">Approve withdrawal</button> : <button className="btn btn-outline btn-success">Completed</button>)}
+                {renderTransactionButtons(item)}
               </td>
             </tr>
           ))}

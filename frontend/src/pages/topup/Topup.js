@@ -6,7 +6,8 @@ import { defaultPrompayImg } from '../../constant/transactionsConstant';
 import { Link, useNavigate } from 'react-router-dom';
 
 export default function Topup() {
-
+  
+  const current_user = JSON.parse(sessionStorage.getItem('current_user'))
   const navigate = useNavigate();
   const validExtensions = ['jpg', 'jpeg', 'png'];
   const [selectedFile, setSelectedFile] = useState(null);
@@ -116,16 +117,15 @@ export default function Topup() {
       const singleFileData = new FormData();
       singleFileData.append('image', selectedFile);
       const uploadSingleFile_res = await axios.post(`${process.env.REACT_APP_QUIC_GEAR_API}/upload/single`, singleFileData);
-      console.log("ab")
-      console.log(uploadSingleFile_res);
       // then POST transaction
       // process.env.REACT_APP_QUIC_GEAR_API}/transactions/create
       const createTransactions = await axios.post(`${process.env.REACT_APP_QUIC_GEAR_API}/transactions/create`, {
         transactionType: "topup",
         imgPath: uploadSingleFile_res.data.filename,
-        userID: 6,
+        userAccount: current_user._id,
         amount: parseInt(topupAmount)
       });
+      console.log(createTransactions)
       alertTopupSuccess();
     }
     catch (err) {

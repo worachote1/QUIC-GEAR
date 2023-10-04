@@ -8,7 +8,7 @@ import axios from 'axios'
 export default function UserSettings() {
 
     const current_user = JSON.parse(sessionStorage.getItem('current_user'))
-    const [updatedUserData, setUpdatedUserData] = useState({ ...current_user, confirmPassword: "" });
+    const [updatedUserData, setUpdatedUserData] = useState({ ...current_user, confirmPassword: current_user.password });
     const [focusedData, setFocusedData] = useState({
         email: false,
         username: false,
@@ -67,7 +67,7 @@ export default function UserSettings() {
         else if (updatedUserData.password !== updatedUserData.confirmPassword) {
             setError('Passwords Do Not Match');
         } 
-        else if (!checkPhone) {
+        else if (!checkPhone && !updatedUserData) {
             setError("Invalid Phone Format !");
         }
         else {
@@ -220,7 +220,7 @@ export default function UserSettings() {
                     <label class="block mb-2 mt-2 text-sm font-medium text-gray-900 dark:text-white">Password</label>
                     <div class="flex justify-end items-center relative">
                         <input type={inputType} name='password' className="w-96 mb-0.5 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-indigo-300"
-                            placeholder="รหัสผ่าน"
+                            placeholder="รหัสผ่าน"  value={updatedUserData.password}
                             onChange={onChangeInput}
                             onFocus={(e) => onChangeFocusedInput(e, true)}
                             onBlur={(e) => onChangeFocusedInput(e, false)}
@@ -276,7 +276,7 @@ export default function UserSettings() {
                     <label class="block mb-2 mt-2 text-sm font-medium text-gray-900 dark:text-white">Confirm Password</label>
                     <div class="flex justify-end items-center relative">
                         <input type={inputConfirmType} name='confirmPassword' className="w-96 mb-0.5 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-indigo-300"
-                            placeholder="ยืนยันรหัสผ่าน"
+                            placeholder="ยืนยันรหัสผ่าน" value={updatedUserData.confirmPassword}
                             onChange={onChangeInput}
                             onFocus={(e) => onChangeFocusedInput(e, true)}
                             onBlur={(e) => onChangeFocusedInput(e, false)}
