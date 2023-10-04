@@ -16,6 +16,10 @@ const transactionsSchema = new mongoose.Schema({
     amount: {
         type: Number,
         require: true
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now,
     }
 });
 

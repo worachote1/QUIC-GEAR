@@ -33,7 +33,7 @@ export default function CheckUsers() {
   useEffect(() => {
     // Update the user data with the sliced data for the current page
     // setUserData(resDataPage)
-    setFilteredUsers(sortByType(userData, sortOption).slice(firstRowIndexPage, lastRowIndexPage));
+    setFilteredUsers(sortByType(userData, sortOption));
   }, [sortOption, currentPage, dataRowPerPage, userData]);
   return (
     <div className='mx-2 mt-1'>
@@ -71,7 +71,7 @@ export default function CheckUsers() {
           </tr>
         </thead>
         <tbody>
-          {filteredUsers?.map((item, Idx) => (
+          {filteredUsers?.slice(firstRowIndexPage, lastRowIndexPage).map((item, Idx) => (
             <tr key={Idx} class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
               <td class="px-6 py-2">
                 {item?._id}

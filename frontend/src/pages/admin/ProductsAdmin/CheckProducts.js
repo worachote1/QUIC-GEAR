@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { testProductData, testImgSrc } from '../../../constant/testDataForAdmin';
 import { brand, type, productSortType } from '../../../constant/productsConstants';
 import { sortByType } from '../../../util/adminModule/adminProduct';
@@ -9,6 +9,8 @@ import { formatNumberInput } from '../../../util/formatUtil';
 import { Link, useNavigate } from 'react-router-dom';
 import { ThreeDots } from 'react-loader-spinner';
 import axios from 'axios';
+import isEqual from 'lodash.isequal';
+import Swal from 'sweetalert2';
 
 export default function CheckProducts() {
 
@@ -26,6 +28,18 @@ export default function CheckProducts() {
     const [selectedTypes, setSelectedTypes] = useState([]);
 
     const [sortOption, setsortOption] = useState(0);
+
+    const alertDeleteProductSuccess = () => {
+        Swal.fire(
+          'Success! ',
+          ' Your product has been removed.',
+          'success'
+        )
+        .then((res) => {
+          if (res.isConfirmed)
+            window.location.reload();
+        })
+      }
 
     const handleBrandCheckboxChange = (brand) => {
         if (selectedBrands.includes(brand)) {
@@ -55,8 +69,11 @@ export default function CheckProducts() {
         setCurrentPage(1);
     };
 
-    const hanleDeleteProduct = (id) => {
-        // DELETE api to remove later
+    const hanleDeleteProduct = async (id) => {
+        // DELETE api to remove
+        const delteProductByID = axios.delete(`${process.env.REACT_APP_QUIC_GEAR_API}/products/delete/${id}`)
+        alertDeleteProductSuccess()
+        console.log(id)
     }
 
     const getProductsData = async () => {
@@ -70,16 +87,23 @@ export default function CheckProducts() {
     }, [])
 
     useEffect(() => {
-        setFilteredProducts(
-            filteredProducts.length > 0
-                ? sortByType(filteredProducts, sortOption)
-                : sortByType(ProductData, sortOption))
-    }, [filteredProducts, sortOption, currentPage, dataRowPerPage, ProductData]);
+        console.log(sortOption)
+        const sortedProducts = filteredProducts.length > 0
+            ? sortByType(filteredProducts, sortOption)
+            : sortByType(ProductData, sortOption);
+        console.log(sortedProducts)
+        console.log(filteredProducts)
+        // Only update the state if the new array is different from the previous one
+        if (!isEqual(sortedProducts, filteredProducts)) {
+            console.log("change")
+            setFilteredProducts(sortedProducts);
+        }
+    }, [filteredProducts, sortOption, ProductData]);
 
     return (
         <div>
             {
-                ProductData ?
+                filteredProducts ?
                     <div className='mx-2 mt-1'>
                         <div className='sm:flex sm:justify-between'>
                             <div className='flex items-center'>
@@ -137,8 +161,10 @@ export default function CheckProducts() {
                                     <label tabIndex={0} className={`btn m-1 text-white bg-yellow-500 `} > {`${productSortType[sortOption]}`} <span className='ml-1'> {<AiFillCaretDown size={20} />} </span></label>
                                     <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
                                         {productSortType.map((item, Idx) => {
-                                            return <li key={`sort-option-${Idx}`}> <button onClick={() => setsortOption(Idx)}> {productSortType[Idx]} </button> </li>
-                                        })}
+                                            return <li key={`sort-option-${Idx}`}> <button onClick={() => setsortOption(Idx)
+                                            }> {productSortType[Idx]} </button> </li>
+                                        }
+                                        )}
                                     </ul>
                                 </div>
                             </div>
@@ -204,10 +230,10 @@ export default function CheckProducts() {
                                             {new Date(item?.createdAt).toLocaleString()}
                                         </td>
                                         <td class="px-6 py-4">
-                                            <Link to={`/admin/update_products/${item["id"]}`}>
+                                            <Link to={`/admin/update_products/${item?._id}`}>
                                                 <button className="btn btn-outline btn-warning">Update</button>
                                             </Link>
-                                            <button className="btn btn-outline btn-error ml-1" onClick={hanleDeleteProduct(item["id"])}>Delete</button>
+                                            <button className="btn btn-outline btn-error ml-1" onClick={() => hanleDeleteProduct(item?._id)}>Delete</button>
                                         </td>
                                     </tr>
                                 ))}

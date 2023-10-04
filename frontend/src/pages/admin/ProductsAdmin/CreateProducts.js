@@ -49,8 +49,12 @@ export default function CreateProducts() {
       return "Product name must not be empty !";
     else if (checkEmptyREGEX.test(product.price) || !checkDigitREGEX.test(product.price))
       return "Price must be only number !";
+    else if (parseInt(product.price) <= 0)
+      return "Price must be greater than 0 !"
     else if (checkEmptyREGEX.test(product.stock) || !checkDigitREGEX.test(product.stock))
       return "Stock of product must be only number !";
+    else if (parseInt(product.stock) <= 0)
+      return "Stock must be greater than 0 !"
     else if (!product.isWireless)
       return "Please select Wired/Wireless !";
     else if (!product.isRGB)
@@ -67,8 +71,11 @@ export default function CreateProducts() {
   const handleSubmitCreateProduct = async (e) => {
     e.preventDefault();
     const checkFormError = validateForm(product);
-    if (checkFormError)
+    if (checkFormError){
       alertFormError(checkFormError);
+      return ;
+    }
+      
     else {
       try {
         // POST /upload for single and multiple file

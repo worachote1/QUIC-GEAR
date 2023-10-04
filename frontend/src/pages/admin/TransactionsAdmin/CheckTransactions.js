@@ -7,6 +7,7 @@ import { sortByType } from '../../../util/adminModule/adminTransaction';
 import { AiFillCaretDown } from 'react-icons/ai';
 import { BiSearch } from 'react-icons/bi'
 import AdminPagination from '../AdminPagination';
+import axios from 'axios';
 
 export default function CheckTransactions() {
   const [transactionsData, setTransactionsData] = useState([]);
@@ -14,7 +15,7 @@ export default function CheckTransactions() {
   const [dataRowPerPage, setDataRowPerPage] = useState(7);
   const lastRowIndexPage = currentPage * dataRowPerPage;
   const firstRowIndexPage = lastRowIndexPage - dataRowPerPage;
-  const resDataPage = testTransactionData.slice(firstRowIndexPage, lastRowIndexPage);
+  // const resDataPage = testTransactionData.slice(firstRowIndexPage, lastRowIndexPage);
 
   const [filteredTransactions, setFilteredTransactions] = useState([]);
 
@@ -41,24 +42,30 @@ export default function CheckTransactions() {
   };
 
   const handleFilterTranactions = () => {
-    const filtered = testTransactionData.filter((item) =>
+    const filtered = transactionsData.filter((item) =>
     (selectedStatus.includes(item.transactionStatus) && selectedTypes.includes(item.transactionType)
       || (selectedStatus.length === 0 && selectedTypes.includes(item.transactionType))
       || (selectedStatus.includes(item.transactionStatus) && selectedTypes.length === 0))
     );
     setFilteredTransactions(filtered);
-    console.log(filtered)
     setCurrentPage(1);
   };
 
-  const hanleDeleteProduct = (id) => {
-    // DELETE api to remove later
-  }
+  const getTransactionsData = async () => {
+    const allTransactionsData = await axios.get(`${process.env.REACT_APP_QUIC_GEAR_API}/transactions`)
+    const res_allTransactionsData = allTransactionsData.data;
+    setTransactionsData(res_allTransactionsData.slice().reverse())
+}
+
+useEffect(() => {
+    getTransactionsData();
+}, [])
 
   useEffect(() => {
-    setTransactionsData(filteredTransactions.length > 0 ? sortByType(filteredTransactions, sortOption).slice(firstRowIndexPage, lastRowIndexPage) 
-    : sortByType(testTransactionData, sortOption).slice(firstRowIndexPage, lastRowIndexPage));
-  }, [filteredTransactions, sortOption,currentPage, dataRowPerPage]);
+    setFilteredTransactions(filteredTransactions.length > 0 
+      ? sortByType(filteredTransactions, sortOption)
+      : sortByType(transactionsData, sortOption));
+  }, [sortOption,currentPage, dataRowPerPage, transactionsData]);
 
   return (
     <div className='mx-2 mt-1'>
@@ -150,7 +157,7 @@ export default function CheckTransactions() {
           </tr>
         </thead>
         <tbody>
-          {transactionsData?.map((item, Idx) => (
+          {filteredTransactions?.slice(firstRowIndexPage, lastRowIndexPage).map((item, Idx) => (
             <tr key={Idx} class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
               <td class="px-6 py-2">
                 {item["id"]}
@@ -169,7 +176,7 @@ export default function CheckTransactions() {
                 {formatNumberInput(item["amount"])}
               </td>
               <td class="px-6 py-4">
-                {item["createAt"]}
+                {new Date(item?.createdAt).toLocaleString()}
               </td>
               <td class="px-6 py-4">
                 {(item["transactionType"] === "topup" && item["transactionStatus"] !== "completed" ? <div> <button className="btn btn-outline btn-warning">Update coin</button> <button className="btn btn-outline btn-error">Decline</button><a className="link link-info ml-2">Check Proof of Payment</a> </div>
@@ -179,7 +186,7 @@ export default function CheckTransactions() {
           ))}
         </tbody>
       </table>
-      <AdminPagination totalDataRow={(!filteredTransactions.length) ? testTransactionData.length : filteredTransactions.length} dataRowPerPage={dataRowPerPage} currentPage={currentPage} setCurrentPage={setCurrentPage} />
+      <AdminPagination totalDataRow={filteredTransactions.length} dataRowPerPage={dataRowPerPage} currentPage={currentPage} setCurrentPage={setCurrentPage} />
     </div>
   )
 }

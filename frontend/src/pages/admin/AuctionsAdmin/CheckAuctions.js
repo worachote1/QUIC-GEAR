@@ -9,6 +9,7 @@ import { BiSearch } from 'react-icons/bi';
 import AdminPagination from '../AdminPagination';
 import { ThreeDots } from 'react-loader-spinner';
 import axios from 'axios';
+import isEqual from 'lodash.isequal';
 
 export default function CheckAuctions() {
 
@@ -81,10 +82,16 @@ export default function CheckAuctions() {
   }, [])
 
   useEffect(() => {
-    setFilteredAuctions(filteredAuctions.length > 0 ?
-      sortByType(filteredAuctions, sortOption)
-      : sortByType(AuctionData, sortOption));
-  }, [filteredAuctions, sortOption, currentPage, dataRowPerPage, AuctionData]);
+    console.log(sortOption)
+    const sortedAuctions = filteredAuctions.length > 0
+        ? sortByType(filteredAuctions, sortOption)
+        : sortByType(AuctionData, sortOption);
+
+    // Only update the state if the new array is different from the previous one
+    if (!isEqual(sortedAuctions, filteredAuctions)) {
+        setFilteredAuctions(sortedAuctions);
+    }
+}, [filteredAuctions, sortOption, AuctionData]);
 
   return (
     <div>
