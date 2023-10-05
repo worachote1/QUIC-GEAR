@@ -5,4 +5,4 @@ const { upload, uploadSingleFile, uploadMultipleFile } = require('../controllers
 router.route('/single').post(uploadSingleFile);
 router.route('/multiple').post(uploadMultipleFile);
 
-module.exports = router;
+module.exports = router; 

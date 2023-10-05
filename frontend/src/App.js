@@ -26,6 +26,9 @@ import CheckUsers from "./pages/admin/UsersAdmin/CheckUsers";
 import CreateProducts from "./pages/admin/ProductsAdmin/CreateProducts";
 import UpdateProducts from "./pages/admin/ProductsAdmin/UpdateProducts";
 
+import AuctionViews from "./pages/auctionViews";
+import ProductView from './pages/productView';
+
 import NotFound from "./util/not_found/NotFound";
 import CheckAuctionDetail from './pages/admin/AuctionsAdmin/CheckAutionDetail';
 import MyFavProducts from './pages/product/MyFavProducts';
@@ -50,17 +53,17 @@ function App() {
             <Route path='/auction_create' element={<AuctionCreate />} />
             <Route path='/topup' element={<Topup />} />
 
-            {/* Admin Routes */}
-            <Route path='/admin' element={<Admin />} />
-            <Route path='/admin/check_auctions' element={<CheckAuctions />} />
-            <Route path='/admin/check_auctions/:id' element={<CheckAuctionDetail/>} />
-            <Route path='/admin/check_orders' element={<CheckOrders />} />
-            <Route path='/admin/check_orders/:id' element={<DetailOrder />} />
-            <Route path='/admin/check_transactions' element={<CheckTransactions />} />
-            <Route path='/admin/check_products' element={<CheckProducts />} />
-            <Route path='/admin/create_products' element={<CreateProducts />} />
-            <Route path='/admin/update_products/:id' element={<UpdateProducts />} />
-            <Route path='/admin/check_users' element={<CheckUsers />} />
+              {/* Admin Routes */}
+              <Route path='/admin' element={<Admin />} />
+              <Route path='/admin/check_auctions' element={<CheckAuctions />} />
+              <Route path='/admin/check_auctions/:id' element={<CheckAuctionDetail/>} />
+              <Route path='/admin/check_orders' element={<CheckOrders />} />
+              <Route path='/admin/check_orders/:id' element={<DetailOrder />} />
+              <Route path='/admin/check_transactions' element={<CheckTransactions />} />
+              <Route path='/admin/check_products' element={<CheckProducts />} />
+              <Route path='/admin/create_products' element={<CreateProducts />} />
+              <Route path='/admin/update_products/:id' element={<UpdateProducts />} />
+              <Route path='/admin/check_users' element={<CheckUsers />} />
 
             <Route path="*" element={<NotFound />} />
           </Routes>
