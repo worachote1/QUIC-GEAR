@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Route, Link, useNavigate } from 'react-router-dom';
+import { formatNumberInput } from "../util/formatUtil";
 
 export default function Navbar() {
-    const [userRole, setUserRole] = useState("admin"); {/*guest,user,admin*/ }
+    const current_user = JSON.parse(sessionStorage.getItem('current_user'));
     const [profileMenuActive, setProfileMenuActive] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
     const navigate = useNavigate();
@@ -10,6 +11,11 @@ export default function Navbar() {
     const clickProfileDropdown = () => {
         setProfileMenuActive(!profileMenuActive);
     };
+    
+    const logOut = () => {
+        clickProfileDropdown()
+        sessionStorage.removeItem('current_user');
+    }
 
     return (
         <div className="sticky top-0 z-40 bg-white">
@@ -59,13 +65,13 @@ export default function Navbar() {
                         <Link to="/cart" className="btn border-white text-black rounded-full hover:bg-[#d8d8d8] mr-2" id="cart_btn">
                             <i className="fas fa-cart-shopping" style={{ fontSize: '1.25rem' }}></i>
                         </Link>
-                        {userRole === "admin" && (
+                        {current_user?.role === "admin" && (
                             <Link to="/admin" className="btn border-white text-black rounded-full hover:bg-[#d8d8d8] mr-2">
                                 <i className="fa-solid fa-screwdriver-wrench " style={{ fontSize: '1.25rem' }}></i>
                             </Link>
                         )}
-                        {userRole === "user" || userRole === "admin" ? (
-                            <div className="relative group">
+                        {current_user ? (
+                            <div className="relative ">
                                 <div
                                     className="flex items-center cursor-pointer relative"
                                     onMouseEnter={() => setProfileMenuActive(true)}
@@ -74,11 +80,11 @@ export default function Navbar() {
                                     <Link to="/edit-profile" className="w-10 h-10 rounded-full bg-gray-300 overflow-hidden">
                                         <img
                                             // https://www.gzone-conan.com/wp-content/uploads/2019/05/25262960-6716-11e9-b3c5-246e963a41ed_03.jpg   
-                                            src="https://media.istockphoto.com/id/1298261537/th/%E0%B9%80%E0%B8%A7%E0%B8%84%E0%B9%80%E0%B8%95%E0%B8%AD%E0%B8%A3%E0%B9%8C/%E0%B8%95%E0%B8%B1%E0%B8%A7%E0%B8%A2%E0%B8%B6%E0%B8%94%E0%B9%84%E0%B8%AD%E0%B8%84%E0%B8%AD%E0%B8%99%E0%B8%AB%E0%B8%B1%E0%B8%A7%E0%B9%82%E0%B8%9B%E0%B8%A3%E0%B9%84%E0%B8%9F%E0%B8%A5%E0%B9%8C%E0%B8%8A%E0%B8%B2%E0%B8%A2%E0%B8%A7%E0%B9%88%E0%B8%B2%E0%B8%87%E0%B9%80%E0%B8%9B%E0%B8%A5%E0%B9%88%E0%B8%B2.jpg?s=612x612&w=0&k=20&c=YlnFFQuxqyOE9gfuj7eKaHl0bjRpn22p2PPlc91YA48="
+                                            src={`uploads/${current_user ? current_user?.imgPath : "default-avatar-1.jpg"}`}
                                             alt="Profile"
                                             className="w-full h-full object-cover"
                                         />
-                               
+
                                     </Link>
 
                                 </div>
@@ -89,20 +95,24 @@ export default function Navbar() {
                                         onMouseLeave={() => setProfileMenuActive(false)}
                                     >
                                         <div className="py-2">
-                                            <div className="p-3 flex items-center justify-between">
+                                            {/* <div className="p-3 flex items-center justify-between">
                                                 <div className="text-left">
-                                                    <p className="text-m font-medium truncate overflow-hidden w-44">Username</p>
+                                                    <p className="text-m font-medium truncate overflow-hidden w-44">{current_user.username}</p>
                                                 </div>
-
+                                
                                                 <span className="text-s font-medium bg-red-100 text-[#a51d2d] px-2 py-1 rounded-full">
-                                                    {userRole}
+                                                    {current_user?.role}
                                                 </span>
 
-                                            </div>
-                                            <div className="p-3 border-b flex items-center justify-between text-left">
-                                                <p className="text-m text-gray-700 font-medium">QuicCoins <i className="fas fa-coins mr-1 text-l"></i></p>
-                                                <p className="text-m text-gray-700 font-medium truncate overflow-hidden">Coins Value</p>
-                                            </div>
+                                            </div> */}
+                                            {
+                                                current_user ?
+                                                    <div className="p-3 border-b flex items-center justify-between text-left">
+                                                        <p className="text-m text-gray-700 font-medium">QuicCoins <i className="fas fa-coins mr-1 text-l"></i></p>
+                                                        <p className="text-m text-gray-700 font-medium truncate overflow-hidden">{formatNumberInput(current_user?.coins)}</p>
+                                                    </div>
+                                                    : ""
+                                            }
                                             <Link to="/edit-profile" className="block p-3 text-sm font-medium text-gray-600 hover:bg-gray-100 text-left">
                                                 บัญชีของฉัน
                                             </Link>
@@ -115,9 +125,9 @@ export default function Navbar() {
                                             <div className="text-center mt-2">
                                                 <button
                                                     className="p-2 text-sm text-white bg-[#e01b24] rounded-xl hover:bg-red-700  w-60"
-                                                    onClick={() => setUserRole("guest")}
+                                                    onClick={logOut}
                                                 >
-                                                    ลงชื่อออก
+                                                    ออกจากระบบ
                                                 </button>
                                             </div>
                                         </div>
@@ -126,9 +136,12 @@ export default function Navbar() {
                             </div>
 
                         ) : (
-                            <button className="btn bg-[#a51d2d] text-white hover:bg-red-600 hover:shadow-lg px-2 py-1 text-md lg:px-4 lg:py-2 lg:text-base" id="login_btn">
-                                ลงชื่อเข้าใช้
-                            </button>
+                            <Link to={'/login'}>
+                                <button className="btn bg-[#a51d2d] text-white hover:bg-red-600 hover:shadow-lg px-2 py-1 text-md lg:px-4 lg:py-2 lg:text-base" id="login_btn"
+                                >
+                                    เข้าสู่ระบบ
+                                </button>
+                            </Link>
                         )}
 
 

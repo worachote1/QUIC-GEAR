@@ -64,7 +64,7 @@ export const renderTransactionButtons = (item) => {
                 <div>
                     <button className="btn btn-outline btn-warning" onClick={() => updateTransaction(item, item.userAccount, "updateCoin", item.amount)}>Update coin</button>
                     <button className="btn btn-outline btn-error ml-2" onClick={() => updateTransaction(item, item.userAccount, "decline", item.amount)}>Decline</button>
-                    <a className="link link-info lg:ml-2">Check Proof of Payment</a>
+                    <a className="link link-info lg:ml-2" href={`uploads/${item.imgPath}`} target='_blank'>Check Proof of Payment</a>
                 </div>
             );
         } 

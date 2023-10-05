@@ -6,12 +6,11 @@ const getStarRating = (rating) => {
 };
 
 const HotProductCard = ({ product }) => {
-  const { id, name, brand, type, price, imgPath, rating } = product;
-
+  const { _id, name, brand, type, price, imgPath, rating } = product;
   return (
     <div className='bg-white lg:w-[210px] md:w-[210px] w-[170px] rounded-md p-4 my-2 mx-2 md:mx-4 lg:mx-4 relative shadow-md transition duration-300'>
       <div className='relative'>
-        <img src={`/uploads/${product.imgPath[0]}`} alt={name} className='w-full h-[200px] object-cover mb-2' />
+        <img src={`/uploads/${imgPath[0]}`} alt={name} className='w-full h-[200px] object-cover mb-2' />
 
         {/* Hot Badge */}
         <div className='bg-red-500 text-white absolute top-0 left-0 mt-1 ml-2 px-2 py-1 rounded-full text-xs text-center'>
@@ -27,7 +26,7 @@ const HotProductCard = ({ product }) => {
         </div>
       </div>
       <button className="mt-3 border border-red-500 bg-white text-red-500 font-bold px-4 py-2 rounded-md hover:bg-red-500 hover:text-white transition duration-300 your-custom-class">
-        <Link to={`/productdetail?id=${id}`}>View Details</Link>
+        <Link to={`/productdetail/${_id}`}>View Details</Link>
       </button>
 
 
