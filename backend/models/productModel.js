@@ -46,7 +46,7 @@ const productSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    totalOrder: {
+    totalProductOrder: {
         type: Number,
         default: 0,
     },

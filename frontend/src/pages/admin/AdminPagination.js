@@ -17,4 +17,3 @@ export default function AdminPagination({totalDataRow, dataRowPerPage, currentPa
         </div>
     );
 }
- 

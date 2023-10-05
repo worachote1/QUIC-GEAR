@@ -31,27 +31,45 @@ import ProductView from './pages/productView';
 
 import NotFound from "./util/not_found/NotFound";
 import CheckAuctionDetail from './pages/admin/AuctionsAdmin/CheckAutionDetail';
-import { CartProvider } from './components/CartContext';
+import MyFavProducts from './pages/product/MyFavProducts';
 
 function App() {
-
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <div className="App">
         <BrowserRouter>
+<<<<<<<<< Temporary merge branch 1
+          <CartProvider>
+            <Navbar />
+            <Routes>
+              <Route path='/' element={<Home />} />
+              <Route path='/login' element={<Login />} />
+              <Route path='/register' element={<Register />} />
+              <Route path='/edit-profile/:id' element={<EditProfile />} /> 
+              <Route path='/cart' element={<Cart />} />
+              <Route path='/product' element={<Product />} />
+              {/* <Route path='/product/:id' element={<ProductDetail />} /> */}
+              <Route path='/auction' element={<Auction />} />
+              <Route path='/auction/:id' element={<AuctionDetail />} />
+              <Route path='/auction_create/' element={<AuctionCreate />} />
+              <Route path='/topup' element={<Topup />} />
+              <Route path='/auctionviews' element={<AuctionViews />} />
+              <Route path='/productview' element={<ProductView />} />
+=========
           <Navbar />
           <Routes>
             <Route path='/' element={<Home />} />
             <Route path='/login' element={<Login />} />
             <Route path='/register' element={<Register />} />
-            <Route path='/edit-profile/:id' element={<EditProfile />} /> 
+            <Route path='/edit-profile' element={<EditProfile />} /> 
             <Route path='/cart' element={<Cart />} />
             <Route path='/product' element={<Product />} />
             {/* <Route path='/product/:id' element={<ProductDetail />} /> */}
             <Route path='/auction' element={<Auction />} />
             <Route path='/auction/:id' element={<AuctionDetail />} />
-            <Route path='/auction_create/' element={<AuctionCreate />} />
+            <Route path='/auction_create' element={<AuctionCreate />} />
             <Route path='/topup' element={<Topup />} />
+>>>>>>>>> Temporary merge branch 2
 
               {/* Admin Routes */}
               <Route path='/admin' element={<Admin />} />
@@ -68,7 +86,8 @@ function App() {
             <Route path="*" element={<NotFound />} />
           </Routes>
           <Footer />
-          {/* <Mobilebar /> */}
+          <Mobilebar />
+>>>>>>>>> Temporary merge branch 2
         </BrowserRouter>
       </div>
     </LocalizationProvider>
