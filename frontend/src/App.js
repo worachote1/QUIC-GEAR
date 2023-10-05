@@ -28,6 +28,7 @@ import UpdateProducts from "./pages/admin/ProductsAdmin/UpdateProducts";
 
 import NotFound from "./util/not_found/NotFound";
 import CheckAuctionDetail from './pages/admin/AuctionsAdmin/CheckAutionDetail';
+import ProtectedRoute from './ProtectedRoute';
 
 function App() {
   return (
@@ -36,29 +37,35 @@ function App() {
         <BrowserRouter>
           <Navbar />
           <Routes>
+            {/* Public Routes */}
             <Route path='/' element={<Home />} />
             <Route path='/login' element={<Login />} />
             <Route path='/register' element={<Register />} />
-            <Route path='/edit-profile' element={<EditProfile />} /> 
-            <Route path='/cart' element={<Cart />} />
             <Route path='/product' element={<Product />} />
-            {/* <Route path='/product/:id' element={<ProductDetail />} /> */}
             <Route path='/auction' element={<Auction />} />
             <Route path='/auction/:id' element={<AuctionDetail />} />
-            <Route path='/auction_create' element={<AuctionCreate />} />
-            <Route path='/topup' element={<Topup />} />
 
-            {/* Admin Routes */}
-            <Route path='/admin' element={<Admin />} />
-            <Route path='/admin/check_auctions' element={<CheckAuctions />} />
-            <Route path='/admin/check_auctions/:id' element={<CheckAuctionDetail/>} />
-            <Route path='/admin/check_orders' element={<CheckOrders />} />
-            <Route path='/admin/check_orders/:id' element={<DetailOrder />} />
-            <Route path='/admin/check_transactions' element={<CheckTransactions />} />
-            <Route path='/admin/check_products' element={<CheckProducts />} />
-            <Route path='/admin/create_products' element={<CreateProducts />} />
-            <Route path='/admin/update_products/:id' element={<UpdateProducts />} />
-            <Route path='/admin/check_users' element={<CheckUsers />} />
+            {/* Protected User Routes */}
+            <Route path='/' element={<ProtectedRoute />}>
+              <Route path='/edit-profile' element={<EditProfile />} />
+              <Route path='/cart' element={<Cart />} />
+              <Route path='/auction_create' element={<AuctionCreate />} />
+              <Route path='/topup' element={<Topup />} />
+            </Route>
+
+            {/* Protected Admin Routes */}
+            <Route path='/admin' element={<ProtectedRoute />}>
+              <Route index element={<Admin />} />
+              <Route path='check_auctions' element={<CheckAuctions />} />
+              <Route path='check_auctions/:id' element={<CheckAuctionDetail />} />
+              <Route path='check_orders' element={<CheckOrders />} />
+              <Route path='check_orders/:id' element={<DetailOrder />} />
+              <Route path='check_transactions' element={<CheckTransactions />} />
+              <Route path='check_products' element={<CheckProducts />} />
+              <Route path='create_products' element={<CreateProducts />} />
+              <Route path='update_products/:id' element={<UpdateProducts />} />
+              <Route path='check_users' element={<CheckUsers />} />
+            </Route>
 
             <Route path="*" element={<NotFound />} />
           </Routes>

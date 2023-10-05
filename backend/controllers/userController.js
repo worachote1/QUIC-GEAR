@@ -11,37 +11,7 @@ const getAllUser = asyncHandler(async (req, res) => {
 // Create new user => POST api/users/create
 const createUser = asyncHandler(async (req, res) => {
     try {
-        const { username,
-                password,
-                imgPath,
-                role,
-                email,
-                address,
-                phone,
-                bankAccount: {
-                    bank,
-                    account_number,
-                    account_name
-                },
-                coins,
-                isGoogleAccount } = req.body;
-
-        const users = await user.create({
-            username,
-            password,
-            imgPath,
-            role,
-            email,
-            address,
-            phone,
-            bankAccount: {
-                bank,
-                account_number,
-                account_name
-            },
-            coins,
-            isGoogleAccount 
-        });
+        const users = await user.create(req.body);
 
         res.status(200).json(users);
     } catch(err) {
