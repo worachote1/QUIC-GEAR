@@ -61,27 +61,28 @@ const auctionProductSchema = new mongoose.Schema({
         },
     }
     ,
-    user_seller: [
-        {
-            id: {
+    user_seller:
+    {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'user',
+        required: true
+    }
+    ,
+    userBidder: {
+        type: [{
+            userId: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'user',
+                required: true
+            },
+            bidAmount: {
                 type: Number,
                 required: true
-            },
-            username: {
-                type: String,
-                required: true
-            },
-            email: {
-                type: String,
-                required: true
-            },
-        }
-    ],
-    userBidder: {
-        type: [],
+            }
+        }],
         default: []
     }
-
+    ,
 });
 
 module.exports = mongoose.model('auctionProducts', auctionProductSchema);

@@ -4,7 +4,7 @@ const sendToken = require('../utils/jwtToken');
 
 // Get all users => GET api/users
 const getAllUser = asyncHandler(async (req, res) => {
-    const users = await user.find();
+    const users = await user.find().populate('favList');
     res.status(200).json(users);
 });
 
@@ -84,40 +84,55 @@ const updateUser = asyncHandler(async (req, res) => {
     res.status(200).json(users)
 });
 
-// Login user => api/users/login
+//Register a user
+//route POST /api/users/register 
+//access : public
+const registerUser = asyncHandler(async (req, res) => {
+    try {
+        const { email, username,  password, confirmPassword } = req.body;
+
+        // Check if user with the given username already exists
+        const existingUser = await user.findOne({ username });
+        if (existingUser) {
+             return res.status(400).json({ message: 'Username already taken.' });
+        }
+
+        // Password confirmation
+        if (password !== confirmPassword) {
+            return res.status(400).json({ message: 'Passwords do not match.' });
+        }
+
+        const newUser = await user.create({
+            email,
+            username,
+            password
+        });
+
+        res.status(201).json(newUser);
+    } catch(err) {
+        console.log(err);
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+});
+
+
+//Login user
+//route POST /api/users/login
+//access : public
 const loginUser = asyncHandler(async (req, res) => {
-    const { email, password } = req.body;
+    const { username, password } = req.body;
 
-    if(!email || !password) {
-        return res.status(400).send('Please enter email & password');
+    const userFound = await user.findOne({ username }).populate('favList');
+    // console.log(userFound)
+    if (!userFound) {
+        return res.status(404).json({ message: 'Invalid username or password.' });
     }
 
-    const users = await user.findOne({ email }).select('+password');
-
-    if(!users) {
-        return res.status(400).send('Invalid Email or Password');
+    if (password !== userFound.password) {
+        return res.status(400).json({ message: 'incorrect password.' });
     }
 
-    const isPasswordMatched = await users.comparePassword(password);
-
-    if(!isPasswordMatched) {
-        return res.status(401).send('Invalid Email or Password');
-    }
-
-    sendToken(users, 200, res);
+    res.status(200).json(userFound);
 });
 
-// Logout user => api/users/logout
-const logoutUser = asyncHandler(async (req, res) => {
-    res.cookie('token', null, {
-        expires: new Date(Date.now()),
-        httpOnly: true
-    });
-
-    res.status(200).json({
-        success: true,
-        message: 'Logged out'
-    });
-});
-
-module.exports = { getAllUser, createUser, deleteUser, updateUser, loginUser, logoutUser };
+module.exports = { getAllUser, createUser, deleteUser, updateUser, loginUser, registerUser};

@@ -5,7 +5,7 @@ const transaction = require('../models/transactionsModel');
 //@route GET /api/transactions
 
 const getAllTransactions = asyncHandler (async (req,res) => {
-    const transactions = await transaction.find();
+    const transactions = await transaction.find().populate('userAccount');
     res.status(200).json(transactions);
 });
 
@@ -14,17 +14,16 @@ const getAllTransactions = asyncHandler (async (req,res) => {
 
 const createTransaction = asyncHandler (async (req,res) => {
     try {
-        const { transactionType, imgPath, userID, transactionStatus, amount} = req.body;
+        const { transactionType, imgPath, userID, amount} = req.body;
 
-        if(!transactionType || !imgPath || !userID || !amount || !transactionStatus) {
-            return res.status(400).send("All data field must be valid");
+        if(!transactionType || !imgPath || !userID || !amount) {
+            res.status(400).send("All data field must be valid");
         }
 
         const transactions = await transaction.create({
             transactionType,
             imgPath,
             userID,
-            transactionStatus,
             amount
         });
 
@@ -78,6 +77,21 @@ const getTransactionsByID = asyncHandler (async (req,res) => {
     }
 });
 
+
+// Update product => PUT api//update/:id
+const updateTransactionsByID = asyncHandler(async (req, res) => {
+    let transactionData = await transaction.findById(req.params.id);
+
+    if(!transactionData) {
+        return res.status(404).send('Transaction not found!');
+    }
+
+    transactionData = await transaction.findByIdAndUpdate(req.params.id, req.body, {
+        new: true,
+    })
+    res.status(200).json(transactionData)
+});
+
 module.exports = { 
-    getAllTransactions, createTransaction ,deleteTransaction, getTransactionsByID
+    getAllTransactions, createTransaction ,deleteTransaction, getTransactionsByID, updateTransactionsByID
 };

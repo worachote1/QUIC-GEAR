@@ -11,7 +11,7 @@ const NewProductCard = ({ product }) => {
   return (
     <div className='bg-white lg:w-[210px] md:w-[210px] w-[170px] rounded-md p-4 my-2 mx-2 md:mx-4 lg:mx-4 relative shadow-md transition duration-300'>
       <div className='relative'>
-        <img src={imgPath} alt={name} className='w-full h-[200px] object-cover mb-2' />
+        <img src={`/uploads/${product.imgPath[0]}`} alt={name} className='w-full h-[200px] object-cover mb-2' />
 
         {/* Hot Badge */}
         <div className='bg-blue-500 text-white absolute top-0 left-0 mt-1 ml-2 px-2 py-1 rounded-full text-xs text-center'>

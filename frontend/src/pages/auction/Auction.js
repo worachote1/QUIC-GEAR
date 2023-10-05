@@ -54,24 +54,30 @@ const Auction = () => {
   const getAuctionsData = async () => {
     const allAuctionsData = await axios.get(`${process.env.REACT_APP_QUIC_GEAR_API}/auctionProducts`)
     const res_allAuctionsData = allAuctionsData.data;
-    const currentDate = new Date();
     //get auction products which should be displayed
     const availableAuctions = res_allAuctionsData?.filter((item) => {
       // just test (it use to be in progess which is auction that confirm by admin)
-      return new Date(item.end_auction_date) >= currentDate && new Date(item.start_auction_date) <= currentDate && item.auctionStatus === "in progress" 
+      const startDate = new Date(item.start_auction_date); 
+      const endDate = new Date(item.end_auction_date);
+      const currentDate = new Date();
+      return startDate <= currentDate && item.auctionStatus === "in progress" 
   })
+  console.log(availableAuctions)
     setAuctionsAvailable(availableAuctions)
 
     //update Expired Auction Item to completed(update auctionStatus)
-    const expiredAuctions = res_allAuctionsData?.filter((item) => {
-      return new Date(item.end_auction_date) <= currentDate && item.auctionStatus === "in progress" 
-  })
+  //   const expiredAuctions = res_allAuctionsData?.filter((item) => {
+  //     return new Date(item.end_auction_date) <= currentDate && item.auctionStatus === "in progress" 
+  // })
   }
 
   useEffect(() => {
     getAuctionsData()
   },[])
   
+  useEffect(() => {
+    setFilteredProducts(auctionsAvailable)
+  },[auctionsAvailable])
 
   useEffect(() => {
     const brandsSet = new Set();
@@ -91,7 +97,7 @@ const Auction = () => {
 
     setFilteredProducts(tempFilteredProducts);
     setBrands(brandsSet);
-  }, [searchQuery, auctionsAvailable]);
+  }, [searchQuery]);
 
   useEffect(() => {
     let filteredByBrand = auctionsAvailable;
@@ -164,7 +170,7 @@ const Auction = () => {
     });
 
     setFilteredProducts(filteredByBrand);
-  }, [selectedBrands, selectedRGB, selectedWireless, searchQuery, selectedFilter, minPrice, maxPrice, auctionsAvailable]);
+  }, [selectedBrands, selectedRGB, selectedWireless, searchQuery, selectedFilter, minPrice, maxPrice]);
 
 
 
@@ -395,7 +401,7 @@ const Auction = () => {
       <div className="md:flex justify-center lg:mr-[550px] items-center mt-8">
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-2">
 
-          {filteredProducts.map((item) => (
+          {filteredProducts?.map((item) => (
             <AuctionCard AuctionItem={item} />
           ))}
         </div>

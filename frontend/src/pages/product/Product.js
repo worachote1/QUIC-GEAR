@@ -31,7 +31,6 @@ const Product = () => {
 
     const getAllProduts = async () => {
         const allProducts = await axios.get(`${process.env.REACT_APP_QUIC_GEAR_API}/products`)
-        console.log(allProducts.data)
         const res_allProducts = allProducts.data
         setAllProducts([...res_allProducts])
     }
@@ -43,7 +42,6 @@ const Product = () => {
     useEffect(() => {
         const brandsSet = new Set();
         const tempFilteredProducts = [];
-        console.log(allProducts)
         allProducts.forEach((item) => {
 
             const nameIncludesQuery = (searchQuery) ? item?.name.toLowerCase().includes(searchQuery.toLowerCase()) : "";

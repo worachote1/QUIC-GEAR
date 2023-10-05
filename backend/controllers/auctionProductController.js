@@ -5,7 +5,7 @@ const auctionProduct = require('../models/auctionProductsModel');
 //@route GET /api/auctionProducts
 
 const getAllAuctionProducts = asyncHandler(async (req, res) => {
-    const auctionProducts = await auctionProduct.find();
+    const auctionProducts = await auctionProduct.find().populate('user_seller').populate('userBidder');
     res.status(200).json(auctionProducts);
 });
 
@@ -15,7 +15,7 @@ const getSingleAuctionProduct = asyncHandler(async (req, res) => {
     try {
         const auctionProductId = req.params.id;
 
-        const targetAuctionProduct = await auctionProduct.findById(auctionProductId);
+        const targetAuctionProduct = await auctionProduct.findById(auctionProductId).populate('user_seller').populate('userBidder');
 
         if(!targetAuctionProduct) {
             return res.status(404).send('Auction ID not found!');

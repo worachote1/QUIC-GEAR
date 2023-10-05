@@ -22,11 +22,9 @@ export default function AuctionCard({ AuctionItem }) {
     return () => clearInterval(timer); // Cleanup the timer on unmount
   }, []);
 
-  console.log("testAucCard")
-  console.log(AuctionItem)
   return (
     // lg:w-[210px] md:w-[210px] w-[170px]
-    <div className='bg-white lg:w-[210px] md:w-[210px] w-[170px] rounded-md p-4 my-2 mx-2 md:mx-4 relative shadow-md transition duration-300'>
+    <div className='bg-white lg:w-[210px] md:w-[210px] w-[170px] rounded-md p-4 my-2 mx-2 md:mx-4 relative shadow-md transition duration-300 '>
       <div className='relative'>
         <img src={`/uploads/${AuctionItem.productItem.imgPath[0]}`} alt={AuctionItem.productItem.name} className='w-full h-[200px] object-cover mb-2' />
 
