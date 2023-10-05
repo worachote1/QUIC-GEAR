@@ -72,6 +72,14 @@ const AuctionDetail = () => {
             console.log([...updatedArrayIndex])
         }
     }
+    
+    const hanleUserBid = () => {
+    
+    }
+
+    const handleUserBuyOut = () => {
+        
+    } 
 
     useEffect(() => {
         getSingleAuctionData();

@@ -1,8 +1,11 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { SideBarCtegories } from "../constant/sideBarConstants";
+import { formatNumberInput } from "../util/formatUtil";
 
 export default function Mobilebar() {
+    
+    const current_user = JSON.parse(sessionStorage.getItem('current_user'))
     const currentPath = useLocation().pathname;
     const [open, setOpen] = useState(false);
     const [userRole, setUserRole] = useState("admin"); {/*guest,user,admin*/ }
@@ -15,6 +18,10 @@ export default function Mobilebar() {
     const clickProfileDropdown = () => {
         setProfileMenuActive(!profileMenuActive);
     };
+    const logOut = () => {
+        clickProfileDropdown()
+        sessionStorage.removeItem('current_user');
+    }
     return (
         <div>
             <div>
@@ -116,12 +123,12 @@ export default function Mobilebar() {
                                 style={{ fontSize: "1.25rem" }}
                             ></i>
                         </Link>
-                        {userRole === "admin" && (
+                        {current_user?.role === "admin" && (
                             <Link to="/admin" className="btn text-red-600 mr-2  hover:bg-red-700/30 rounded-full" id="admin_btn">
                                 <i className="fa-solid fa-screwdriver-wrench " style={{ fontSize: "1.25rem" }}></i>
                             </Link>
                         )}
-                        {userRole === "user" || userRole === "admin" ? (
+                        {current_user ? (
                             <div className="relative group">
                                 <div
                                     className="flex items-center cursor-pointer relative"
@@ -129,7 +136,7 @@ export default function Mobilebar() {
                                 >
                                     <div className="w-10 h-10 rounded-full bg-gray-300 overflow-hidden">
                                         <img
-                                            src="https://www.gzone-conan.com/wp-content/uploads/2019/05/25262960-6716-11e9-b3c5-246e963a41ed_03.jpg"
+                                            src={`uploads/${current_user ? current_user?.imgPath : "default-avatar-1.jpg"}`}
                                             alt="Profile"
                                             className="w-full h-full object-cover"
                                         />
@@ -141,7 +148,7 @@ export default function Mobilebar() {
                                         className="absolute right-0 bottom-16 w-64 bg-white rounded-md shadow-lg"
                                     >
                                         <div className="py-2">
-                                            <div className="p-3 flex items-center justify-between">
+                                            {/* <div className="p-3 flex items-center justify-between">
                                                 <div className="text-left">
                                                     <p className="text-m text-gray-700 font-medium truncate overflow-hidden w-44">Username</p>
                                                 </div>
@@ -150,10 +157,10 @@ export default function Mobilebar() {
                                                     {userRole}
                                                 </span>
 
-                                            </div>
+                                            </div> */}
                                             <div className="p-3 border-b flex items-center justify-between text-left">
                                                 <p className="text-m text-gray-700 font-medium">QuicCoins <i className="fas fa-coins mr-1 text-l"></i></p>
-                                                <p className="text-m text-gray-700 font-medium truncate overflow-hidden">Coins Value</p>
+                                                <p className="text-m text-gray-700 font-medium truncate overflow-hidden">{formatNumberInput(current_user?.coins)}</p>
                                             </div>
 
                                             <Link to="/topup" className="block p-3 text-sm font-medium text-gray-600 hover:bg-gray-100 text-left">
@@ -168,9 +175,9 @@ export default function Mobilebar() {
                                             <div className="text-center mt-2">
                                                 <button
                                                     className="p-2 text-sm text-white bg-[#e01b24] rounded-xl hover:bg-red-700  w-60"
-                                                    onClick={() => setUserRole("guest")}
+                                                    onClick={logOut}
                                                 >
-                                                    ลงชื่อออก
+                                                    ออกจากระบบ
                                                 </button>
                                             </div>
                                         </div>
@@ -183,6 +190,7 @@ export default function Mobilebar() {
                                 className="btn text-red-600 mr-2  hover:bg-red-700/30 rounded-full"
                                 id="profile_m_btn"
                             >
+                                 เข้าสู่ระบบ
                                 <i className="fa-solid fa-user" style={{ fontSize: "1.25rem" }}></i>
                             </Link>
                         )}
