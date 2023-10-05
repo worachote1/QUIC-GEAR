@@ -9,9 +9,10 @@ import { BiSearch } from 'react-icons/bi';
 import AdminPagination from '../AdminPagination';
 import { ThreeDots } from 'react-loader-spinner';
 import axios from 'axios';
+import isEqual from 'lodash.isequal';
 
 export default function CheckAuctions() {
-
+  
   const [AuctionData, setAuctionData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [dataRowPerPage, setDataRowPerPage] = useState(7);
@@ -81,10 +82,16 @@ export default function CheckAuctions() {
   }, [])
 
   useEffect(() => {
-    setFilteredAuctions(filteredAuctions.length > 0 ?
-      sortByType(filteredAuctions, sortOption)
-      : sortByType(AuctionData, sortOption));
-  }, [filteredAuctions, sortOption, currentPage, dataRowPerPage, AuctionData]);
+    console.log(sortOption)
+    const sortedAuctions = filteredAuctions.length > 0
+        ? sortByType(filteredAuctions, sortOption)
+        : sortByType(AuctionData, sortOption);
+
+    // Only update the state if the new array is different from the previous one
+    if (!isEqual(sortedAuctions, filteredAuctions)) {
+        setFilteredAuctions(sortedAuctions);
+    }
+}, [filteredAuctions, sortOption, AuctionData]);
 
   return (
     <div>
@@ -168,7 +175,7 @@ export default function CheckAuctions() {
                   <div>
                     <h2 class="text-2xl font-semibold leading-tight">Sort : </h2>
                   </div>
-                  <div className="dropdown ml-2">
+                  <div className="dropdown ml-2 mr-5">
                     <label tabIndex={0} className={`btn m-1 text-white bg-yellow-500 `} > {`${auctionSortType[sortOption]}`} <span className='ml-1'> {<AiFillCaretDown size={20} />} </span></label>
                     <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
                       {auctionSortType.map((item, Idx) => {
@@ -226,10 +233,10 @@ export default function CheckAuctions() {
                         {formatNumberInput(item?.startPrice)}
                       </td>
                       <td scope='row' class="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white">
-                        <img class="w-10 h-10 rounded-full" src={testImgSrc} alt="Jese image" />
+                        <img class="w-10 h-10 rounded-full" src={`uploads/${item?.user_seller.imgPath}`} alt="Jese image" />
                         <div class="pl-3">
-                          <div class="text-base font-semibold">{item?.user_seller[0]?.username}</div>
-                          <div class="font-normal text-gray-500">{item?.user_seller[0]?.email}</div>
+                          <div class="text-base font-semibold">{item?.user_seller?.username}</div>
+                          <div class="font-normal text-gray-500">{item?.user_seller?.email}</div>
                         </div>
                       </td>
                       <td class="px-6 py-4">

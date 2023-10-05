@@ -1,4 +1,4 @@
-export const status = ["completed","pending"];
+export const status = ["completed","waiting approved","declined"];
 
 export const type = ["topup","withdraw"]
 

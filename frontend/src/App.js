@@ -40,14 +40,14 @@ function App() {
             <Route path='/' element={<Home />} />
             <Route path='/login' element={<Login />} />
             <Route path='/register' element={<Register />} />
-            <Route path='/edit-profile/:id' element={<EditProfile />} /> 
+            <Route path='/edit-profile' element={<EditProfile />} /> 
             <Route path='/cart' element={<Cart />} />
             <Route path='/product' element={<Product />} />
             <Route path='/fav_product/:id' element={<MyFavProducts />} />
             {/* <Route path='/product/:id' element={<ProductDetail />} /> */}
             <Route path='/auction' element={<Auction />} />
             <Route path='/auction/:id' element={<AuctionDetail />} />
-            <Route path='/auction_create/' element={<AuctionCreate />} />
+            <Route path='/auction_create' element={<AuctionCreate />} />
             <Route path='/topup' element={<Topup />} />
 
             {/* Admin Routes */}
@@ -65,7 +65,7 @@ function App() {
             <Route path="*" element={<NotFound />} />
           </Routes>
           <Footer />
-          {/* <Mobilebar /> */}
+          <Mobilebar />
         </BrowserRouter>
       </div>
     </LocalizationProvider>

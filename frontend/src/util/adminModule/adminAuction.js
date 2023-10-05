@@ -1,20 +1,21 @@
 export const sortByType = (arrObj, sortOption) => {
     let res = [];
+    let tempArrObj = [...arrObj];
     //  0 : Newst
     if (sortOption === 0) {
-        res = arrObj.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+        res = tempArrObj.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
     }
     // 1 : Oldest
     if (sortOption === 1) {
-        res = arrObj.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
+        res = tempArrObj.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
     }
     // 2 : Opening Bid : Hight-Low
     if (sortOption === 2) {
-        res = arrObj.sort((a, b) => b.startPrice - a.startPrice)
+        res = tempArrObj.sort((a, b) => b.startPrice - a.startPrice)
     }
     // 3 : Opening Bid: Low-Height
     if (sortOption === 3) {
-        res = arrObj.sort((a, b) => a.startPrice - b.startPrice)
+        res = tempArrObj.sort((a, b) => a.startPrice - b.startPrice)
     }
     return [...res];
 }
