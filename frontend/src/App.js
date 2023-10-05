@@ -46,6 +46,7 @@ function App() {
             <Route path='/edit-profile' element={<EditProfile />} /> 
             <Route path='/cart' element={<Cart />} />
             <Route path='/product' element={<Product />} />
+            <Route path='/productdetail' element={<ProductView />} />
             <Route path='/fav_product/:id' element={<MyFavProducts />} />
             {/* <Route path='/product/:id' element={<ProductDetail />} /> */}
             <Route path='/auction' element={<Auction />} />
