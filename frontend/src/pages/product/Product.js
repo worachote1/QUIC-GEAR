@@ -44,19 +44,22 @@ const Product = () => {
         const tempFilteredProducts = [];
         allProducts.forEach((item) => {
 
-            const nameIncludesQuery = (searchQuery) ? item?.name.toLowerCase().includes(searchQuery.toLowerCase()) : "";
-            const brandIncludesQuery = (searchQuery) ? item?.brand.toLowerCase().includes(searchQuery.toLowerCase()) : "";
-            const typeIncludesQuery = (searchQuery) ? item?.type.toLowerCase().includes(searchQuery.toLowerCase()) : "";
-            const subtypeIncludesQuery = (searchQuery) ? item?.subType.toLowerCase().includes(searchQuery.toLowerCase()) : "";
+            const nameIncludesQuery = item.product?.name?.toLowerCase()?.includes(searchQuery?.toLowerCase());
+            const brandIncludesQuery = item.product?.brand?.toLowerCase()?.includes(searchQuery?.toLowerCase());
+            const typeIncludesQuery = item.product?.type?.toLowerCase()?.includes(searchQuery?.toLowerCase());
+            const subtypeIncludesQuery = item.product?.subtype?.toLowerCase()?.includes(searchQuery?.toLowerCase());
+      
             if (searchQuery === null || nameIncludesQuery || brandIncludesQuery || typeIncludesQuery || subtypeIncludesQuery) {
-                tempFilteredProducts.push(item);
-                brandsSet.add(item.brand);
+              tempFilteredProducts.push(item);
+              if (item.product?.brand) {
+                brandsSet.add(item.product.brand);
+              }
             }
         });
 
         setFilteredProducts(tempFilteredProducts);
         setBrands(brandsSet);
-    }, [searchQuery, allProducts]);
+    }, [searchQuery]);
 
     useEffect(() => {
         let filteredByBrand = allProducts;

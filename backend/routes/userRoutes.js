@@ -5,10 +5,12 @@ const { getAllUser,
         deleteUser,
         updateUser,
         loginUser,
-        registerUser} = require('../controllers/userController');
+        registerUser,
+        getUserData} = require('../controllers/userController');
 
 router.route('/').get(getAllUser);
 router.route('/create').post(createUser);
+router.route('/:id').get(getUserData);
 router.route('/delete/:id').delete(deleteUser);
 router.route('/update/:id').put(updateUser);
 router.route('/login').post(loginUser);

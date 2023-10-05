@@ -3,43 +3,29 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft, faChevronRight, faDotCircle } from '@fortawesome/free-solid-svg-icons';
 import { BsChevronCompactLeft, BsChevronCompactRight } from 'react-icons/bs';
 import React, { useState, useEffect } from 'react';
-import { productData } from '../constant/productData';
+import { productData } from "../../constant/productData"
 import Swal from 'sweetalert2';
-import { useCart } from '../components/CartContext';
-import ProductMobilebar from '../components/ProductMobilebar';
+import { useCart } from '../../components/CartContext';
+import ProductMobilebar from '../../components/ProductMobilebar';
+import { useParams } from 'react-router-dom';
+import axios from "axios";
+
 export default function ProductView() {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
-  const id = searchParams.get('id');
+  //const id = searchParams.get('id');
   const { addToCart } = useCart();
   const [product, setProduct] = useState(null);
+  const [productImg, setProductImg] = useState([]);
+  const [isFav,setIsFav] = useState(false);
 
-  const slides = [
-    {
-      url: 'https://mercular.s3.ap-southeast-1.amazonaws.com/images/products/2021/01/logitech-g-pro-x-superlight-wireless-gaming-mouse-white-icon.jpg'
-    },
-    {
-      url: 'https://mercular.s3.ap-southeast-1.amazonaws.com/images/products/2021/01/Logitech%20G%20Pro%20X%20Superlight%20Wireless%20Gaming%20Mouse.jpg'
-    },
-    {
-      url: 'https://cdn.discordapp.com/attachments/696053498739163146/1147254999613722654/Logitech-G-Pro-X-Superlight-21.png'
-    },
-    {
-      url: 'https://cdn.discordapp.com/attachments/696053498739163146/1147255092014223510/Logitech-G-Pro-X-Superlight-31.png'
-    },
-    {
-      url: 'https://cdn.discordapp.com/attachments/696053498739163146/1147255223186882681/Logitech-G-Pro-X-Superlight-41.png'
-    },
-    {
-      url: 'https://cdn.discordapp.com/attachments/696053498739163146/1147255245752246363/logitech-g-pro-x-superlight-wireless-gaming-mouse-white-lifestyle.png'
-    }
-  ];
+  const { id } = useParams();
 
   const prevSlide = () => {
     const newArrayIndex = arrayIndex.map((index) => {
       let newIndex = index - 1;
       if (newIndex < 0) {
-        newIndex = slides.length - 1;
+        newIndex = productImg.length - 1;
       }
       return newIndex;
     });
@@ -49,19 +35,29 @@ export default function ProductView() {
 
   const mobilePrevImg = () => {
     if(hoverIndex == 0) {
-        setHoverIndex(slides.length-1);
+        setHoverIndex(productImg.length-1);
     } else {
         setHoverIndex(hoverIndex-1);
     }
 }
 
 const mobileNextImg = () => {
-    if(hoverIndex == slides.length-1) {
+    if(hoverIndex == productImg.length-1) {
         setHoverIndex(0);
     } else {
         setHoverIndex(hoverIndex+1);
     }
 };
+
+const getProductData = async () => {
+  const Product = await axios.get(`${process.env.REACT_APP_QUIC_GEAR_API}/products/${id}`)
+  //console.log(Product.data)
+  const res_Product = Product.data
+  setProduct(res_Product);
+  setProductImg(res_Product.imgPath);
+  //console.log(res_Product.imgPath)
+
+}
 
   const [arrayIndex, setArrayIndex] = useState([0, 1, 2]); // ให้ arrayIndex มีค่าเริ่มต้นเป็น [0, 1, 2]
   const [hoverIndex, setHoverIndex] = useState(0);
@@ -69,7 +65,7 @@ const mobileNextImg = () => {
   const nextSlide = () => {
     const newArrayIndex = arrayIndex.map((index) => {
       let newIndex = index + 1;
-      if (newIndex >= slides.length) {
+      if (newIndex >= productImg.length) {
         newIndex = 0;
       }
       return newIndex;
@@ -78,7 +74,7 @@ const mobileNextImg = () => {
     setArrayIndex(newArrayIndex);
   };
 
-  useEffect(() => {
+  /*useEffect(() => {
     const idAsNumber = parseInt(id);
 
     const fetchedProduct = productData.find((entry) => entry.product.id === idAsNumber);
@@ -88,7 +84,23 @@ const mobileNextImg = () => {
     } else {
       setProduct(null);
     }
-  }, [id]);
+  }, [id]);*/
+
+  const checkIsFav = async () => {
+    const data = JSON.parse(sessionStorage.getItem('current_user'));
+    const userData = await axios.get(`${process.env.REACT_APP_QUIC_GEAR_API}/users/`+data._id)
+    const favData = [...userData.data.favList];
+    if(favData.some(item => item._id === id)) {
+        setIsFav(true);
+    } else {
+        setIsFav(false);
+    }
+  }
+
+  useEffect(()=>{
+    getProductData();
+    checkIsFav();
+  },[])
 
   const productImages = product ? [{ url: product.imgPath }, /* Add more images if needed */] : [];
 
@@ -96,12 +108,61 @@ const mobileNextImg = () => {
   const [amount, setAmount] = useState(1);
 
   const plusAmount = () => {
-    setAmount(amount + 1);
+    if(amount < product.stock) {
+      setAmount(amount + 1);
+    }
   };
 
   const minusAmount = () => {
     if (amount > 1)
       setAmount(amount - 1);
+  };
+
+  const clickFavIcon = async () => {
+    //const userData = await axios.get(`${process.env.REACT_APP_QUIC_GEAR_API}/users/`)
+    const data = JSON.parse(sessionStorage.getItem('current_user'));
+    //console.log(data._id);
+
+    const userData = await axios.get(`${process.env.REACT_APP_QUIC_GEAR_API}/users/${data._id}`)
+    const favData = [...userData.data.favList];
+    //const favData = [];
+    //console.log(favData);
+    //console.log(id);
+
+    if(favData.some(item => item._id === id)) {
+      //console.log("Contain key Do something...");
+      const newArray = favData.filter(item => item._id !== id);
+      axios.put(`${process.env.REACT_APP_QUIC_GEAR_API}/users/update/${data._id}`,{ favList: newArray });
+      //console.log(newArray);
+      setIsFav(false);
+      Swal.fire({
+        title: "ลบสินค้าออกจากรายการโปรด",
+        text: `ทำการลบ ${product.name} เรียบร้อยแล้ว`,
+        icon: "success",
+        showCancelButton: false,
+        confirmButtonColor: "#a51d2d",
+        cancelButtonColor: "#a51d2d",
+        confirmButtonText: "<span class='text-white'>ยืนยัน</span>",
+      })
+    } else {
+      //console.log("Not Contain Added");
+      favData.push(id);
+      //console.log(favData);
+      axios.put(`${process.env.REACT_APP_QUIC_GEAR_API}/users/update/${data._id}`,{ favList: favData });
+      setIsFav(true);
+
+      Swal.fire({
+        title: "เพิ่มสินค้าลงรายการโปรด",
+        text: `ทำการเพิ่ม ${product.name} เรียบร้อยแล้ว`,
+        icon: "success",
+        showCancelButton: false,
+        confirmButtonColor: "#a51d2d",
+        cancelButtonColor: "#a51d2d",
+        confirmButtonText: "<span class='text-white'>ยืนยัน</span>",
+      })
+
+    }
+
   };
 
   const hanldeClickAdd_ForCart = (id, itemName, itemPrice, imgPath, amount) => {
@@ -174,11 +235,11 @@ const mobileNextImg = () => {
         </div>
         <div class='flex flex-col sm:flex-row'>
           <div class='relative group'>
-            <div class='flex justify-center items-center h-full w-full lg:mr-16'>
+            <div class='flex justify-center items-center h-[500px] w-[600px] lg:mr-16'>
               <img
 
-                src={slides[hoverIndex].url}
-                class='w-2/4 rounded-3xl duration-500 bg-center'
+                src={`/uploads/${productImg[hoverIndex]}`}
+                class='rounded-3xl duration-500 bg-center w-full h-full'
               />
               {/* Left Arrows */}
               <button onClick={mobilePrevImg} class="md:hidden absolute top-[50%] -translate-x-0 translate-y-[-50]% left-5 text-xl rounded-full p-2 bg-gray-600 text-white cursor-pointer">
@@ -192,7 +253,7 @@ const mobileNextImg = () => {
           </div>
           <div class='flex flex-col justify-start mt-4 sm:w-3/6 md:w-[450px] lg:w-3/6 ml-3'>
             <p class='flex font-Prompt text-3xl font-bold'>{product.name}</p>
-            <p class='flex py-4 font-Prompt text-sm'>Product ID: {product.id}</p>
+            <p class='flex py-4 font-Prompt text-sm'>Product ID: {product._id}</p>
             <p class='flex font-Prompt text-3xl text-[#a51d2d] font-bold'>{product.price} บาท</p>
             <div class='flex flex-row gap-x-3 py-3'>
               <p class='flex w-24 h-6'>สี</p>
@@ -213,10 +274,12 @@ const mobileNextImg = () => {
                   <button class='flex rounded w-6 h-6 bg-[#F1F1F1] hover:bg-[#DEDEDE] font-bold justify-center items-center' onClick={minusAmount}>-</button>
                 </div>
               </p>
-              <p class='flex text-xs justify-center items-center'>มีสินค้าทั้งหมด 27 ชิ้น </p>
+              <p class='flex text-xs justify-center items-center'>มีสินค้าทั้งหมด {product.stock} ชิ้น </p>
             </div>
             <div class='md:flex flex-row gap-x-3 py-3 hidden'>
-              <button className="hover:text-red-500"><i className="fas fa-heart" style={{ fontSize: '2.3rem' }}></i></button>
+              <button className="hover:text-red-500" onClick={clickFavIcon}>
+                <i className={`${isFav === true ? 'fas fa-heart text-red-500' : 'fa-regular fa-heart'}`} style={{ fontSize: '2.3rem' }}></i>
+              </button>
               <button class='flex rounded-full w-48 h-11 bg-[#F1F1F1] hover:bg-[#DEDEDE] justify-center items-center'
                 onClick={() => hanldeClickAdd_ForCart(product.id, product.name, product.price, product.imgPath, amount)}>เพิ่มไปยังรถเข็น</button>
               <button class='flex rounded-full w-48 h-11 bg-[#A51D2D] hover:bg-[#841724] justify-center items-center text-white'>ซื้อสินค้า</button>
@@ -240,9 +303,9 @@ const mobileNextImg = () => {
                     <li key={index} className="p-2 overflow-hidden">
                       <div className={`border-2 rounded-2xl overflow-hidden ${hoverIndex === index ? 'border-2 rounded-2xl border-rose-600' : ''}`}>
                         <img
-                          className={`h-28 w-full rounded-md overflow-hidden`}
+                          className={`h-28 w-32 rounded-md overflow-hidden`}
                           onMouseEnter={() => setHoverIndex(index)}
-                          src={slides[index].url}
+                          src={`/uploads/${productImg[index]}`}
                           alt=""
                         />
                       </div>

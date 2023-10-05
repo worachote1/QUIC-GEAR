@@ -14,12 +14,6 @@ const getAllTransactions = asyncHandler (async (req,res) => {
 
 const createTransaction = asyncHandler (async (req,res) => {
     try {
-<<<<<<<<< Temporary merge branch 1
-        const { transactionType, imgPath, userID, transactionStatus, amount} = req.body;
-
-        if(!transactionType || !imgPath || !userID || !amount || !transactionStatus) {
-            return res.status(400).send("All data field must be valid");
-=========
         const { transactionType, imgPath, amount, userAccount} = req.body;
 
         if(!transactionType || !imgPath || !userAccount || !amount) {
@@ -29,14 +23,8 @@ const createTransaction = asyncHandler (async (req,res) => {
         const transactions = await transaction.create({
             transactionType,
             imgPath,
-<<<<<<<<< Temporary merge branch 1
-            userID,
-            transactionStatus,
-            amount
-=========
             amount,
             userAccount
->>>>>>>>> Temporary merge branch 2
         });
 
         res.status(200).json(transactions);

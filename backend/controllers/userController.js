@@ -70,6 +70,24 @@ const deleteUser = asyncHandler(async (req, res) => {
     }
 });
 
+// Get single user => GET api/user/:id
+const getUserData = asyncHandler(async (req, res) => {
+    try {
+        const userId = req.params.id;
+
+        const findbyUserId = await user.findById(userId).populate("favList");
+
+        if(!findbyUserId) {
+            return res.status(404).send('User not found!');
+        }
+
+        res.status(200).json(findbyUserId);
+
+    } catch(err) {
+        console.log(err);
+    }
+});
+
 // Update user => api/users/update/:id
 const updateUser = asyncHandler(async (req, res) => {
     let users = await user.findById(req.params.id);
@@ -135,4 +153,4 @@ const loginUser = asyncHandler(async (req, res) => {
     res.status(200).json(userFound);
 });
 
-module.exports = { getAllUser, createUser, deleteUser, updateUser, loginUser, registerUser};
+module.exports = { getAllUser, createUser, deleteUser, updateUser, loginUser, registerUser, getUserData};

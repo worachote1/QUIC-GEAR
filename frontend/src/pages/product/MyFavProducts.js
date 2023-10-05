@@ -8,14 +8,29 @@ import '../../App.css'
 
 const MyFavProducts = () => {
     const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 4; // Number of items to display per page
-    const totalPages = Math.ceil(testProductData.length / itemsPerPage);
+    const itemsPerPage = 12; // Number of items to display per page
+    const [favProduct,setFavProduct] = useState([]);
+
+    const totalPages = Math.ceil(favProduct.length / itemsPerPage);
   
     // Calculate the range of products to display for the current page
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
-    const productsToDisplay = testProductData.slice(startIndex, endIndex);
+    const productsToDisplay = favProduct.slice(startIndex, endIndex);
   
+    const fetchFavData = async () => {
+        const data = JSON.parse(sessionStorage.getItem('current_user'));
+        const userData = await axios.get(`${process.env.REACT_APP_QUIC_GEAR_API}/users/${data._id}`)
+        const favData = [...userData.data.favList];
+
+        setFavProduct(favData);
+    }
+
+    useEffect(()=>{
+        fetchFavData();
+      },[])
+
+
     const handlePageChange = (pageNumber) => {
       setCurrentPage(pageNumber);
     };
@@ -31,6 +46,19 @@ const MyFavProducts = () => {
           setCurrentPage(currentPage + 1);
         }
       };
+
+    if(favProduct.length === 0) {
+        return(
+            <div className="flex-col">
+                <div className="flex justify-center p-4 text-xl">
+                    สินค้าที่ถูกใจ
+                </div>
+                <div className="flex justify-center p-4 text-xl">
+                    ไม่มีสินค้าที่ถูกใจ หรือ ไม่มีใครที่ถูกใจ
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="flex-col">

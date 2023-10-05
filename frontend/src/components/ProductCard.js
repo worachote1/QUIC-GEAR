@@ -23,7 +23,7 @@ const ProductCard = ({ product }) => {
           {getStarRating(product.rating)}
         </div>
       </div>
-      <Link to={`/product/${product._id}`}>
+      <Link to={`/productview/${product._id}`}>
         <button className="mt-3 border border-red-500 bg-white text-red-500 font-bold px-4 py-2 rounded-md hover:bg-red-500 hover:text-white transition duration-300 your-custom-class">
           View Details
         </button>
