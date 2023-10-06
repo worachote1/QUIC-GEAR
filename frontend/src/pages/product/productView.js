@@ -8,6 +8,7 @@ import Swal from 'sweetalert2';
 import { useCart } from '../../components/CartContext';
 import ProductMobilebar from '../../components/ProductMobilebar';
 import { useParams } from 'react-router-dom';
+import { AiOutlineDollarCircle } from 'react-icons/ai'
 import axios from "axios";
 
 export default function ProductView() {
@@ -87,13 +88,16 @@ const getProductData = async () => {
   }, [id]);*/
 
   const checkIsFav = async () => {
-    const data = JSON.parse(sessionStorage.getItem('current_user'));
-    const userData = await axios.get(`${process.env.REACT_APP_QUIC_GEAR_API}/users/`+data._id)
-    const favData = [...userData.data.favList];
-    if(favData.some(item => item._id === id)) {
-        setIsFav(true);
-    } else {
-        setIsFav(false);
+
+    if(sessionStorage.getItem('current_user') !== null) {
+      const data = JSON.parse(sessionStorage.getItem('current_user'));
+      const userData = await axios.get(`${process.env.REACT_APP_QUIC_GEAR_API}/users/`+data._id)
+      const favData = [...userData.data.favList];
+      if(favData.some(item => item._id === id)) {
+          setIsFav(true);
+      } else {
+          setIsFav(false);
+      }
     }
   }
 
@@ -119,48 +123,49 @@ const getProductData = async () => {
   };
 
   const clickFavIcon = async () => {
-    //const userData = await axios.get(`${process.env.REACT_APP_QUIC_GEAR_API}/users/`)
-    const data = JSON.parse(sessionStorage.getItem('current_user'));
-    //console.log(data._id);
+    if(sessionStorage.getItem('current_user') !== null) {
+      //const userData = await axios.get(`${process.env.REACT_APP_QUIC_GEAR_API}/users/`)
+      const data = JSON.parse(sessionStorage.getItem('current_user'));
+      //console.log(data._id);
 
-    const userData = await axios.get(`${process.env.REACT_APP_QUIC_GEAR_API}/users/${data._id}`)
-    const favData = [...userData.data.favList];
-    //const favData = [];
-    //console.log(favData);
-    //console.log(id);
-
-    if(favData.some(item => item._id === id)) {
-      //console.log("Contain key Do something...");
-      const newArray = favData.filter(item => item._id !== id);
-      axios.put(`${process.env.REACT_APP_QUIC_GEAR_API}/users/update/${data._id}`,{ favList: newArray });
-      //console.log(newArray);
-      setIsFav(false);
-      Swal.fire({
-        title: "ลบสินค้าออกจากรายการโปรด",
-        text: `ทำการลบ ${product.name} เรียบร้อยแล้ว`,
-        icon: "success",
-        showCancelButton: false,
-        confirmButtonColor: "#a51d2d",
-        cancelButtonColor: "#a51d2d",
-        confirmButtonText: "<span class='text-white'>ยืนยัน</span>",
-      })
-    } else {
-      //console.log("Not Contain Added");
-      favData.push(id);
+      const userData = await axios.get(`${process.env.REACT_APP_QUIC_GEAR_API}/users/${data._id}`)
+      const favData = [...userData.data.favList];
+      //const favData = [];
       //console.log(favData);
-      axios.put(`${process.env.REACT_APP_QUIC_GEAR_API}/users/update/${data._id}`,{ favList: favData });
-      setIsFav(true);
+      //console.log(id);
 
-      Swal.fire({
-        title: "เพิ่มสินค้าลงรายการโปรด",
-        text: `ทำการเพิ่ม ${product.name} เรียบร้อยแล้ว`,
-        icon: "success",
-        showCancelButton: false,
-        confirmButtonColor: "#a51d2d",
-        cancelButtonColor: "#a51d2d",
-        confirmButtonText: "<span class='text-white'>ยืนยัน</span>",
-      })
+      if(favData.some(item => item._id === id)) {
+        //console.log("Contain key Do something...");
+        const newArray = favData.filter(item => item._id !== id);
+        axios.put(`${process.env.REACT_APP_QUIC_GEAR_API}/users/update/${data._id}`,{ favList: newArray });
+        //console.log(newArray);
+        setIsFav(false);
+        Swal.fire({
+          title: "ลบสินค้าออกจากรายการโปรด",
+          text: `ทำการลบ ${product.name} เรียบร้อยแล้ว`,
+          icon: "success",
+          showCancelButton: false,
+          confirmButtonColor: "#a51d2d",
+          cancelButtonColor: "#a51d2d",
+          confirmButtonText: "<span class='text-white'>ยืนยัน</span>",
+        })
+      } else {
+        //console.log("Not Contain Added");
+        favData.push(id);
+        //console.log(favData);
+        axios.put(`${process.env.REACT_APP_QUIC_GEAR_API}/users/update/${data._id}`,{ favList: favData });
+        setIsFav(true);
 
+        Swal.fire({
+          title: "เพิ่มสินค้าลงรายการโปรด",
+          text: `ทำการเพิ่ม ${product.name} เรียบร้อยแล้ว`,
+          icon: "success",
+          showCancelButton: false,
+          confirmButtonColor: "#a51d2d",
+          cancelButtonColor: "#a51d2d",
+          confirmButtonText: "<span class='text-white'>ยืนยัน</span>",
+        })
+      }
     }
 
   };
@@ -254,7 +259,11 @@ const getProductData = async () => {
           <div class='flex flex-col justify-start mt-4 sm:w-3/6 md:w-[450px] lg:w-3/6 ml-3'>
             <p class='flex font-Prompt text-3xl font-bold'>{product.name}</p>
             <p class='flex py-4 font-Prompt text-sm'>Product ID: {product._id}</p>
-            <p class='flex font-Prompt text-3xl text-[#a51d2d] font-bold'>{product.price} บาท</p>
+            <p class='flex font-Prompt text-3xl text-[#a51d2d] font-bold'>
+              <div className="flex flex-row items-center">
+               <AiOutlineDollarCircle class=' text-3xl' /> {product.price}
+              </div>
+            </p>
             <div class='flex flex-row gap-x-3 py-3'>
               <p class='flex w-24 h-6'>สี</p>
               <button class='flex rounded w-24 h-6 bg-[#F1F1F1] hover:bg-[#DEDEDE] justify-center items-center'>ดำ</button>
@@ -268,10 +277,13 @@ const getProductData = async () => {
             </div>
             <div class='flex flex-row gap-x-3 py-3'>
               <p class='flex w-24 h-6'>จำนวน</p>
-              <p class='flex rounded w-28 h-6 bg-[#F1F1F1] justify-between items-center'>{amount}
+              <p class='flex rounded w-24 h-6 bg-[#F1F1F1] justify-between items-center'>
+                <div class='flex'>
+                  <button class='flex rounded w-6 h-6 bg-[#F1F1F1] hover:bg-[#DEDEDE] font-bold justify-center items-center' onClick={minusAmount}>-</button>
+                </div>
+                {amount}
                 <div class='flex'>
                   <button class='flex rounded w-6 h-6 bg-[#F1F1F1] hover:bg-[#DEDEDE] font-bold justify-center items-center' onClick={plusAmount}>+</button>
-                  <button class='flex rounded w-6 h-6 bg-[#F1F1F1] hover:bg-[#DEDEDE] font-bold justify-center items-center' onClick={minusAmount}>-</button>
                 </div>
               </p>
               <p class='flex text-xs justify-center items-center'>มีสินค้าทั้งหมด {product.stock} ชิ้น </p>
