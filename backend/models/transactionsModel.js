@@ -18,6 +18,10 @@ const transactionsSchema = new mongoose.Schema({
         type: String,
         require: true
     },
+    transactionStatus: {
+        type: String,
+        require: true
+    },
     amount: {
         type: Number,
         require: true
