@@ -1,11 +1,13 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { SideBarCtegories } from "../constant/sideBarConstants";
 import { formatNumberInput } from "../util/formatUtil";
+import axios from "axios";
 
 export default function Mobilebar() {
     
     const current_user = JSON.parse(sessionStorage.getItem('current_user'))
+    const [updateUser, setUpdateUser] = useState(current_user)
     const currentPath = useLocation().pathname;
     const [open, setOpen] = useState(false);
     const [userRole, setUserRole] = useState("admin"); {/*guest,user,admin*/ }
@@ -21,7 +23,22 @@ export default function Mobilebar() {
     const logOut = () => {
         clickProfileDropdown()
         sessionStorage.removeItem('current_user');
+        setUpdateUser(null);
     }
+
+    const getSingleUser = async () => {
+        if (!current_user){
+            return ;
+        }
+        const res_getUserData = await axios.get(`${process.env.REACT_APP_QUIC_GEAR_API}/users/${current_user._id}`);
+        setUpdateUser({ ...res_getUserData.data });
+        sessionStorage.setItem('current_user', JSON.stringify(res_getUserData.data))
+    }
+
+    useEffect(() => {
+        getSingleUser()
+    }, [])
+
     return (
         <div>
             <div>
