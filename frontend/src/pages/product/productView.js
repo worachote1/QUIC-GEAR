@@ -232,19 +232,19 @@ const getProductData = async () => {
     <div className='flex flex-col flex-1 lg:ml-[200px]'>
       <div class='flex flex-col justify-center'>
         <div class='flex h-full relative p-8 hidden lg:block'>
-          <p className='font-Prompt text-sm text-black'>
+          <p className='font-Prompt text-sm text-black text-start'>
             <Link to="/" >หน้าแรก</Link> {'>'}
             <Link to={`/product?search=${product.subtype}`} > {product.subtype}</Link> {'>'}
             <Link to={`/product?search=${product.name}`} className='font-bold'> {product.name}</Link>
           </p>
         </div>
         <div class='flex flex-col sm:flex-row'>
-          <div class='relative group'>
-            <div class='flex justify-center items-center h-[500px] w-[600px] lg:mr-16'>
+          <div class='flex justify-center h-full w-5/12 backdrop:relative '>
+            <div class='h-[300px] w-full lg:w-8/12 lg:ml-16'>
               <img
 
                 src={`/uploads/${productImg[hoverIndex]}`}
-                class='rounded-3xl duration-500 bg-center w-full h-full'
+                class='w-full h-full rounded-3xl duration-500 bg-center object-contain'
               />
               {/* Left Arrows */}
               <button onClick={mobilePrevImg} class="md:hidden absolute top-[50%] -translate-x-0 translate-y-[-50]% left-5 text-xl rounded-full p-2 bg-gray-600 text-white cursor-pointer">
@@ -298,12 +298,11 @@ const getProductData = async () => {
             </div>
           </div>
         </div>
-
-        <div class="flex justify-center">
-          <div class='lg:flex justify-start h-full w-full hidden'>
-            <div class='flex h-full w-3/6 ml-20'>
+        <div class="flex lg:ml-28">
+          <div class='lg:flex justify-center h-full hidden'>
+            <div class='flex h-full'>
               <div class="w-2/12 flex items-center">
-                <div class="w-full text-end mr-4">
+                <div class="w-full text-center">
                   <button onClick={prevSlide} class="p-3 rounded-full hover:bg-[#FAFAFA] bg-white border-gray-700 shadow-lg">
                     <BsChevronCompactLeft />
                   </button>
@@ -315,7 +314,7 @@ const getProductData = async () => {
                     <li key={index} className="p-2 overflow-hidden">
                       <div className={`border-2 rounded-2xl overflow-hidden ${hoverIndex === index ? 'border-2 rounded-2xl border-rose-600' : ''}`}>
                         <img
-                          className={`h-28 w-32 rounded-md overflow-hidden`}
+                          className={`h-28 w-32 rounded-md overflow-hidden object-contain`}
                           onMouseEnter={() => setHoverIndex(index)}
                           src={`/uploads/${productImg[index]}`}
                           alt=""
