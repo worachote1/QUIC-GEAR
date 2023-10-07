@@ -8,7 +8,9 @@ import Swal from 'sweetalert2';
 import { useCart } from '../../components/CartContext';
 import ProductMobilebar from '../../components/ProductMobilebar';
 import { useParams } from 'react-router-dom';
+import { AiOutlineDollarCircle } from 'react-icons/ai'
 import axios from "axios";
+import { ThreeDots } from 'react-loader-spinner';
 
 export default function ProductView() {
   const location = useLocation();
@@ -17,7 +19,7 @@ export default function ProductView() {
   const { addToCart } = useCart();
   const [product, setProduct] = useState(null);
   const [productImg, setProductImg] = useState([]);
-  const [isFav,setIsFav] = useState(false);
+  const [isFav, setIsFav] = useState(false);
 
   const { id } = useParams();
 
@@ -34,30 +36,27 @@ export default function ProductView() {
   };
 
   const mobilePrevImg = () => {
-    if(hoverIndex == 0) {
-        setHoverIndex(productImg.length-1);
+    if (hoverIndex == 0) {
+      setHoverIndex(productImg.length - 1);
     } else {
-        setHoverIndex(hoverIndex-1);
+      setHoverIndex(hoverIndex - 1);
     }
-}
+  }
 
-const mobileNextImg = () => {
-    if(hoverIndex == productImg.length-1) {
-        setHoverIndex(0);
+  const mobileNextImg = () => {
+    if (hoverIndex == productImg.length - 1) {
+      setHoverIndex(0);
     } else {
-        setHoverIndex(hoverIndex+1);
+      setHoverIndex(hoverIndex + 1);
     }
-};
+  };
 
-const getProductData = async () => {
-  const Product = await axios.get(`${process.env.REACT_APP_QUIC_GEAR_API}/products/${id}`)
-  //console.log(Product.data)
-  const res_Product = Product.data
-  setProduct(res_Product);
-  setProductImg(res_Product.imgPath);
-  //console.log(res_Product.imgPath)
-
-}
+  const getProductData = async () => {
+    const Product = await axios.get(`${process.env.REACT_APP_QUIC_GEAR_API}/products/${id}`)
+    const res_Product = Product.data
+    setProduct(res_Product);
+    setProductImg(res_Product.imgPath);
+  }
 
   const [arrayIndex, setArrayIndex] = useState([0, 1, 2]); // ให้ arrayIndex มีค่าเริ่มต้นเป็น [0, 1, 2]
   const [hoverIndex, setHoverIndex] = useState(0);
@@ -74,33 +73,23 @@ const getProductData = async () => {
     setArrayIndex(newArrayIndex);
   };
 
-  /*useEffect(() => {
-    const idAsNumber = parseInt(id);
-
-    const fetchedProduct = productData.find((entry) => entry.product.id === idAsNumber);
-
-    if (fetchedProduct) {
-      setProduct(fetchedProduct.product);
-    } else {
-      setProduct(null);
-    }
-  }, [id]);*/
-
   const checkIsFav = async () => {
-    const data = JSON.parse(sessionStorage.getItem('current_user'));
-    const userData = await axios.get(`${process.env.REACT_APP_QUIC_GEAR_API}/users/`+data._id)
-    const favData = [...userData.data.favList];
-    if(favData.some(item => item._id === id)) {
+    if (sessionStorage.getItem('current_user') !== null) {
+      const data = JSON.parse(sessionStorage.getItem('current_user'));
+      const userData = await axios.get(`${process.env.REACT_APP_QUIC_GEAR_API}/users/` + data._id)
+      const favData = [...userData.data.favList];
+      if (favData.some(item => item._id === id)) {
         setIsFav(true);
-    } else {
+      } else {
         setIsFav(false);
+      }
     }
   }
 
-  useEffect(()=>{
+  useEffect(() => {
     getProductData();
     checkIsFav();
-  },[])
+  }, [])
 
   const productImages = product ? [{ url: product.imgPath }, /* Add more images if needed */] : [];
 
@@ -108,7 +97,7 @@ const getProductData = async () => {
   const [amount, setAmount] = useState(1);
 
   const plusAmount = () => {
-    if(amount < product.stock) {
+    if (amount < product.stock) {
       setAmount(amount + 1);
     }
   };
@@ -119,48 +108,38 @@ const getProductData = async () => {
   };
 
   const clickFavIcon = async () => {
-    //const userData = await axios.get(`${process.env.REACT_APP_QUIC_GEAR_API}/users/`)
-    const data = JSON.parse(sessionStorage.getItem('current_user'));
-    //console.log(data._id);
+    if (sessionStorage.getItem('current_user')) {
+      const data = JSON.parse(sessionStorage.getItem('current_user'));
+      const userData = await axios.get(`${process.env.REACT_APP_QUIC_GEAR_API}/users/${data._id}`)
+      const favData = [...userData.data.favList];
+      if (favData.some(item => item._id === id)) {
+        const newArray = favData.filter(item => item._id !== id);
+        axios.put(`${process.env.REACT_APP_QUIC_GEAR_API}/users/update/${data._id}`, { favList: newArray });
+        setIsFav(false);
+        Swal.fire({
+          title: "ลบสินค้าออกจากรายการโปรด",
+          text: `ทำการลบ ${product.name} เรียบร้อยแล้ว`,
+          icon: "success",
+          showCancelButton: false,
+          confirmButtonColor: "#a51d2d",
+          cancelButtonColor: "#a51d2d",
+          confirmButtonText: "<span class='text-white'>ยืนยัน</span>",
+        })
+      } else {
+        favData.push(id);
+        axios.put(`${process.env.REACT_APP_QUIC_GEAR_API}/users/update/${data._id}`, { favList: favData });
+        setIsFav(true);
 
-    const userData = await axios.get(`${process.env.REACT_APP_QUIC_GEAR_API}/users/${data._id}`)
-    const favData = [...userData.data.favList];
-    //const favData = [];
-    //console.log(favData);
-    //console.log(id);
-
-    if(favData.some(item => item._id === id)) {
-      //console.log("Contain key Do something...");
-      const newArray = favData.filter(item => item._id !== id);
-      axios.put(`${process.env.REACT_APP_QUIC_GEAR_API}/users/update/${data._id}`,{ favList: newArray });
-      //console.log(newArray);
-      setIsFav(false);
-      Swal.fire({
-        title: "ลบสินค้าออกจากรายการโปรด",
-        text: `ทำการลบ ${product.name} เรียบร้อยแล้ว`,
-        icon: "success",
-        showCancelButton: false,
-        confirmButtonColor: "#a51d2d",
-        cancelButtonColor: "#a51d2d",
-        confirmButtonText: "<span class='text-white'>ยืนยัน</span>",
-      })
-    } else {
-      //console.log("Not Contain Added");
-      favData.push(id);
-      //console.log(favData);
-      axios.put(`${process.env.REACT_APP_QUIC_GEAR_API}/users/update/${data._id}`,{ favList: favData });
-      setIsFav(true);
-
-      Swal.fire({
-        title: "เพิ่มสินค้าลงรายการโปรด",
-        text: `ทำการเพิ่ม ${product.name} เรียบร้อยแล้ว`,
-        icon: "success",
-        showCancelButton: false,
-        confirmButtonColor: "#a51d2d",
-        cancelButtonColor: "#a51d2d",
-        confirmButtonText: "<span class='text-white'>ยืนยัน</span>",
-      })
-
+        Swal.fire({
+          title: "เพิ่มสินค้าลงรายการโปรด",
+          text: `ทำการเพิ่ม ${product.name} เรียบร้อยแล้ว`,
+          icon: "success",
+          showCancelButton: false,
+          confirmButtonColor: "#a51d2d",
+          cancelButtonColor: "#a51d2d",
+          confirmButtonText: "<span class='text-white'>ยืนยัน</span>",
+        })
+      }
     }
 
   };
@@ -220,7 +199,9 @@ const getProductData = async () => {
 
   if (!product) {
     // Handle the case where the product with the given id is not found
-    return <div>Product not found</div>;
+    return <div className='w-full h-screen flex justify-center items-center'>
+      <ThreeDots type="Circles" color="#841724" height={100} width={100} />
+    </div>;
   }
 
   return (
@@ -254,7 +235,11 @@ const getProductData = async () => {
           <div class='flex flex-col justify-start mt-4 sm:w-3/6 md:w-[450px] lg:w-3/6 ml-3'>
             <p class='flex font-Prompt text-3xl font-bold'>{product.name}</p>
             <p class='flex py-4 font-Prompt text-sm'>Product ID: {product._id}</p>
-            <p class='flex font-Prompt text-3xl text-[#a51d2d] font-bold'>{product.price} บาท</p>
+            <p class='flex font-Prompt text-3xl text-[#a51d2d] font-bold'>
+              <div className="flex flex-row items-center">
+                <AiOutlineDollarCircle class=' text-3xl' /> {product.price}
+              </div>
+            </p>
             <div class='flex flex-row gap-x-3 py-3'>
               <p class='flex w-24 h-6'>สี</p>
               <button class='flex rounded w-24 h-6 bg-[#F1F1F1] hover:bg-[#DEDEDE] justify-center items-center'>ดำ</button>
@@ -268,10 +253,13 @@ const getProductData = async () => {
             </div>
             <div class='flex flex-row gap-x-3 py-3'>
               <p class='flex w-24 h-6'>จำนวน</p>
-              <p class='flex rounded w-28 h-6 bg-[#F1F1F1] justify-between items-center'>{amount}
+              <p class='flex rounded w-24 h-6 bg-[#F1F1F1] justify-between items-center'>
+                <div class='flex'>
+                  <button class='flex rounded w-6 h-6 bg-[#F1F1F1] hover:bg-[#DEDEDE] font-bold justify-center items-center' onClick={minusAmount}>-</button>
+                </div>
+                {amount}
                 <div class='flex'>
                   <button class='flex rounded w-6 h-6 bg-[#F1F1F1] hover:bg-[#DEDEDE] font-bold justify-center items-center' onClick={plusAmount}>+</button>
-                  <button class='flex rounded w-6 h-6 bg-[#F1F1F1] hover:bg-[#DEDEDE] font-bold justify-center items-center' onClick={minusAmount}>-</button>
                 </div>
               </p>
               <p class='flex text-xs justify-center items-center'>มีสินค้าทั้งหมด {product.stock} ชิ้น </p>
@@ -334,7 +322,7 @@ const getProductData = async () => {
         </div>
       </div>
       <div class='sm:flex md:hidden'>
-          <ProductMobilebar />
+        <ProductMobilebar />
       </div>
     </div>
   )

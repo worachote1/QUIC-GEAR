@@ -16,9 +16,10 @@ export default function Navbar() {
     };
 
     const logOut = () => {
-        clickProfileDropdown()
-        sessionStorage.removeItem('current_user');
-        setUpdateUser(null)
+        clickProfileDropdown();
+        sessionStorage.clear() ;
+        setUpdateUser(null);
+        navigate('/');
     }
 
     const getSingleUser = async () => {

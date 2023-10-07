@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { SideBarCtegories } from "../constant/sideBarConstants";
 import { formatNumberInput } from "../util/formatUtil";
 import axios from "axios";
 
 export default function Mobilebar() {
     
+    const navigate = useNavigate()
     const current_user = JSON.parse(sessionStorage.getItem('current_user'))
     const [updateUser, setUpdateUser] = useState(current_user)
     const currentPath = useLocation().pathname;
@@ -22,8 +23,9 @@ export default function Mobilebar() {
     };
     const logOut = () => {
         clickProfileDropdown()
-        sessionStorage.removeItem('current_user');
+        sessionStorage.clear();
         setUpdateUser(null);
+        navigate('/');
     }
 
     const getSingleUser = async () => {
