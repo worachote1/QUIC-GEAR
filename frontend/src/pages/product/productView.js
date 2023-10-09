@@ -145,19 +145,16 @@ export default function ProductView() {
 
   };
 
-  const hanldeClickAdd_ForCart = (id, itemName, itemPrice, imgPath, amount) => {
-    itemPrice = parseFloat(String(itemPrice).replace(/,/g, ''));
-    amount = parseFloat(String(amount).replace(/,/g, ''));
-
+  const hanldeClickAdd_ForCart = (productObj, amount) => {
     let temp_obj = {
-      "id": id,
-      "itemName": itemName,
-      "itemPrice": itemPrice,
-      "imgPath": imgPath,
-      "quantity": amount
+      ...productObj,
+      quantity : amount
     }
+    console.log(productObj)
+    console.log(temp_obj)
     // not have any menu in basket create session : currrent_cartItem
     if (sessionStorage.getItem("currrent_cartItem") === null) {
+      console.log("session was empty")
       sessionStorage.setItem("currrent_cartItem", JSON.stringify([temp_obj]))
       // window.location.reload()
     }
@@ -165,22 +162,26 @@ export default function ProductView() {
     // find if that menu not in basket  
     else {
       const cur_CartData = JSON.parse((sessionStorage.getItem("currrent_cartItem")))
-      const itemIndex = cur_CartData.findIndex(item => item.id === id);
+      const itemIndex = cur_CartData.findIndex(item => item._id === productObj._id);
       // 
-      if (cur_CartData.find(obj => obj.id === id) === undefined) {
+      console.log("test")
+      if (cur_CartData.find(item => item._id === productObj._id) === undefined) {
+        console.log("add new product to cart")
         cur_CartData.push(temp_obj)
 
       }
       else {
+        console.log("add previous product")
         cur_CartData[itemIndex].quantity += amount;
       }
+      console.log(cur_CartData)
       sessionStorage.setItem("currrent_cartItem", JSON.stringify(cur_CartData))
       // window.location.reload()
     }
     addToCart(temp_obj);
     Swal.fire({
       title: "เพิ่มสินค้าลงรถเข็น",
-      text: `${itemName} จำนวน ${amount} ชิ้น`,
+      text: `${temp_obj.name} จำนวน ${amount} ชิ้น`,
       icon: "success",
       showCancelButton: true,
       confirmButtonColor: "#ebebeb",
@@ -271,7 +272,7 @@ export default function ProductView() {
                   <i className={`${isFav === true ? 'fas fa-heart text-red-500' : 'fa-regular fa-heart'}`} style={{ fontSize: '2.3rem' }}></i>
                 </button>
                 <button class='flex rounded-full w-48 h-11 bg-[#F1F1F1] hover:bg-[#DEDEDE] justify-center items-center'
-                  onClick={() => hanldeClickAdd_ForCart(product.id, product.name, product.price, product.imgPath, amount)}>เพิ่มไปยังรถเข็น</button>
+                  onClick={() => hanldeClickAdd_ForCart(product, amount)}>เพิ่มไปยังรถเข็น</button>
                 <button class='flex rounded-full w-48 h-11 bg-[#A51D2D] hover:bg-[#841724] justify-center items-center text-white'>ซื้อสินค้า</button>
               </div>
             </div>

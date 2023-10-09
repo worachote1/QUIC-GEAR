@@ -12,6 +12,8 @@ import EditProfile from './pages/auth/EditProfile';
 import MyFavProducts from './pages/product/MyFavProducts'
 import Topup from "./pages/topup/Topup";
 import Cart from "./pages/Cart";
+import MyOrder from './pages/MyOrder';
+import MyOrdersList from './pages/MyOrdersList';
 import Auction from "./pages/auction/Auction";
 import AuctionDetail from "./pages/auction/AuctionDetail";
 import AuctionCreate from "./pages/auction/AuctionCreate";
@@ -54,6 +56,8 @@ function App() {
                 <Route path='/edit-profile' element={<EditProfile />} />
                 <Route path='/fav_product/:id' element={<MyFavProducts />} />
                 <Route path='/cart' element={<Cart />} />
+                <Route path='/myorder' element={<MyOrdersList />} />
+                <Route path='/myorder/:id' element={<MyOrder />} />
                 <Route path='/auction_create' element={<AuctionCreate />} />
                 <Route path='/topup' element={<Topup />} />
               </Route>

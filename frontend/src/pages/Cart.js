@@ -33,7 +33,7 @@ export default function Cart() {
     }
     let cnt = 0;
     for (let i = 0; i < currentItemInCart.length; i++) {
-      cnt += currentItemInCart[i].itemPrice * currentItemInCart[i].quantity;
+      cnt += currentItemInCart[i].price * currentItemInCart[i].quantity;
     }
     return cnt;
   };
@@ -72,7 +72,7 @@ export default function Cart() {
     <div className="">
       <div className="flex justify-center ">
         <div className="flex flex-col w-2/3 mt-4 text-xl">
-          รถเข็น
+          
         {currentItemInCart !== null
           ? currentItemInCart.map((item) => {
               return (

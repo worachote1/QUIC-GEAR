@@ -6,9 +6,10 @@ export default function CartItem({ menuObj, callbackUpdate, cur_Total }) {
     const handle_ClickVote = (id, voteVal) => {
         const cur_itemInCart = JSON.parse(sessionStorage.getItem("currrent_cartItem"))
         cur_itemInCart.forEach(item => {
+            console.log(item)
             if (item.id === id) {
                 item.quantity += voteVal
-                cur_Total += voteVal * item.itemPrice
+                cur_Total += voteVal * item.price
                 // if menu downvote to 0 -> remove that objecct from session from session
                 if (item.quantity <= 0) {
                     const filterData = cur_itemInCart.filter(item => item.id !== id)
@@ -29,6 +30,7 @@ export default function CartItem({ menuObj, callbackUpdate, cur_Total }) {
                     // update that menu quantity after click vote to session
                     sessionStorage.setItem("currrent_cartItem", JSON.stringify(cur_itemInCart))
                     // display new sub total
+                    console.log(cur_Total)
                     callbackUpdate(cur_Total)
                 }
             }
@@ -39,7 +41,7 @@ export default function CartItem({ menuObj, callbackUpdate, cur_Total }) {
             <div className="flex">
                 <div class="rounded-lg">
                     <img
-                        src={menuObj.imgPath}
+                        src={`/uploads/${menuObj.imgPath[0]}`}
                         alt="Product image"
                         class="w-44 h-36 object-cover rounded-lg"
                     />
@@ -48,13 +50,13 @@ export default function CartItem({ menuObj, callbackUpdate, cur_Total }) {
                     <h2
                         class="font-bold text-2xl md:text-3xl"
                     >
-                        {menuObj.itemName}
+                        {menuObj.name}
                     </h2>
                     <div class="mt-4 flex items-center text-2xl">
                         <div>
                             <span class="font-bold text-red-700">
                                 ฿
-                                {menuObj.itemPrice * displayQuantity}
+                                {menuObj.price * displayQuantity}
                             </span>
                         </div>
                     </div>
@@ -62,7 +64,7 @@ export default function CartItem({ menuObj, callbackUpdate, cur_Total }) {
             </div>
             <div class="flex items-end justify-end mr-6">
                 <span class="flex rounded w-36 h-8 bg-[#F1F1F1] justify-between items-center">
-                    {displayQuantity}
+                    
                     <div class="flex">
                         <button
                             class="rounded w-6 h-8 bg-[#F1F1F1] hover:bg-[#DEDEDE] font-bold justify-center items-center"
@@ -70,6 +72,7 @@ export default function CartItem({ menuObj, callbackUpdate, cur_Total }) {
                         >
                             -
                         </button>
+                        {displayQuantity}
                         <button
                             class="rounded w-6 h-8 bg-[#F1F1F1] hover:bg-[#DEDEDE] font-bold justify-center items-center"
                             onClick={() => handle_ClickVote(menuObj.id, 1)}
