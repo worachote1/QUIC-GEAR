@@ -108,9 +108,8 @@ const AuctionDetail = () => {
                         <div class='flex justify-center lg:justify-end h-full relative lg:w-3/6 '>
                             <div class='h-[300px] w-full lg:w-3/6 lg:mr-16 '>
                                 <img
-
                                     src={`/uploads/${slides[hoverIndex]}`}
-                                    class=' w-full h-full rounded-3xl duration-500 bg-center object-contain'
+                                    class='w-full h-full rounded-3xl duration-500 bg-center object-contain'
                                 />
                             </div>
                             {/* Left Arrows */}
@@ -149,7 +148,7 @@ const AuctionDetail = () => {
                                             <li key={index} className="p-2 overflow-hidden">
                                                 <div className="border rounded-2xl overflow-hidden">
                                                     <img
-                                                        className={`h-28 w-44 rounded-md overflow-hidden object-contain ${hoverIndex === index ? 'border-2 rounded-2xl border-rose-600' : ''}`}
+                                                        className={`h-28 w-28 rounded-md overflow-hidden object-contain ${hoverIndex === index ? 'border-2 rounded-2xl border-rose-600' : ''}`}
                                                         onMouseEnter={() => setHoverIndex(index)}
                                                         src={`/uploads/${slides[index]}`}
                                                         alt=""
