@@ -45,3 +45,4 @@ const HotProductCard = ({ product }) => {
 };
 
 export default HotProductCard;
+
