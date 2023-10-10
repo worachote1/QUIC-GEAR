@@ -29,18 +29,7 @@ const getSingleOrder = asyncHandler(async (req, res) => {
 // Create new order => POST api/orders/create
 const createOrder = asyncHandler(async (req, res) => {
     try {
-        const { userID,
-                orderItems,
-                shippingInfo,
-                totalPrice } = req.body;
-
-        const orders = await order.create({
-            userID,
-            orderItems,
-            shippingInfo,
-            totalPrice
-        });
-
+        const orders = await order.create(req.body)
         res.status(200).json(orders);
     } catch(err) {
         console.log(err);

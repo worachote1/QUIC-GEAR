@@ -18,7 +18,7 @@ import Auction from "./pages/auction/Auction";
 import AuctionDetail from "./pages/auction/AuctionDetail";
 import AuctionCreate from "./pages/auction/AuctionCreate";
 import Product from "./pages/product/Product";
-import ProductView from './pages/product/ProductView';
+import ProductView from './pages/product/productView';
 import Admin from "./pages/admin/Admin";
 import CheckAuctions from "./pages/admin/AuctionsAdmin/CheckAuctions";
 

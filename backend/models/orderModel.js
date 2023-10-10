@@ -22,11 +22,11 @@ const orderSchema = mongoose.Schema({
             },
             productID: {
                 type: mongoose.Schema.Types.ObjectId,
-                required: true,
+                required: false,
                 ref: 'product'
             },
             imgPath: {
-                type: String,
+                type: [String],
                 required: true
             },
             brand: {

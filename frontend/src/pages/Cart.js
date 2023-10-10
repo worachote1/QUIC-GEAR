@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import CartItem from "../components/CartItem";
 import Swal from "sweetalert2";
+import axios from "axios";
 
 export default function Cart() {
   //  fetch Item that user add to basket (must be the same foodShop)
@@ -42,29 +43,48 @@ export default function Cart() {
   };
   const [Total, setTotal] = useState(calTotal());
 
-  const handle_placeOrder = () => {
-    // POST API : create new Order
-    fetch(`http://localhost:5000/api/orders/`, {
-      method: "POST",
-      body: JSON.stringify({
-        user: sessionStorage.getItem("current_user"),
-        date: new Date().toLocaleString(),
-        productInCart: sessionStorage.getItem("currrent_cartItem"),
-      }),
-      headers: {
-        "Content-type": "application/json; charset=UTF-8",
-      },
-    })
-      .then((res) => {
-        return res.json();
+  const handlePayment = () => {
+    console.log("handlePayment function called");
+    // Create an order object
+    const order = {
+      userID: "651cccc8e42f544df3654512",
+      orderItems: currentItemInCart.map((item) => ({
+        name: item.name,
+        quantity: item.quantity,
+        price: item.price,
+        productID: "651cccc8e42f544df3654512",
+        imgPath: item.imgPath,
+        brand: item.brand,
+        type: item.type,
+        subType: item.subType,
+      })),
+      orderStatus: "Processing",
+      shippingInfo: "Your shipping information", // Replace with actual shipping information
+      totalPrice: Total, // Replace with the actual total price
+    };
+    // Make a POST request using Axios
+    axios
+      .post(`${process.env.REACT_APP_QUIC_GEAR_API}/orders/create`, order, {
+        headers: {
+          "Content-Type": "application/json; charset=UTF-8",
+        },
       })
-      .then((data) => {
-        // alert(data)
-        sessionStorage.removeItem("currrent_cartItem");
-        navigate("/");
+      .then((response) => {
+        console.log("POST request successful"); 
+        // Handle the response or show a success message
+        sessionStorage.removeItem("current_cartItem");
+        Swal.fire({
+          title: "Place Order Complete!",
+          text: "Your order has been placed successfully.",
+          icon: "success",
+        }).then(() => {
+          navigate("/");
+        });
       })
-      .catch((err) => {
-        console.log(err);
+      .catch((error) => {
+        console.error("POST request error:", error);
+        console.error(error);
+        // Handle the error, e.g., show an error message
       });
   };
 
@@ -98,7 +118,10 @@ export default function Cart() {
                 </span>
               </div>
               <div className="flex items-center ">
-                <button className="flex rounded-full w-48 h-11 bg-[#A51D2D] hover:bg-[#841724] justify-center items-center text-white text-xl">
+                <button 
+                  className="flex rounded-full w-48 h-11 bg-[#A51D2D] hover:bg-[#841724] justify-center items-center text-white text-xl"
+                  onClick={handlePayment}
+                >
                   ชำระเงิน
                 </button>
               </div>
