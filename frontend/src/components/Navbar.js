@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Route, Link, useNavigate } from 'react-router-dom';
 import { formatNumberInput } from "../util/formatUtil";
+import axios from "axios";
 
 export default function Navbar() {
-    const current_user = JSON.parse(sessionStorage.getItem('current_user'));
+
+    const current_user = JSON.parse(sessionStorage.getItem('current_user'))
+    const [updateUser, setUpdateUser] = useState(current_user)
     const [profileMenuActive, setProfileMenuActive] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
     const navigate = useNavigate();
@@ -11,13 +14,29 @@ export default function Navbar() {
     const clickProfileDropdown = () => {
         setProfileMenuActive(!profileMenuActive);
     };
-    
+
     const logOut = () => {
-        clickProfileDropdown()
-        sessionStorage.removeItem('current_user');
+        clickProfileDropdown();
+        sessionStorage.clear() ;
+        setUpdateUser(null);
+        navigate('/');
     }
 
+    const getSingleUser = async () => {
+        if (!current_user){
+            return ;
+        }
+        const res_getUserData = await axios.get(`${process.env.REACT_APP_QUIC_GEAR_API}/users/${current_user._id}`);
+        setUpdateUser({ ...res_getUserData.data });
+        sessionStorage.setItem('current_user', JSON.stringify(res_getUserData.data))
+    }
+
+    useEffect(() => {
+        getSingleUser()
+    }, [])
+
     return (
+
         <div className="sticky top-0 z-40 bg-white">
             <nav className="flex flex-col md:flex-row items-center p-4 border-b-2 border-[#dbdbdb] shadow-md">
                 <div className="w-full md:w-1/2 text-center md:text-left">
@@ -119,8 +138,11 @@ export default function Navbar() {
                                             <Link to="/topup" className="block p-3 text-sm font-medium text-gray-600 hover:bg-gray-100 text-left">
                                                 เติมเงิน
                                             </Link>
-                                            <Link to="/my-orders" className="block p-3 text-sm font-medium text-gray-600 hover:bg-gray-100 text-left">
+                                            <Link to="/myorder" className="block p-3 text-sm font-medium text-gray-600 hover:bg-gray-100 text-left">
                                                 การซื้อของฉัน
+                                            </Link>
+                                            <Link to="/myauction" className="block p-3 text-sm font-medium text-gray-600 hover:bg-gray-100 text-left">
+                                                การประมูลของฉัน
                                             </Link>
                                             <div className="text-center mt-2">
                                                 <button
@@ -150,5 +172,7 @@ export default function Navbar() {
                 </div>
             </nav>
         </div>
+
+
     );
 }

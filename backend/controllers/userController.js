@@ -8,6 +8,24 @@ const getAllUser = asyncHandler(async (req, res) => {
     res.status(200).json(users);
 });
 
+// Get single user => GET api/user/:id
+const getUserData = asyncHandler(async (req, res) => {
+    try {
+        const userId = req.params.id;
+
+        const findbyUserId = await user.findById(userId).populate("favList");
+
+        if(!findbyUserId) {
+            return res.status(404).send('User not found!');
+        }
+
+        res.status(200).json(findbyUserId);
+
+    } catch(err) {
+        console.log(err);
+    }
+});
+
 // Create new user => POST api/users/create
 const createUser = asyncHandler(async (req, res) => {
     try {
@@ -105,4 +123,4 @@ const loginUser = asyncHandler(async (req, res) => {
     res.status(200).json(userFound);
 });
 
-module.exports = { getAllUser, createUser, deleteUser, updateUser, loginUser, registerUser};
+module.exports = { getAllUser, getUserData,createUser, deleteUser, updateUser, loginUser, registerUser};

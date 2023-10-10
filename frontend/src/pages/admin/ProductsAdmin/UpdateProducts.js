@@ -120,24 +120,24 @@ export default function UpdateProducts() {
 
         <div className="flex items-center justify-center w-full">
           <div className="p-8 rounded w-7/12">
-            <div>
-              <label className="block mb-1 font-bold text-gray-500">Product Name</label>
+            <div className='flex flex-col'>
+              <label className="block mb-1 font-bold text-gray-500 self-start">Product Name</label>
               <input type="name" className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-300" name='name'
                 onChange={onChangeInput} />
             </div>
-            <div className='mt-2'>
-              <label className="block mb-1 font-bold text-gray-500">Price</label>
+            <div className='mt-2 flex flex-col'>
+              <label className="block mb-1 font-bold text-gray-500 self-start">Price</label>
               <input name="price" className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-300"
                 onChange={onChangeInput} />
             </div>
-            <div className='mt-2'>
-              <label className="block mb-1 font-bold text-gray-500">Stock</label>
+            <div className='mt-2 flex flex-col'>
+              <label className="block mb-1 font-bold text-gray-500 self-start">Stock</label>
               <input name="stock" className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-300"
                 onChange={onChangeInput} />
             </div>
             {/* Select input */}
-            <div className='mt-2'>
-              <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select Brand</label>
+            <div className='mt-2 flex flex-col'>
+              <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white self-start">Select Brand</label>
               <select class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600
                dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500
                overflow-y-auto max-h-44"
@@ -149,8 +149,8 @@ export default function UpdateProducts() {
                 })}
               </select>
             </div>
-            <div className='mt-2'>
-              <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select Type</label>
+            <div className='mt-2 flex flex-col'>
+              <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white self-start">Select Type</label>
               <select class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600
                dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500
                overflow-y-auto max-h-44"
@@ -162,8 +162,8 @@ export default function UpdateProducts() {
                 })}
               </select>
             </div>
-            <div className='mt-2'>
-              <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select Subtype</label>
+            <div className='mt-2 flex flex-col'>
+              <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white self-start">Select Subtype</label>
               <select class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600
                dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500
                overflow-y-auto max-h-44"
@@ -176,8 +176,8 @@ export default function UpdateProducts() {
               </select>
             </div>
             {/* radio input */}
-            <div className='mt-2'>
-              <label className="block mb-1 font-bold text-gray-500">Wired/Wireless</label>
+            <div className='mt-2 flex flex-col'>
+              <label className="block mb-1 font-bold text-gray-500 self-start">Wired/Wireless</label>
               <div className='flex mt-2'>
                 <div class="flex items-center mr-4">
                   <input type="radio" value={false} name="isWireless" onChange={onChangeInput} class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
@@ -189,8 +189,8 @@ export default function UpdateProducts() {
                 </div>
               </div>
             </div>
-            <div className='mt-2'>
-              <label className="block mb-1 font-bold text-gray-500">RGB</label>
+            <div className='mt-2 flex flex-col'>
+              <label className="block mb-1 font-bold text-gray-500 self-start">RGB</label>
               <div className='flex mt-2'>
                 <div class="flex items-center mr-4">
                   <input type="radio" value={true} name="isRGB" onChange={onChangeInput} class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
@@ -202,8 +202,8 @@ export default function UpdateProducts() {
                 </div>
               </div>
             </div>
-            <div className='mt-2'>
-              <label className="block mb-1 font-bold text-gray-500">Description</label>
+            <div className='mt-2 flex flex-col'>
+              <label className="block mb-1 font-bold text-gray-500 self-start">Description</label>
               <textarea type="text" name="description" value={product['description']} onChange={onChangeInput} className="w-full h-44 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-300"></textarea>
             </div>
             <button type="submit" className="w-full mt-2 bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 focus:outline-none focus:ring focus:ring-blue-300">Submit</button>

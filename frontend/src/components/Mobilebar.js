@@ -1,11 +1,14 @@
-import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { SideBarCtegories } from "../constant/sideBarConstants";
 import { formatNumberInput } from "../util/formatUtil";
+import axios from "axios";
 
 export default function Mobilebar() {
     
+    const navigate = useNavigate()
     const current_user = JSON.parse(sessionStorage.getItem('current_user'))
+    const [updateUser, setUpdateUser] = useState(current_user)
     const currentPath = useLocation().pathname;
     const [open, setOpen] = useState(false);
     const [userRole, setUserRole] = useState("admin"); {/*guest,user,admin*/ }
@@ -20,8 +23,24 @@ export default function Mobilebar() {
     };
     const logOut = () => {
         clickProfileDropdown()
-        sessionStorage.removeItem('current_user');
+        sessionStorage.clear();
+        setUpdateUser(null);
+        navigate('/');
     }
+
+    const getSingleUser = async () => {
+        if (!current_user){
+            return ;
+        }
+        const res_getUserData = await axios.get(`${process.env.REACT_APP_QUIC_GEAR_API}/users/${current_user._id}`);
+        setUpdateUser({ ...res_getUserData.data });
+        sessionStorage.setItem('current_user', JSON.stringify(res_getUserData.data))
+    }
+
+    useEffect(() => {
+        getSingleUser()
+    }, [])
+
     return (
         <div>
             <div>
@@ -163,14 +182,17 @@ export default function Mobilebar() {
                                                 <p className="text-m text-gray-700 font-medium truncate overflow-hidden">{formatNumberInput(current_user?.coins)}</p>
                                             </div>
 
+                                            <Link to="/edit-profile" className="block p-3 text-sm font-medium text-gray-600 hover:bg-gray-100 text-left">
+                                                บัญชีของฉัน
+                                            </Link>
                                             <Link to="/topup" className="block p-3 text-sm font-medium text-gray-600 hover:bg-gray-100 text-left">
                                                 เติมเงิน
                                             </Link>
-                                            <Link to="/my-orders" className="block p-3 text-sm font-medium text-gray-600 hover:bg-gray-100 text-left">
+                                            <Link to="/myorder" className="block p-3 text-sm font-medium text-gray-600 hover:bg-gray-100 text-left">
                                                 การซื้อของฉัน
                                             </Link>
-                                            <Link to="/edit-profile" className="block p-3 text-sm font-medium text-gray-600 hover:bg-gray-100 text-left">
-                                                การตั้งค่า
+                                            <Link to="/myauction" className="block p-3 text-sm font-medium text-gray-600 hover:bg-gray-100 text-left">
+                                                การประมูลของฉัน
                                             </Link>
                                             <div className="text-center mt-2">
                                                 <button

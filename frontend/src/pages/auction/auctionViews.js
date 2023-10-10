@@ -54,7 +54,7 @@ const AuctionViews = () => {
     };
 
     const mobilePrevImg = () => {
-        if(hoverIndex == 0) {
+        if(hoverIndex === 0) {
             setHoverIndex(slides.length-1);
         } else {
             setHoverIndex(hoverIndex-1);
@@ -62,7 +62,7 @@ const AuctionViews = () => {
     }
 
     const mobileNextImg = () => {
-        if(hoverIndex == slides.length-1) {
+        if(hoverIndex === slides.length-1) {
             setHoverIndex(0);
         } else {
             setHoverIndex(hoverIndex+1);
