@@ -8,7 +8,7 @@ export default function Cart() {
   //  fetch Item that user add to basket (must be the same foodShop)
   //  fetch Object from session
   const [currentItemInCart, setCurrentItemInCart] = useState(
-    JSON.parse(sessionStorage.getItem("currrent_cartItem"))
+    JSON.parse(sessionStorage.getItem("current_cartItem"))
   );
   const navigate = useNavigate();
   const alert_EmptyCart = () => {

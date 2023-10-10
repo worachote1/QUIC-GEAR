@@ -152,16 +152,16 @@ export default function ProductView() {
     }
     console.log(productObj)
     console.log(temp_obj)
-    // not have any menu in basket create session : currrent_cartItem
-    if (sessionStorage.getItem("currrent_cartItem") === null) {
+    // not have any menu in basket create session : current_cartItem
+    if (sessionStorage.getItem("current_cartItem") === null) {
       console.log("session was empty")
-      sessionStorage.setItem("currrent_cartItem", JSON.stringify([temp_obj]))
+      sessionStorage.setItem("current_cartItem", JSON.stringify([temp_obj]))
       // window.location.reload()
     }
-    // add property of that menu to array of JSON (currrent_menuInBasket Session)
+    // add property of that menu to array of JSON (current_menuInBasket Session)
     // find if that menu not in basket  
     else {
-      const cur_CartData = JSON.parse((sessionStorage.getItem("currrent_cartItem")))
+      const cur_CartData = JSON.parse((sessionStorage.getItem("current_cartItem")))
       const itemIndex = cur_CartData.findIndex(item => item._id === productObj._id);
       // 
       console.log("test")
@@ -175,7 +175,7 @@ export default function ProductView() {
         cur_CartData[itemIndex].quantity += amount;
       }
       console.log(cur_CartData)
-      sessionStorage.setItem("currrent_cartItem", JSON.stringify(cur_CartData))
+      sessionStorage.setItem("current_cartItem", JSON.stringify(cur_CartData))
       // window.location.reload()
     }
     addToCart(temp_obj);
