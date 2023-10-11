@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Route, Link, useNavigate } from 'react-router-dom';
 import { formatNumberInput } from "../util/formatUtil";
+import { useCart } from "./CartContext";
 import axios from "axios";
 
 export default function Navbar() {
@@ -10,7 +11,8 @@ export default function Navbar() {
     const [profileMenuActive, setProfileMenuActive] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
     const navigate = useNavigate();
-
+    const { cart } = useCart();
+    
     const clickProfileDropdown = () => {
         setProfileMenuActive(!profileMenuActive);
     };
@@ -83,6 +85,7 @@ export default function Navbar() {
                         </Link>
                         <Link to="/cart" className="btn border-white text-black rounded-full hover:bg-[#d8d8d8] mr-2" id="cart_btn">
                             <i className="fas fa-cart-shopping" style={{ fontSize: '1.25rem' }}></i>
+                            {/* {cart.length !== 0 ? <div className="badge badge-secondary" style={{ backgroundColor: '#a51d2d', color: 'white' }}>{cart.length}</div> : ""} */}
                         </Link>
                         {current_user?.role === "admin" && (
                             <Link to="/admin" className="btn border-white text-black rounded-full hover:bg-[#d8d8d8] mr-2">

@@ -2,18 +2,21 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import OrderCard from "../components/OrderCard";
 import { testOrderData } from "../constant/testDataForAdmin"; 
-
+import { ThreeDots } from 'react-loader-spinner';
+import axios from 'axios';
+ 
 export default function MyOrdersList() {
+  const current_user = JSON.parse(sessionStorage.getItem("current_user"));
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 7; // Number of items to display per page
   const [orderList, setOrderList] = useState([]);
 
-  const totalPages = Math.ceil(testOrderData.length / itemsPerPage);
+  const totalPages = Math.ceil(orderList.length / itemsPerPage);
 
   // Calculate the range of products to display for the current page
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
-  const orderToDisplay = testOrderData.slice(startIndex, endIndex);
+  const orderToDisplay = orderList.slice(startIndex, endIndex);
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
@@ -30,6 +33,24 @@ export default function MyOrdersList() {
         setCurrentPage(currentPage + 1);
     }
   };
+
+  const getUserOrders = async () => {
+    const allOrders = await axios.get(`${process.env.REACT_APP_QUIC_GEAR_API}/orders`)
+    const currentUserOrders = allOrders.data.filter((item) => item.userID._id === current_user._id)
+    // console.log(currentUserOrders.slice().reverse())
+    setOrderList([...currentUserOrders].slice().reverse())
+    
+  }
+
+  useEffect(()=>{
+    getUserOrders()
+  },[])
+
+  if (!orderList.length) {
+    return <div className='w-full h-screen flex justify-center items-center'>
+        <ThreeDots type="Circles" color="#841724" height={100} width={100} />
+    </div>;
+}
 
   return (
     <div className="flex justify-center">

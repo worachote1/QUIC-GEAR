@@ -6,51 +6,24 @@ const orderSchema = mongoose.Schema({
         required: true,
         ref: 'user'
     },
-    orderItems: [
-        {
-            name: {
-                type: String,
-                required: true
+    orderItems:[{
+        productID: {
+                type: mongoose.Schema.Types.ObjectId,
+                required: true,
+                ref: 'product'
             },
             quantity: {
                 type: Number,
                 required: true
-            },
-            price: {
-                type: Number,
-                required: true
-            },
-            productID: {
-                type: mongoose.Schema.Types.ObjectId,
-                required: false,
-                ref: 'product'
-            },
-            imgPath: {
-                type: [String],
-                required: true
-            },
-            brand: {
-                type: String,
-                required: true
-            },
-            type: {
-                type: String,
-                required: true
-            },
-            subType: {
-                type: String,
-                required: true
             }
-        }
-    ],
+        }],
     orderStatus: {
         type: String,
-        required: true,
-        default: 'Processing'
+        default: 'to recieve'
     },
-    shippingInfo: {
+    trackingNumber: {
         type: String,
-        required: true
+        default: "THDL122XSE"
     },
     totalPrice: {
         type: Number,

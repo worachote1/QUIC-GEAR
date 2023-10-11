@@ -1,24 +1,18 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import OrderProduct from '../components/OrderProduct';
 import { useParams } from 'react-router-dom';
 import { testOrderData } from "../constant/testDataForAdmin";
+import { ThreeDots } from 'react-loader-spinner';
+import axios from 'axios';
 
 const MyOrder = () => {
     const { id } = useParams();
-
+    const [orders, setOrders] = useState(null);
     const order = testOrderData.find((order) => order.id === id);
-
-    if (!order) {
-        return <div>Order not found</div>;
-    }
-
-    if (!order.orderStatus) {
-        order.orderStatus = 'Order Received';
-    }
 
     const getStatusIcon = (orderStatus) => {
         switch (orderStatus) {
-            case 'Order Received':
+            case 'order received':
                 return 'fa-clipboard';
             case 'to recieve':
                 return 'fa-shipping-fast';
@@ -31,7 +25,7 @@ const MyOrder = () => {
 
     const getStatusText = (orderStatus) => {
         switch (orderStatus) {
-            case 'Order Received':
+            case 'order received':
                 return 'ได้รับคำสั่งซื้อ';
             case 'to recieve':
                 return 'อยู่ระหว่างการจัดส่ง';
@@ -42,9 +36,13 @@ const MyOrder = () => {
         }
     };
 
-    const statusOrder = ['Order Received', 'to recieve', 'completed'];
+    const statusOrder = ['order received', 'to recieve', 'completed'];
 
-    const orderDate = new Date().toLocaleDateString();
+    if (!orders) {
+        return <div className='w-full h-screen flex justify-center items-center'>
+            <ThreeDots type="Circles" color="#841724" height={100} width={100} />
+        </div>;
+    }
 
     return (
         <div className="container mx-auto p-4 max-w-[1000px]">
