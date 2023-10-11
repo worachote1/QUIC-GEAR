@@ -1,121 +1,181 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from "react";
+import { Route, Link, useNavigate } from 'react-router-dom';
+import { formatNumberInput } from "../util/formatUtil";
+import { useCart } from "./CartContext";
+import axios from "axios";
 
 export default function Navbar() {
+
+    const current_user = JSON.parse(sessionStorage.getItem('current_user'))
+    const [updateUser, setUpdateUser] = useState(current_user)
     const [profileMenuActive, setProfileMenuActive] = useState(false);
-    const [mobileMenuActive, setMobileMenuActive] = useState(false);
+    const [searchQuery, setSearchQuery] = useState("");
+    const navigate = useNavigate();
+    const { cart } = useCart();
+    
     const clickProfileDropdown = () => {
         setProfileMenuActive(!profileMenuActive);
+    };
+
+    const logOut = () => {
+        clickProfileDropdown();
+        sessionStorage.clear() ;
+        setUpdateUser(null);
+        navigate('/');
     }
-    const clickMobileMenuDropdown = () => {
-        setMobileMenuActive(!mobileMenuActive);
+
+    const getSingleUser = async () => {
+        if (!current_user){
+            return ;
+        }
+        const res_getUserData = await axios.get(`${process.env.REACT_APP_QUIC_GEAR_API}/users/${current_user._id}`);
+        setUpdateUser({ ...res_getUserData.data });
+        sessionStorage.setItem('current_user', JSON.stringify(res_getUserData.data))
     }
+
+    useEffect(() => {
+        getSingleUser()
+    }, [])
+
     return (
-        <nav class="bg-gray-800">
-            <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
-                <div class="relative flex h-16 items-center justify-between">
-                    <div class="absolute inset-y-0 left-0 flex items-center sm:hidden">
-                        {/* <!-- Mobile menu button--> */}
-                        <button type="button" class="relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white" aria-controls="mobile-menu"
-                            aria-expanded="false" onClick={clickMobileMenuDropdown}>
-                            <span class="absolute -inset-0.5"></span>
-                            <span class="sr-only">Open main menu</span>
-                            {/* <!--
-                            Icon when menu is closed.
 
-                            Menu open: "hidden", Menu closed: "block"
-          --> */}
-                            <svg class="block h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-                            </svg>
-                            {/* <!--
-                            Icon when menu is open.
-
-                            Menu open: "block", Menu closed: "hidden"
-          --> */}
-                            <svg class="hidden h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                            </svg>
-                        </button>
+        <div className="sticky top-0 z-40 bg-white">
+            <nav className="flex flex-col md:flex-row items-center p-4 border-b-2 border-[#dbdbdb] shadow-md">
+                <div className="w-full md:w-1/2 text-center md:text-left">
+                    <div style={{ display: "inline-block", cursor: "pointer" }}>
+                        <Link to="">
+                            <img
+                                src="https://media.discordapp.net/attachments/1008605866624303204/1146757863205769276/quicgear.png?width=1440&height=288"
+                                alt="QUICGEAR Logo"
+                                style={{ maxWidth: "280px", maxHeight: "100px" }}
+                            />
+                        </Link>
                     </div>
-                    <div class="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
-                        <div class="flex flex-shrink-0 items-center">
-                            <img class="h-8 w-auto" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500" alt="Your Company" />
-                        </div>
-                        <div class="hidden sm:ml-6 sm:block">
-                            <div class="flex space-x-4">
-                                {/* <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" --> */}
-                                <a href="#" class="bg-gray-900 text-white rounded-md px-3 py-2 text-sm font-medium" aria-current="page">Dashboard</a>
-                                <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Team</a>
-                                <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Projects</a>
-                                <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Calendar</a>
-                            </div>
-                        </div>
-                    </div>
-                    {   
-                        <div class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-                            <button type="button" class="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
-                                <span class="absolute -inset-1.5"></span>
-                                <span class="sr-only">View notifications</span>
-                                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
-                                </svg>
-                            </button>
-
-                            {/* <!-- Profile dropdown --> */}
-                            <div class="relative ml-3">
-                                <div>
-                                    <button type="button" class="relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800" id="user-menu-button"
-                                        aria-expanded="false" aria-haspopup="true" onClick={clickProfileDropdown}>
-                                        <span class="absolute -inset-1.5"></span>
-                                        <span class="sr-only">Open user menu</span>
-                                        <img class="h-8 w-8 rounded-full" src={''} alt="" />
-                                    </button>
-                                </div>
-
-                                {/* <!--
-                    Dropdown menu, show/hide based on menu state.
-
-                    Entering: "transition ease-out duration-100"
-                    From: "transform opacity-0 scale-95"
-                    To: "transform opacity-100 scale-100"
-                    Leaving: "transition ease-in duration-75"
-                    From: "transform opacity-100 scale-100"
-                    To: "transform opacity-0 scale-95"
-  --> */}
-                                {profileMenuActive ?
-                                    <div class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1">
-                                        {/* <!-- Active: "bg-gray-100", Not Active: "" --> */}
-                                        <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-0">Your Profile</a>
-                                        <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-1">Settings</a>
-                                        <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-2"
-                                            
-                                        >
-                                            Sign out
-                                        </a>
-                                    </div>
-                                    : ""
-                                }
-                            </div>
-                        </div>
-                    }
-
                 </div>
-            </div>
 
-            {/* <!-- Mobile menu, show/hide based on menu state. --> */}
-            <div class="sm:hidden" id="mobile-menu">
-                {mobileMenuActive ?
-                    <div class="space-y-1 px-2 pb-3 pt-2">
-                        {/* <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" --> */}
-                        <a href="#" class="bg-gray-900 text-white block rounded-md px-3 py-2 text-base font-medium" aria-current="page">Dashboard</a>
-                        <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium">Team</a>
-                        <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium">Projects</a>
-                        <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium">Calendar</a>
+                <div className="w-full md:w-1/2 mt-4 md:mt-0">
+                    <div className="relative">
+                        <i className="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2"></i>
+                        <input
+                            type="text"
+                            id="search_field"
+                            className="pl-10 px-4 py-2 rounded-lg w-full focus:outline-1 text-black-300 placeholder-gray-500 bg-[#ebebeb]"
+                            placeholder="ค้นหาสินค้าที่ต้องการ"
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            onKeyDown={(e) => {
+                                if (e.key === "Enter") {
+                                    const currentURL = window.location.pathname;
+                                    const searchPath = currentURL === "/auction" ? "/auction" : "/product";
+                                    navigate(`${searchPath}?search=${encodeURIComponent(searchQuery)}`);
+                                }
+                            }}
+                        />
                     </div>
-                    : ""
-                }
-            </div>
-        </nav>
+                </div>
 
-    )
+                <div className="w-full md:w-1/2 mt-4 md:mt-0 text-center md:text-right hidden lg:block">
+                    <div className="md:ml-auto flex justify-center items-center md:justify-end">
+
+                        <Link to="/auction" className="btn border-white text-black rounded-full hover:bg-[#d8d8d8] mr-2" id="auction_btn">
+                            <i className="fa-solid fa-building-columns" style={{ fontSize: '1.25rem' }}></i>
+                        </Link>
+                        <Link to={`/fav_product/${2}`} className="btn border-white text-black rounded-full hover:bg-[#d8d8d8] mr-2" id="fav_btn">
+                            <i className="fas fa-heart" style={{ fontSize: '1.25rem' }}></i>
+                        </Link>
+                        <Link to="/cart" className="btn border-white text-black rounded-full hover:bg-[#d8d8d8] mr-2" id="cart_btn">
+                            <i className="fas fa-cart-shopping" style={{ fontSize: '1.25rem' }}></i>
+                            {/* {cart.length !== 0 ? <div className="badge badge-secondary" style={{ backgroundColor: '#a51d2d', color: 'white' }}>{cart.length}</div> : ""} */}
+                        </Link>
+                        {current_user?.role === "admin" && (
+                            <Link to="/admin" className="btn border-white text-black rounded-full hover:bg-[#d8d8d8] mr-2">
+                                <i className="fa-solid fa-screwdriver-wrench " style={{ fontSize: '1.25rem' }}></i>
+                            </Link>
+                        )}
+                        {current_user ? (
+                            <div className="relative ">
+                                <div
+                                    className="flex items-center cursor-pointer relative"
+                                    onMouseEnter={() => setProfileMenuActive(true)}
+                                    onMouseLeave={() => setProfileMenuActive(false)}
+                                >
+                                    <Link to="/edit-profile" className="w-10 h-10 rounded-full bg-gray-300 overflow-hidden">
+                                        <img
+                                            // https://www.gzone-conan.com/wp-content/uploads/2019/05/25262960-6716-11e9-b3c5-246e963a41ed_03.jpg   
+                                            src={`/uploads/${current_user ? current_user?.imgPath : "default-avatar-1.jpg"}`}
+                                            alt="Profile"
+                                            className="w-full h-full object-cover"
+                                        />
+
+                                    </Link>
+
+                                </div>
+                                {profileMenuActive && (
+                                    <div
+                                        className="absolute right-0 top-10 w-64 bg-white rounded-md shadow-lg"
+                                        onMouseEnter={() => setProfileMenuActive(true)}
+                                        onMouseLeave={() => setProfileMenuActive(false)}
+                                    >
+                                        <div className="py-2">
+                                            {/* <div className="p-3 flex items-center justify-between">
+                                                <div className="text-left">
+                                                    <p className="text-m font-medium truncate overflow-hidden w-44">{current_user.username}</p>
+                                                </div>
+                                
+                                                <span className="text-s font-medium bg-red-100 text-[#a51d2d] px-2 py-1 rounded-full">
+                                                    {current_user?.role}
+                                                </span>
+
+                                            </div> */}
+                                            {
+                                                current_user ?
+                                                    <div className="p-3 border-b flex items-center justify-between text-left">
+                                                        <p className="text-m text-gray-700 font-medium">QuicCoins <i className="fas fa-coins mr-1 text-l"></i></p>
+                                                        <p className="text-m text-gray-700 font-medium truncate overflow-hidden">{formatNumberInput(current_user?.coins)}</p>
+                                                    </div>
+                                                    : ""
+                                            }
+                                            <Link to="/edit-profile" className="block p-3 text-sm font-medium text-gray-600 hover:bg-gray-100 text-left">
+                                                บัญชีของฉัน
+                                            </Link>
+                                            <Link to="/topup" className="block p-3 text-sm font-medium text-gray-600 hover:bg-gray-100 text-left">
+                                                เติมเงิน
+                                            </Link>
+                                            <Link to="/myorder" className="block p-3 text-sm font-medium text-gray-600 hover:bg-gray-100 text-left">
+                                                การซื้อของฉัน
+                                            </Link>
+                                            <Link to="/myauction" className="block p-3 text-sm font-medium text-gray-600 hover:bg-gray-100 text-left">
+                                                การประมูลของฉัน
+                                            </Link>
+                                            <div className="text-center mt-2">
+                                                <button
+                                                    className="p-2 text-sm text-white bg-[#e01b24] rounded-xl hover:bg-red-700  w-60"
+                                                    onClick={logOut}
+                                                >
+                                                    ออกจากระบบ
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+
+                        ) : (
+                            <Link to={'/login'}>
+                                <button className="btn bg-[#a51d2d] text-white hover:bg-red-600 hover:shadow-lg px-2 py-1 text-md lg:px-4 lg:py-2 lg:text-base" id="login_btn"
+                                >
+                                    เข้าสู่ระบบ
+                                </button>
+                            </Link>
+                        )}
+
+
+
+                    </div>
+                </div>
+            </nav>
+        </div>
+
+
+    );
 }

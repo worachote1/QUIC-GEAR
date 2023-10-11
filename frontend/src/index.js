@@ -5,6 +5,7 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
+document.title = "QUIC GEAR"
 root.render(
   <React.StrictMode>
     <App />
