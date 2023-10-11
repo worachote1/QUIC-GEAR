@@ -8,10 +8,12 @@ export default function OrderCard({ order }) {
 
   const getStatusText = (orderStatus) => {
     switch (orderStatus) {
-      case 'to recieve':
-        return 'อยู่ระหว่างจัดส่ง';
       case 'completed':
         return 'สำเร็จ';
+      case 'dispatched':
+        return 'อยู่ระหว่างจัดส่ง'
+      case 'order received':
+        return 'ได้รับสินค้าแล้ว';
       default:
         return 'Unknown';
   }

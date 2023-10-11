@@ -19,7 +19,7 @@ const orderSchema = mongoose.Schema({
         }],
     orderStatus: {
         type: String,
-        default: 'to recieve'
+        default: 'order received'
     },
     trackingNumber: {
         type: String,

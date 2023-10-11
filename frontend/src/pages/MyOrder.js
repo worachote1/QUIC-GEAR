@@ -10,13 +10,13 @@ import { AiOutlineDollarCircle } from 'react-icons/ai'
 const MyOrder = () => {
     const { id } = useParams();
     const [orders, setOrders] = useState(null);
-    const statusOrder = ['order received', 'to recieve', 'completed'];
+    const statusOrder = ['order received', 'dispatched', 'completed'];
 
     const getStatusIcon = (orderStatus) => {
         switch (orderStatus) {
             case 'order received':
                 return 'fa-clipboard';
-            case 'to recieve':
+            case 'dispatched':
                 return 'fa-shipping-fast';
             case 'completed':
                 return 'fa-check-circle';
@@ -26,10 +26,11 @@ const MyOrder = () => {
     };
 
     const getStatusText = (orderStatus) => {
+        console.log(orderStatus)
         switch (orderStatus) {
             case 'order received':
                 return 'ได้รับคำสั่งซื้อ';
-            case 'to recieve':
+            case 'dispatched':
                 return 'อยู่ระหว่างการจัดส่ง';
             case 'completed':
                 return 'สำเร็จ';
