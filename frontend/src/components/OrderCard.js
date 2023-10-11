@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import OrderProduct from "./OrderProduct";
 import { formatNumberInput } from "../util/formatUtil";
+import { AiOutlineDollarCircle } from 'react-icons/ai'
 
 export default function OrderCard({ order }) {
 
@@ -33,13 +34,16 @@ return (
         </div>
       </div>
       <div className="flex justify-between pr-2 md:pr-8 items-center bg-gray-100 pt-4 pb-4">
-        <div>
+        <div className="flex flex-col items-start">
           <div className="pl-4 md:pl-8 text-sm md:text-lg">วันที่สั่งซื้อ</div>
           <div className="pl-4 md:pl-8 text-sm pt-2">{new Date(order.createdAt).toLocaleString()}</div>
         </div>
-        <div className="flex">
+        <div className="flex items-center">
           <div className="pl-4 md:pl-8 text-m md:text-lg">ยอดสุทธิ</div>
-          <div className="flex items-center pl-2 md:pl-8">฿{formatNumberInput(order.totalPrice)}</div>
+          <div className="flex items-center pl-2 md:pl-8">
+            <AiOutlineDollarCircle class=' text-2xl' />
+            {formatNumberInput(order.totalPrice)}
+          </div>
         </div>
       </div>
       <div>

@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
 import { AiOutlineDollarCircle } from 'react-icons/ai'
 import { formatNumberInput } from '../util/formatUtil'
+import { Link } from 'react-router-dom'
 
 export default function CartItem({ menuObj, callbackUpdate, cur_Total }) {
     const [displayQuantity, setDisplayQuantity] = useState(menuObj.quantity)
-    
+
     const handle_ClickVote = (id, voteVal) => {
         const cur_itemInCart = JSON.parse(sessionStorage.getItem("current_cartItem"))
         console.log(cur_itemInCart)
@@ -43,11 +44,13 @@ export default function CartItem({ menuObj, callbackUpdate, cur_Total }) {
         <div class="shadow-md py-4 rounded-lg mt-2">
             <div className="flex">
                 <div class="rounded-lg">
-                    <img
-                        src={`/uploads/${menuObj.imgPath[0]}`}
-                        alt="Product image"
-                        class="w-44 h-36 object-cover rounded-lg"
-                    />
+                    <Link to={`/product/${menuObj._id}`}>
+                        <img
+                            src={`/uploads/${menuObj.imgPath[0]}`}
+                            alt="Product image"
+                            class="w-44 h-36 object-cover rounded-lg"
+                        />
+                    </Link>
                 </div>
                 <div class="mt-4 mt-0 ml-6">
                     <h2

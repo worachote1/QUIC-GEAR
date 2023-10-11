@@ -11,6 +11,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { AiOutlineDollarCircle } from 'react-icons/ai'
 import axios from "axios";
 import { ThreeDots } from 'react-loader-spinner';
+import { formatNumberInput } from '../../util/formatUtil'
 
 export default function ProductView() {
   const current_user = JSON.parse(sessionStorage.getItem("current_user"));
@@ -121,8 +122,8 @@ export default function ProductView() {
         axios.put(`${process.env.REACT_APP_QUIC_GEAR_API}/users/update/${data._id}`, { favList: newArray });
         setIsFav(false);
         Swal.fire({
-          title: "This product has been removed from your favorites list.",
-          text: `You've successfully removed ${product.name} from your favorites.`,
+          title: "นำสินค้าออกจากรายการโปรด",
+          text: `คุณได้นำ ${product.name} ออกจากรายการโปรดของคุณเรียบร้อย`,
           icon: "success",
           showCancelButton: false,
           confirmButtonColor: "#a51d2d",
@@ -135,8 +136,8 @@ export default function ProductView() {
         setIsFav(true);
 
         Swal.fire({
-          title: "This product has been added from your favorites list.",
-          text: `You've successfully added ${product.name} from your favorites.`,
+          title: "เพิ่มสินค้านี้เข้ารายการโปรด",
+          text: `คุณได้เพิ่ม ${product.name} เข้ารายการโปรดของคุณเรียบร้อย`,
           icon: "success",
           showCancelButton: false,
           confirmButtonColor: "#a51d2d",
@@ -154,8 +155,8 @@ export default function ProductView() {
   const alert_placeOrderSuccess = () => {
     sessionStorage.removeItem("current_cartItem");
     Swal.fire({
-      title: "Place Order Complete!",
-      text: "Your order has been placed successfully.",
+      title: "การสั่งซื้อเสร็จสมบูรณ์!",
+      text: "คำสั่งซื้อของคุณได้รับการยืนยันเรียบร้อยแล้ว",
       icon: "success",
     }).then(() => {
       navigate("/myorder");
@@ -165,8 +166,8 @@ export default function ProductView() {
   const alert_NotEnoughCoins = () => {
     sessionStorage.removeItem("current_cartItem");
     Swal.fire({
-      title: "Insufficient Coins",
-      text: "You don't have enough coins to place this order. Please top-up your coins before proceeding.",
+      title: "เหรียญไม่เพียงพอ",
+      text: "กรุณาเติมเหรียญก่อนดำเนินการต่อ",
       icon: "error",
     }).then(() => {
       navigate("/topup");
@@ -180,8 +181,8 @@ export default function ProductView() {
     }
     else if (checkEmptyREGEX.test(current_user.address)) {
       Swal.fire({
-        title: "",
-        text: `An address is required to place an order. Please update your profile information !`,
+        title: "ต้องการที่อยู่",
+        text: `กรุณาระบุข้อมูลที่อยู่ในโปรไฟล์ของคุณก่อนทําการซื้อ!`,
         icon: "error",
         showCancelButton: false,
         confirmButtonColor: "#a51d2d",
@@ -195,49 +196,62 @@ export default function ProductView() {
       })
       return;
     }
-  
-    //Create Order
-    try {
-      const productsObj = []
-      const orderData = {
-        userID: current_user._id,
-        orderItems: [{
-          productID : product._id,
-          quantity : amount
-        }],
-        totalPrice: product.price * amount
-      }
-      if (current_user.coins < orderData.totalPrice) {
-        alert_NotEnoughCoins()
-        return ;
-      }
-      productsObj.push(orderData)
-      const createOrder = await axios.post(`${process.env.REACT_APP_QUIC_GEAR_API}/orders/create`, orderData);
-      const res_createOrder = createOrder.data;
-      const getSingleOrder = await axios.get(`${process.env.REACT_APP_QUIC_GEAR_API}/orders/${res_createOrder._id}`);
-      const res_getSingleOrder = getSingleOrder.data;
-      console.log(res_getSingleOrder);
-      //update products stock
-      res_getSingleOrder.orderItems.forEach(async (item) => {
-        const updateProduct = await axios.put(`${process.env.REACT_APP_QUIC_GEAR_API}/products/update/${item.productID._id}`, {
-          ...item.productID,
-          stock: item.productID.stock - item.quantity,
-          totalOrder : item.productID.totalOrder + item.quantity
-        })
-      })
-      //update user coin
-      const updateUser = await axios.put(`${process.env.REACT_APP_QUIC_GEAR_API}/users/update/${res_getSingleOrder.userID._id}`, {
-        ...res_getSingleOrder.userID,
-        coins: res_getSingleOrder.userID.coins - res_getSingleOrder.totalPrice
-      })
-      sessionStorage.setItem("current_user", JSON.stringify(updateUser.data));
-      alert_placeOrderSuccess();
-    }
-    catch (err) {
-      console.log(err);
-    }
 
-    
+    Swal.fire({
+      title: "ยืนยันการซื้อ",
+      text: `คุณต้องการจะซื้อสินค้านี้หรือไม่?`,
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "#ebebeb",
+      cancelButtonColor: "#a51d2d",
+      confirmButtonText: "<span class='text-black'>ชําระเงิน</span>",
+      cancelButtonText: "ยกเลิก",
+    }).then(async(result) => {
+      if (result.isConfirmed) {
+        //Create Order
+        try {
+          const productsObj = []
+          const orderData = {
+            userID: current_user._id,
+            orderItems: [{
+              productID: product._id,
+              quantity: amount
+            }],
+            totalPrice: product.price * amount
+          }
+          if (current_user.coins < orderData.totalPrice) {
+            alert_NotEnoughCoins()
+            return;
+          }
+          productsObj.push(orderData)
+          const createOrder = await axios.post(`${process.env.REACT_APP_QUIC_GEAR_API}/orders/create`, orderData);
+          const res_createOrder = createOrder.data;
+          const getSingleOrder = await axios.get(`${process.env.REACT_APP_QUIC_GEAR_API}/orders/${res_createOrder._id}`);
+          const res_getSingleOrder = getSingleOrder.data;
+          console.log(res_getSingleOrder);
+          //update products stock
+          res_getSingleOrder.orderItems.forEach(async (item) => {
+            const updateProduct = await axios.put(`${process.env.REACT_APP_QUIC_GEAR_API}/products/update/${item.productID._id}`, {
+              ...item.productID,
+              stock: item.productID.stock - item.quantity,
+              totalOrder: item.productID.totalOrder + item.quantity
+            })
+          })
+          //update user coin
+          const updateUser = await axios.put(`${process.env.REACT_APP_QUIC_GEAR_API}/users/update/${res_getSingleOrder.userID._id}`, {
+            ...res_getSingleOrder.userID,
+            coins: res_getSingleOrder.userID.coins - res_getSingleOrder.totalPrice
+          })
+          sessionStorage.setItem("current_user", JSON.stringify(updateUser.data));
+          alert_placeOrderSuccess();
+        }
+        catch (err) {
+          console.log(err);
+        }
+      } else {
+        
+      }
+    });
   }
 
   const handleClickAdd_ForCart = (productObj, amount) => {
@@ -285,7 +299,8 @@ export default function ProductView() {
       cancelButtonText: "เลือกสินค้าเพิ่มเติม",
     }).then((result) => {
       if (result.isConfirmed) {
-        window.location.href = "/cart"; // ไปหน้าตะกร้า
+        navigate("/cart")
+
       } else {
         // ช้อปปิ้งต่อ - ไม่ต้องทำอะไร
       }
@@ -335,7 +350,7 @@ export default function ProductView() {
               <p class='flex py-4 font-Prompt text-sm'>Product ID: {product._id}</p>
               <p class='flex font-Prompt text-3xl text-[#a51d2d] font-bold'>
                 <div className="flex flex-row items-center">
-                  <AiOutlineDollarCircle class=' text-3xl' /> {product.price}
+                  <AiOutlineDollarCircle class=' text-3xl' /> {formatNumberInput(product.price)}
                 </div>
               </p>
               <div class='flex flex-row gap-x-3 py-3'>

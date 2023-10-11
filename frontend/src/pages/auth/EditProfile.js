@@ -201,7 +201,8 @@ export default function UserSettings() {
                                 onChange={onChangeInput}
                                 onFocus={(e) => onChangeFocusedInput(e, true)}
                                 onBlur={(e) => onChangeFocusedInput(e, false)}
-                            />
+                                readOnly
+                           />
                             {!focusedData.username && (
                                 <svg
                                     class="absolute mr-3"

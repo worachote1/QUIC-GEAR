@@ -4,11 +4,13 @@ import { useParams } from 'react-router-dom';
 import { testOrderData } from "../constant/testDataForAdmin";
 import { ThreeDots } from 'react-loader-spinner';
 import axios from 'axios';
+import { formatNumberInput } from '../util/formatUtil';
+import { AiOutlineDollarCircle } from 'react-icons/ai'
 
 const MyOrder = () => {
     const { id } = useParams();
     const [orders, setOrders] = useState(null);
-    const order = testOrderData.find((order) => order.id === id);
+    const statusOrder = ['order received', 'to recieve', 'completed'];
 
     const getStatusIcon = (orderStatus) => {
         switch (orderStatus) {
@@ -36,7 +38,16 @@ const MyOrder = () => {
         }
     };
 
-    const statusOrder = ['order received', 'to recieve', 'completed'];
+    
+    const getSingleOrder = async () => {
+        const singleOrder = await axios.get(`${process.env.REACT_APP_QUIC_GEAR_API}/orders/${id}`)
+        console.log({...singleOrder.data})
+        setOrders({...singleOrder.data})
+    }
+
+    useEffect(() => {
+        getSingleOrder()
+    },[])
 
     if (!orders) {
         return <div className='w-full h-screen flex justify-center items-center'>
@@ -50,19 +61,19 @@ const MyOrder = () => {
                 <div className="flex flex-col md:flex-row justify-between items-center mb-4">
                     <h1 className="text-2xl font-semibold">รายละเอียดคำสั่งซื้อ</h1>
                     <div className="text-right">
-                        <p className="font-bold text-gray-700 mt-4 lg:mt-0">วันที่สั่งซื้อ {order.createAt}</p>
+                        <p className="font-bold text-gray-700 mt-4 lg:mt-0">วันที่สั่งซื้อ {new Date(orders?.createdAt).toLocaleString()}</p>
                     </div>
                 </div>
                 <div className="bg-gray-100 p-4 rounded-lg shadow-md mb-4 flex flex-col md:flex-row md:justify-between md:items-center">
-                    <div className="mb-4 lg:mb-0">
+                    <div className="mb-4 lg:mb-0 flex flex-col items-start">
                         <p className="text-l md:text-xl font-semibold mb-2">ที่อยู่จัดส่ง
                             <i className="fas fa-map-marker-alt text-gray-500 ml-2"></i></p>
-                        <p className="text-gray-700">{order.shippingInfo}</p>
+                        <p className="text-gray-700">{orders?.userID.address}</p>
                     </div>
-                    <div>
+                    <div className='flex flex-col items-start'>
                         <p className="text-l text-left md:text-xl md:text-right font-semibold mb-2">เลขติดตามพัสดุ
                             <i className="fas fa-box text-gray-500 ml-2"></i></p>
-                        <p className="text-left md:text-right text-gray-700">THDL122XSE</p>
+                        <p className="text-left md:text-right text-gray-700">{orders?.trackingNumber}</p>
                     </div>
                 </div>
                 <h1 className="text-l md:text-xl font-semibold mt-8 mb-2 md:mt-0 mb-4">สถานะคำสั่งซื้อสินค้า</h1>
@@ -70,9 +81,9 @@ const MyOrder = () => {
                     {statusOrder.map((status, index) => (
                         <div
                             key={index}
-                            className={`flex items-center ${order.orderStatus === status
+                            className={`flex items-center ${orders?.orderStatus === status
                                 ? 'text-red-500'
-                                : statusOrder.indexOf(order.orderStatus) >= index
+                                : statusOrder.indexOf(orders?.orderStatus) >= index
                                     ? 'text-red-500'
                                     : 'text-gray-400'
                                 } mb-2 lg:mb-0 lg:mr-4`}
@@ -83,13 +94,15 @@ const MyOrder = () => {
                     ))}
                 </div>
                 <div className="flex flex-col mb-2">
-                    {order.orderItems.map((item) => (
-                        <OrderProduct key={item.productId} item={item} />
+                    {orders.orderItems.map((item) => (
+                        <OrderProduct key={item.productID._id} item={item} />
                     ))}
                 </div>
                 <div className="bg-gray-100 p-4 rounded-lg shadow-md mb-4 flex flex-row lg:flex-row justify-between items-center">
                     <p className="text-l md:text-xl font-semibold">ราคาสุทธิ</p>
-                    <p className="text-l md:text-xl font-semibold">${order.totalPrice}</p>
+                    <p className="text-l md:text-xl font-semibold flex items-center">
+                        <AiOutlineDollarCircle class=' text-2xl' />
+                        {formatNumberInput(orders?.totalPrice)}</p>
                 </div>
             </div>
         </div>

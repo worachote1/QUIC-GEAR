@@ -102,7 +102,7 @@ export default function Navbar() {
                                     <Link to="/edit-profile" className="w-10 h-10 rounded-full bg-gray-300 overflow-hidden">
                                         <img
                                             // https://www.gzone-conan.com/wp-content/uploads/2019/05/25262960-6716-11e9-b3c5-246e963a41ed_03.jpg   
-                                            src={`uploads/${current_user ? current_user?.imgPath : "default-avatar-1.jpg"}`}
+                                            src={`/uploads/${current_user ? current_user?.imgPath : "default-avatar-1.jpg"}`}
                                             alt="Profile"
                                             className="w-full h-full object-cover"
                                         />
