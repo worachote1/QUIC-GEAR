@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Route, Link, useNavigate } from 'react-router-dom';
 import { formatNumberInput } from "../util/formatUtil";
+import { useCart } from "./CartContext";
 import axios from "axios";
 
 export default function Navbar() {
@@ -10,15 +11,17 @@ export default function Navbar() {
     const [profileMenuActive, setProfileMenuActive] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
     const navigate = useNavigate();
-
+    const { cart } = useCart();
+    
     const clickProfileDropdown = () => {
         setProfileMenuActive(!profileMenuActive);
     };
 
     const logOut = () => {
-        clickProfileDropdown()
-        sessionStorage.removeItem('current_user');
-        setUpdateUser(null)
+        clickProfileDropdown();
+        sessionStorage.clear() ;
+        setUpdateUser(null);
+        navigate('/');
     }
 
     const getSingleUser = async () => {
@@ -77,11 +80,12 @@ export default function Navbar() {
                         <Link to="/auction" className="btn border-white text-black rounded-full hover:bg-[#d8d8d8] mr-2" id="auction_btn">
                             <i className="fa-solid fa-building-columns" style={{ fontSize: '1.25rem' }}></i>
                         </Link>
-                        <Link to="/favorite" className="btn border-white text-black rounded-full hover:bg-[#d8d8d8] mr-2" id="fav_btn">
+                        <Link to={`/fav_product/${2}`} className="btn border-white text-black rounded-full hover:bg-[#d8d8d8] mr-2" id="fav_btn">
                             <i className="fas fa-heart" style={{ fontSize: '1.25rem' }}></i>
                         </Link>
                         <Link to="/cart" className="btn border-white text-black rounded-full hover:bg-[#d8d8d8] mr-2" id="cart_btn">
                             <i className="fas fa-cart-shopping" style={{ fontSize: '1.25rem' }}></i>
+                            {/* {cart.length !== 0 ? <div className="badge badge-secondary" style={{ backgroundColor: '#a51d2d', color: 'white' }}>{cart.length}</div> : ""} */}
                         </Link>
                         {current_user?.role === "admin" && (
                             <Link to="/admin" className="btn border-white text-black rounded-full hover:bg-[#d8d8d8] mr-2">
@@ -98,7 +102,7 @@ export default function Navbar() {
                                     <Link to="/edit-profile" className="w-10 h-10 rounded-full bg-gray-300 overflow-hidden">
                                         <img
                                             // https://www.gzone-conan.com/wp-content/uploads/2019/05/25262960-6716-11e9-b3c5-246e963a41ed_03.jpg   
-                                            src={`uploads/${current_user ? current_user?.imgPath : "default-avatar-1.jpg"}`}
+                                            src={`/uploads/${current_user ? current_user?.imgPath : "default-avatar-1.jpg"}`}
                                             alt="Profile"
                                             className="w-full h-full object-cover"
                                         />
@@ -137,8 +141,11 @@ export default function Navbar() {
                                             <Link to="/topup" className="block p-3 text-sm font-medium text-gray-600 hover:bg-gray-100 text-left">
                                                 เติมเงิน
                                             </Link>
-                                            <Link to="/my-orders" className="block p-3 text-sm font-medium text-gray-600 hover:bg-gray-100 text-left">
+                                            <Link to="/myorder" className="block p-3 text-sm font-medium text-gray-600 hover:bg-gray-100 text-left">
                                                 การซื้อของฉัน
+                                            </Link>
+                                            <Link to="/myauction" className="block p-3 text-sm font-medium text-gray-600 hover:bg-gray-100 text-left">
+                                                การประมูลของฉัน
                                             </Link>
                                             <div className="text-center mt-2">
                                                 <button

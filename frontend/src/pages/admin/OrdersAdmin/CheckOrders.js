@@ -7,6 +7,9 @@ import { sortByType } from '../../../util/adminModule/adminOrder';
 import { AiFillCaretDown } from 'react-icons/ai';
 import { BiSearch } from 'react-icons/bi';
 import AdminPagination from '../AdminPagination';
+import { ThreeDots } from 'react-loader-spinner';
+import axios from 'axios';
+import isEqual from 'lodash.isequal';
 
 export default function CheckOrders() {
   const [ordersData, setOrdersData] = useState([]);
@@ -14,7 +17,7 @@ export default function CheckOrders() {
   const [dataRowPerPage, setDataRowPerPage] = useState(7);
   const lastRowIndexPage = currentPage * dataRowPerPage;
   const firstRowIndexPage = lastRowIndexPage - dataRowPerPage;
-  const resDataPage = testOrderData.slice(firstRowIndexPage, lastRowIndexPage);
+  // const resDataPage = testOrderData.slice(firstRowIndexPage, lastRowIndexPage);
 
   const [filteredOrders, setFilteredOrders] = useState([]);
   const [selectedStatus, setSelectedStatus] = useState([]);
@@ -30,7 +33,7 @@ export default function CheckOrders() {
   };
 
   const handleFilterOrders = () => {
-    const filtered = testOrderData.filter((item) =>
+    const filtered = ordersData?.filter((item) =>
       selectedStatus.includes(item.orderStatus)
     );
     setFilteredOrders(filtered);
@@ -38,11 +41,33 @@ export default function CheckOrders() {
     setCurrentPage(1);
   };
 
+  const getOrdersData = async () => {
+    const allOrdersData = await axios.get(`${process.env.REACT_APP_QUIC_GEAR_API}/orders`)
+    const res_allOrdersData = allOrdersData.data;
+    console.log(res_allOrdersData)
+    setOrdersData(res_allOrdersData.slice().reverse())
+  }
+
+  const updateOrderToDispatched = async (orderId) => {
+    const updateOrder = await axios.put(`${process.env.REACT_APP_QUIC_GEAR_API}/orders/update/${orderId}`,{
+      orderStatus : "dispatched"
+    })
+    window.location.reload()
+  }
+
   useEffect(() => {
-    setOrdersData(filteredOrders.length > 0 ?
-      sortByType(filteredOrders, sortOption).slice(firstRowIndexPage, lastRowIndexPage)
-      : sortByType(testOrderData, sortOption).slice(firstRowIndexPage, lastRowIndexPage));
-  }, [filteredOrders, sortOption, currentPage, dataRowPerPage]);
+    getOrdersData();
+  }, [])
+
+  useEffect(() => {
+    const sortedOrder = filteredOrders.length > 0 ?
+      sortByType(filteredOrders, sortOption)
+      : sortByType(ordersData, sortOption);
+
+      if (!isEqual(sortedOrder, filteredOrders)) {
+        setFilteredOrders(sortedOrder);
+    }
+  }, [filteredOrders, sortOption, ordersData]);
 
   return (
     <div className='mx-2 mt-1'>
@@ -111,33 +136,50 @@ export default function CheckOrders() {
           </tr>
         </thead>
         <tbody>
-          {ordersData?.map((item, Idx) => (
+          {filteredOrders?.slice(firstRowIndexPage, lastRowIndexPage).map((item, Idx) => (
             <tr key={Idx} class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
               <td class="px-6 py-2">
-                {item["id"]}
+                {item?._id}
               </td>
               <td scope="row" class="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white">
-                <img class="w-10 h-10 rounded-full" src={testImgSrc} alt="Jese image" />
+                <img class="w-10 h-10 rounded-full" src={`/uploads/${item?.userID.imgPath}`} alt="Jese image" />
                 <div class="pl-3">
-                  <div class="text-base font-semibold">testUser</div>
-                  <div class="font-normal text-gray-500">testUserEmail</div>
+                  <div class="text-base font-semibold">{item?.userID.username}</div>
+                  <div class="font-normal text-gray-500">{item?.userID.email}</div>
                 </div>
               </td>
               <td class="px-6 py-4">
-                {formatNumberInput(item["totalPrice"])}
+                {formatNumberInput(item.totalPrice)}
               </td>
               <td class="px-6 py-4">
-                {item["createAt"]}
+                {new Date(item?.createdAt).toLocaleString()}
               </td>
               <td class="px-6 py-4">
-                {(item["orderStatus"] === "completed") ? <div> <button className="btn btn-outline btn-success">Completed</button> </div>
-                  : <div><button className="btn btn-outline btn-warning">To Recieve</button> <a className="link link-info ml-2">update order</a> </div>}
+                {(item?.orderStatus === "completed") 
+                  ? 
+                  <div> 
+                    <button className="btn btn-outline btn-success">Completed</button> 
+                  </div>
+                  : (item?.orderStatus === "dispatched")
+                      ? 
+                      <div>
+                        <button className="btn btn-outline btn-warning">Dispatched</button> 
+                      </div>
+                      :
+                      <div >
+                        <button className="btn btn-outline btn-error">Order Received</button> 
+                        <br/>
+                        {/* <a className="link link-info">Detail</a> 
+                        <br/> */}
+                        <a className="link link-info " onClick={() => updateOrderToDispatched(item._id)}>Update to Dispatched</a> 
+                      </div>
+                    }
               </td>
             </tr>
           ))}
         </tbody>
       </table>
-      <AdminPagination totalDataRow={(!filteredOrders.length) ? testOrderData.length : filteredOrders.length} dataRowPerPage={dataRowPerPage} currentPage={currentPage} setCurrentPage={setCurrentPage} />
+      <AdminPagination totalDataRow={filteredOrders.length} dataRowPerPage={dataRowPerPage} currentPage={currentPage} setCurrentPage={setCurrentPage} />
     </div>
   )
 }

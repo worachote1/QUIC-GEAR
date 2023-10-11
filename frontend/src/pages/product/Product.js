@@ -4,6 +4,7 @@ import { productData } from "../../constant/productData.js";
 import ProductCard from "../../components/ProductCard.js";
 import Sidebar from "../../components/Sidebar.js";
 import axios from "axios";
+import { ThreeDots } from 'react-loader-spinner';
 
 const Product = () => {
     const location = useLocation();
@@ -21,7 +22,7 @@ const Product = () => {
     const [maxPrice, setMaxPrice] = useState("");
 
     const [allProducts, setAllProducts] = useState([]);
-    
+
     const toggleExpand = () => {
         setpriceExpanded(!priceExpanded);
     };
@@ -35,69 +36,72 @@ const Product = () => {
         setAllProducts([...res_allProducts])
     }
 
-    useEffect(()=>{
+    useEffect(() => {
         getAllProduts();
-    },[])
+    }, [])
 
     useEffect(() => {
         const brandsSet = new Set();
         const tempFilteredProducts = [];
-        allProducts.forEach((item) => {
+        allProducts?.forEach((item) => {
 
-            const nameIncludesQuery = (searchQuery) ? item?.name.toLowerCase().includes(searchQuery.toLowerCase()) : "";
-            const brandIncludesQuery = (searchQuery) ? item?.brand.toLowerCase().includes(searchQuery.toLowerCase()) : "";
-            const typeIncludesQuery = (searchQuery) ? item?.type.toLowerCase().includes(searchQuery.toLowerCase()) : "";
-            const subtypeIncludesQuery = (searchQuery) ? item?.subType.toLowerCase().includes(searchQuery.toLowerCase()) : "";
+            const nameIncludesQuery = item.product?.name?.toLowerCase()?.includes(searchQuery?.toLowerCase());
+            const brandIncludesQuery = item.product?.brand?.toLowerCase()?.includes(searchQuery?.toLowerCase());
+            const typeIncludesQuery = item.product?.type?.toLowerCase()?.includes(searchQuery?.toLowerCase());
+            const subtypeIncludesQuery = item.product?.subtype?.toLowerCase()?.includes(searchQuery?.toLowerCase());
+
             if (searchQuery === null || nameIncludesQuery || brandIncludesQuery || typeIncludesQuery || subtypeIncludesQuery) {
                 tempFilteredProducts.push(item);
-                brandsSet.add(item.brand);
+                if (item.product?.brand) {
+                    brandsSet.add(item.product.brand);
+                }
             }
         });
 
         setFilteredProducts(tempFilteredProducts);
         setBrands(brandsSet);
-    }, [searchQuery, allProducts]);
+    }, [searchQuery]);
 
     useEffect(() => {
         let filteredByBrand = allProducts;
 
         if (selectedFilter === "newArrival") {
             // Sort products by createdAt in ascending order (newest first)
-            filteredByBrand.sort((a, b) => new Date(b?.createdAt) - new Date(a?.createdAt));
+            filteredByBrand?.sort((a, b) => new Date(b?.createdAt) - new Date(a?.createdAt));
         } else if (selectedFilter === "bestSelling") {
             // Sort products by totalOrder in descending order (highest first)
-            filteredByBrand.sort((a, b) => b?.totalOrder - a?.totalOrder);
+            filteredByBrand?.sort((a, b) => b?.totalOrder - a?.totalOrder);
         } else if (selectedFilter === "priceLowToHigh") {
             // Sort products by price in ascending order (low to high)
-            filteredByBrand.sort((a, b) => a?.price - b?.price);
+            filteredByBrand?.sort((a, b) => a?.price - b?.price);
         } else if (selectedFilter === "priceHighToLow") {
             // Sort products by price in descending order (high to low)
-            filteredByBrand.sort((a, b) => b?.price - a?.price);
+            filteredByBrand?.sort((a, b) => b?.price - a?.price);
         }
 
         if (selectedBrands !== null) {
             filteredByBrand = filteredByBrand.filter((item) =>
-                selectedBrands.includes(item.brand)
+                selectedBrands?.includes(item.brand)
             );
         }
 
         if (selectedRGB !== null) {
-            filteredByBrand = filteredByBrand.filter((item) => {
+            filteredByBrand = filteredByBrand?.filter((item) => {
                 if (selectedRGB === "Yes") {
-                    return item.isRGB === true;
+                    return item?.isRGB === true;
                 } else if (selectedRGB === "No") {
-                    return item.isRGB === false;
+                    return item?.isRGB === false;
                 }
                 return true;
             });
         }
 
         if (selectedWireless !== null) {
-            filteredByBrand = filteredByBrand.filter((item) => {
+            filteredByBrand = filteredByBrand?.filter((item) => {
                 if (selectedWireless === "Yes") {
-                    return item.isWireless === true;
+                    return item?.isWireless === true;
                 } else if (selectedWireless === "No") {
-                    return item.isWireless === false;
+                    return item?.isWireless === false;
                 }
                 return true;
             });
@@ -149,6 +153,12 @@ const Product = () => {
         }
     };
 
+
+    if (!allProducts) {
+        return <div className='w-full h-screen flex justify-center items-center'>
+            <ThreeDots type="Circles" color="#841724" height={100} width={100} />
+        </div>;
+    }
     return (
 
         <div className="flex">
