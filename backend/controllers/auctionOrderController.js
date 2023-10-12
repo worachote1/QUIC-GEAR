@@ -5,7 +5,7 @@ const order = require('../models/auctionOrderModel');
 const getAllAuctionOrder = asyncHandler(async (req, res) => {
     const orders = await order.find().populate('auctionID');
     res.status(200).json(orders);
-});
+}); 
 
 // Get single order => GET api/orders/:id
 //Test
@@ -70,5 +70,5 @@ const updateAuctionOrder = asyncHandler(async (req, res) => {
     })
     res.status(200).json(orders)
 });
-
+   
 module.exports = { getAllAuctionOrder, getSingleAuctionOrder, createAuctionOrder, deleteAuctionOrder, updateAuctionOrder };

@@ -83,7 +83,7 @@ const MyOrder = () => {
 
 
     return (
-        <div className="container mx-auto p-4 max-w-[1000px]">
+        <div className="container mx-auto p-4 max-w-[1000px]"> 
             <div className="bg-white p-6 shadow-lg rounded-lg">
                 <div className="flex flex-col md:flex-row justify-between items-center mb-4">
                     <h1 className="text-2xl font-semibold">รายละเอียดคำสั่งซื้อ</h1>
@@ -145,5 +145,5 @@ const MyOrder = () => {
         </div>
     );
 };
-
+   
 export default MyOrder;

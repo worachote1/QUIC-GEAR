@@ -7,5 +7,5 @@ router.route('/:id').get(getSingleOrder);
 router.route('/create').post(createOrder);
 router.route('/delete/:id').delete(deleteOrder);
 router.route('/update/:id').put(updateOrder);
-
-module.exports = router;
+   
+module.exports = router; 
