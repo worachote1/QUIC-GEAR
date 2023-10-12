@@ -17,4 +17,4 @@ router.route('/update/:id').put(updateUser);
 router.route('/login').post(loginUser);
 router.route('/register').post(registerUser);
 
-module.exports = router; 
+module.exports = router;
