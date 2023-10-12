@@ -69,5 +69,5 @@ const updateProduct = asyncHandler(async (req, res) => {
     })
     res.status(200).json(products)
 });
-
+   
 module.exports = { getAllProduct, createProduct, deleteProduct, getSingleProduct, updateProduct };

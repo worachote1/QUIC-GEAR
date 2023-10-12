@@ -122,5 +122,5 @@ const loginUser = asyncHandler(async (req, res) => {
 
     res.status(200).json(userFound);
 });
-
+   
 module.exports = { getAllUser, getUserData,createUser, deleteUser, updateUser, loginUser, registerUser};

@@ -70,5 +70,5 @@ const updateOrder = asyncHandler(async (req, res) => {
     })
     res.status(200).json(orders)
 });
-
+   
 module.exports = { getAllOrder, getSingleOrder, createOrder, deleteOrder, updateOrder };
