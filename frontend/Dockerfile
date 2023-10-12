@@ -10,7 +10,7 @@ COPY . /opt/quicgear
 # Run Vite production build
 WORKDIR /opt/quicgear
 RUN yarn
-CMD yarn run dev
+CMD yarn start
 
 # Copy files to nginx path
 #RUN cp -r build/* /usr/share/nginx/html
