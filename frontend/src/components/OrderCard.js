@@ -18,7 +18,6 @@ export default function OrderCard({ order }) {
         return 'Unknown';
   }
 };
-     
 
 return (
   <div className="pt-4 shadow-lg border rounded-lg">
