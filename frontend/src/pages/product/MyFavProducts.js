@@ -71,7 +71,7 @@ const MyFavProducts = () => {
             <div className='flex flex-col flex-1 overflow-x-hidden'>
                 <div className="md:flex justify-center items-center mt-8">
                     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-2">
-                        {productsToDisplay.map((item) => (
+                        {productsToDisplay.slice().reverse().map((item) => (
                             <MyFavProductsCard key={item._id} product={item} />
                         ))}
                     </div>

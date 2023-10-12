@@ -41,6 +41,10 @@ export default function Mobilebar() {
         getSingleUser()
     }, [])
 
+    if (currentPath==='/cart') {
+        return null;
+    }
+
     return (
         <div>
             <div>

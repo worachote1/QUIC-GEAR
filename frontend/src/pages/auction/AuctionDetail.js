@@ -4,13 +4,14 @@ import { ImClock } from 'react-icons/im';
 import { BsFillPeopleFill } from 'react-icons/bs';
 import { AiOutlineDollarCircle } from 'react-icons/ai';
 import { calculateTimeRemaining } from '../../util/auctionModule/countdown';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import {ThreeDots} from 'react-loader-spinner';
 import axios from "axios";
 import { formatNumberInput } from "../../util/formatUtil";
 
 const AuctionDetail = () => {
 
+    const navigate = useNavigate();
     const { id } = useParams();
     const [timeRemaining, setTimeRemaining] = useState(null);
     const [singleAuctionData, setSingleAuctionData] = useState(null);
@@ -74,11 +75,17 @@ const AuctionDetail = () => {
     }
     
     const hanleUserBid = () => {
-    
+        if (!sessionStorage.getItem("current_user")){
+            navigate('/login')
+            return ;
+          }
     }
 
     const handleUserBuyOut = () => {
-        
+        if (!sessionStorage.getItem("current_user")){
+            navigate('/login')
+            return ;
+          }
     } 
 
     useEffect(() => {
@@ -168,10 +175,14 @@ const AuctionDetail = () => {
                             </div>
                         </div>
                         <div class='flex flex-col lg:flex-row box-border gap-x-3 py-3 justify-start items-center w-4/6 lg:w-3/6 h-full '>
-                            <button class='flex  rounded-full w-full lg:w-48 h-11 bg-[#F1F1F1] hover:bg-[#DEDEDE] justify-center items-center text-md font-Prompt lg:mb-0 mb-4'>
+                            <button class='flex  rounded-full w-full lg:w-48 h-11 bg-[#F1F1F1] hover:bg-[#DEDEDE] justify-center items-center text-md font-Prompt lg:mb-0 mb-4'
+                                onClick={() => hanleUserBid()}
+                            >
                                 ประมูลขั้นต่ำ <span> <AiOutlineDollarCircle class='text-xl ml-1' /> </span> {formatNumberInput(singleAuctionData?.startPrice)}
                             </button>
-                            <button class='flex rounded-full w-full lg:w-48 h-11 bg-[#A51D2D] hover:bg-[#841724] justify-center items-center text-white font-Prompt'>
+                            <button class='flex rounded-full w-full lg:w-48 h-11 bg-[#A51D2D] hover:bg-[#841724] justify-center items-center text-white font-Prompt'
+                                onClick={() => handleUserBuyOut()}
+                            >
                                 ซื้อทันที <span> <AiOutlineDollarCircle class='text-xl ml-1' /> </span> {formatNumberInput(singleAuctionData?.buyOutPrice)}
                             </button>
                         </div>

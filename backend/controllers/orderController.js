@@ -3,7 +3,7 @@ const order = require('../models/orderModel');
 
 // Get all orders => GET api/orders
 const getAllOrder = asyncHandler(async (req, res) => {
-    const orders = await order.find();
+    const orders = await order.find().populate('orderItems.productID').populate('userID');
     res.status(200).json(orders);
 });
 
@@ -13,7 +13,7 @@ const getSingleOrder = asyncHandler(async (req, res) => {
     try {
         const orderId = req.params.id;
 
-        const targetOrder = await order.findById(orderId);
+        const targetOrder = await order.findById(orderId).populate('orderItems.productID').populate('userID');
 
         if(!targetOrder) {
             return res.status(404).send('Order ID not found!');
