@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import OrderProduct from '../components/OrderProduct';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { testOrderData } from "../constant/testDataForAdmin";
 import { ThreeDots } from 'react-loader-spinner';
 import axios from 'axios';
 import { formatNumberInput } from '../util/formatUtil';
-import { AiOutlineDollarCircle } from 'react-icons/ai'
+import { AiOutlineDollarCircle } from 'react-icons/ai';
+import Swal from 'sweetalert2';
+import '../index.css';
 
 const MyOrder = () => {
     const { id } = useParams();
+    const navigate = useNavigate();
     const [orders, setOrders] = useState(null);
     const statusOrder = ['order received', 'dispatched', 'completed'];
 
@@ -39,22 +42,45 @@ const MyOrder = () => {
         }
     };
 
-    
+
     const getSingleOrder = async () => {
         const singleOrder = await axios.get(`${process.env.REACT_APP_QUIC_GEAR_API}/orders/${id}`)
-        console.log({...singleOrder.data})
-        setOrders({...singleOrder.data})
+        console.log({ ...singleOrder.data })
+        setOrders({ ...singleOrder.data })
     }
 
     useEffect(() => {
         getSingleOrder()
-    },[])
+    }, [])
 
     if (!orders) {
         return <div className='w-full h-screen flex justify-center items-center'>
             <ThreeDots type="Circles" color="#841724" height={100} width={100} />
         </div>;
     }
+
+    const currentStatus = orders?.orderStatus;
+
+    const openRatingDialog = () => {
+        Swal.fire({
+            title: "ยืนยันการได้รับสินค้า",
+            text: `คุณได้รับสินค้าแล้วหรือไม่?`,
+            icon: "question",
+            showCancelButton: true,
+            confirmButtonColor: "#ebebeb",
+            cancelButtonColor: "#a51d2d",
+            confirmButtonText: "<span class='text-black'>ยืนยัน</span>",
+            cancelButtonText: "ยกเลิก",
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                await axios.put(`${process.env.REACT_APP_QUIC_GEAR_API}/orders/update/${id}`, {
+                    orderStatus: "completed"
+                })
+                navigate('/myorder')
+            }
+        })
+    };
+
 
     return (
         <div className="container mx-auto p-4 max-w-[1000px]">
@@ -105,6 +131,16 @@ const MyOrder = () => {
                         <AiOutlineDollarCircle class=' text-2xl' />
                         {formatNumberInput(orders?.totalPrice)}</p>
                 </div>
+
+                {currentStatus === 'dispatched' && (
+                    <div
+                        className="border border-red-500 bg-white text-red-500 text-sm md:text-lg font-bold px-4 py-2 rounded-md hover:bg-red-500 hover:text-white transition duration-300"
+                        onClick={openRatingDialog}
+                    >
+                        ยืนยันการได้รับสินค้า
+                    </div>
+                )}
+
             </div>
         </div>
     );

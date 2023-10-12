@@ -159,7 +159,7 @@ export default function Mobilebar() {
                                 >
                                     <div className="w-10 h-10 rounded-full bg-gray-300 overflow-hidden">
                                         <img
-                                            src={`uploads/${current_user ? current_user?.imgPath : "default-avatar-1.jpg"}`}
+                                            src={`/uploads/${current_user ? current_user?.imgPath : "default-avatar-1.jpg"}`}
                                             alt="Profile"
                                             className="w-full h-full object-cover"
                                         />
