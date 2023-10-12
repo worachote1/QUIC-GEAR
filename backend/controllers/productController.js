@@ -33,7 +33,7 @@ const createProduct = asyncHandler(async (req, res) => {
     } catch(err) {
         console.log(err);
     }
-});
+}); 
 
 // Delete product => DELETE api/products/delete/:id
 const deleteProduct = asyncHandler(async (req, res) => {

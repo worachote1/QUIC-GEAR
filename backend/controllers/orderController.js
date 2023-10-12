@@ -24,7 +24,7 @@ const getSingleOrder = asyncHandler(async (req, res) => {
     } catch(err) {
         console.log(err);
     }
-});
+}); 
 
 // Create new order => POST api/orders/create
 const createOrder = asyncHandler(async (req, res) => {

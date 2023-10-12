@@ -8,4 +8,4 @@ router.route('/create').post(createAuctionOrder);
 router.route('/delete/:id').delete(deleteAuctionOrder);
 router.route('/update/:id').put(updateAuctionOrder);
 
-module.exports = router;
+module.exports = router; 

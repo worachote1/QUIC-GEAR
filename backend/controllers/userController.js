@@ -17,7 +17,7 @@ const getUserData = asyncHandler(async (req, res) => {
 
         if(!findbyUserId) {
             return res.status(404).send('User not found!');
-        }
+        } 
 
         res.status(200).json(findbyUserId);
 

@@ -12,4 +12,4 @@ const auctionOrderSchema = new mongoose.Schema({
     },
 })
 
-module.exports = mongoose.model('auctionOrder', auctionOrderSchema);
+module.exports = mongoose.model('auctionOrder', auctionOrderSchema); 
