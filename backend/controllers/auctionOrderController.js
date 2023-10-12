@@ -70,5 +70,4 @@ const updateAuctionOrder = asyncHandler(async (req, res) => {
     })
     res.status(200).json(orders)
 });
-//
 module.exports = { getAllAuctionOrder, getSingleAuctionOrder, createAuctionOrder, deleteAuctionOrder, updateAuctionOrder };
