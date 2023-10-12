@@ -16,3 +16,13 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.fa-star {
+  font-size: 1.5rem;
+  color: #d1d1d1;
+  cursor: pointer;
+}
+
+.fa-star.checked {
+  color: #ffcf2e;
+}

@@ -11,9 +11,9 @@ export default function OrderCard({ order }) {
       case 'completed':
         return 'สำเร็จ';
       case 'dispatched':
-        return 'อยู่ระหว่างจัดส่ง'
+        return 'อยู่ระหว่างการจัดส่ง'
       case 'order received':
-        return 'ได้รับสินค้าแล้ว';
+        return 'ได้รับคำสั่งซื้อ';
       default:
         return 'Unknown';
   }
