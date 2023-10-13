@@ -72,6 +72,7 @@ const Auction = () => {
   }
 
   useEffect(() => {
+    window.scroll(0,0)
     getAuctionsData()
   },[])
   
