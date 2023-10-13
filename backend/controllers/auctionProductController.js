@@ -5,7 +5,7 @@ const auctionProduct = require('../models/auctionProductsModel');
 //@route GET /api/auctionProducts
 
 const getAllAuctionProducts = asyncHandler(async (req, res) => {
-    const auctionProducts = await auctionProduct.find().populate('user_seller').populate('userBidder').populate('userWinner');
+    const auctionProducts = await auctionProduct.find().populate('user_seller').populate('userBidder.userId').populate('userWinner.userId');
     res.status(200).json(auctionProducts);
 });
 
@@ -15,15 +15,15 @@ const getSingleAuctionProduct = asyncHandler(async (req, res) => {
     try {
         const auctionProductId = req.params.id;
 
-        const targetAuctionProduct = await auctionProduct.findById(auctionProductId).populate('user_seller').populate('userBidder').populate('userWinner');
+        const targetAuctionProduct = await auctionProduct.findById(auctionProductId).populate('user_seller').populate('userBidder.userId').populate('userWinner.userId');
 
-        if(!targetAuctionProduct) {
+        if (!targetAuctionProduct) {
             return res.status(404).send('Auction ID not found!');
         }
 
         res.status(200).json(targetAuctionProduct);
 
-    } catch(err) {
+    } catch (err) {
         console.log(err);
     }
 });
@@ -87,7 +87,12 @@ const updateAuctionProducts = asyncHandler(async (req, res) => {
             res.status(404).send(`Product ID not found!`);
         }
 
-        res.status(200).json(updateProductID);
+        const populatedProduct = await auctionProduct.findById(updateProductID._id)
+            .populate('user_seller')
+            .populate('userBidder.userId')
+            .populate('userWinner.userId');
+
+        res.status(200).json(populatedProduct);
 
     } catch (err) {
         console.log(err);
