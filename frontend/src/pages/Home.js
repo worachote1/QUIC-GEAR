@@ -12,20 +12,19 @@ import ProductCard from '../components/ProductCard';
 export default function Home() {
   const slides = [
     {
-      url: 'https://www.gump.in.th/uploaded_files/images/Logitech/G%20Pro%20Wrieless%20-%2001.jpg',
+      url: 'https://cdn.discordapp.com/attachments/1162425165095907410/1162431393712832562/DEV-banner-gaming01.jpg?ex=653be999&is=65297499&hm=29bb57bf0ebd00523f8f31c48c4447ca2971bd2985e9fa368a36419cfeaced15&',
     },
     {
-      url: 'https://mercular.s3.ap-southeast-1.amazonaws.com/images/products/2021/09/Product/Glorious%20GMMK%20Pro%20Barebones%20ANSI%20Layout%203.jpg',
+      url: 'https://cdn.discordapp.com/attachments/1162425165095907410/1162431394098712709/DEV-banner-gaming02.jpg?ex=653be999&is=65297499&hm=bc6c13064dbdc89c0b76d66b8c2f99849e223cc51caf0fb476c260d61a232cd4&',
     },
     {
       url: 'https://media.flixfacts.com/inpage/logitech/g-pro/g-pro-x/banner.jpg',
     },
-
     {
-      url: 'https://images.unsplash.com/photo-1512756290469-ec264b7fbf87?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2253&q=80',
+      url: 'https://media.discordapp.net/attachments/1162425165095907410/1162433528710054029/DEV-banner-gaming06.jpg?ex=653beb96&is=65297696&hm=a26ed3dc0833269f623cacbe5d79dd8fbca98ede4459a458ba446dfd22d555bb&=&width=1440&height=555',
     },
     {
-      url: 'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2671&q=80',
+      url: 'https://cdn.discordapp.com/attachments/1162425165095907410/1162434804885766305/DEV-banner-gaming07.jpg?ex=653becc6&is=652977c6&hm=4238ab7e71065aca2b06674162e0d68488e26eac8665512d248e214d34df6b98&',
     },
   ];
 
