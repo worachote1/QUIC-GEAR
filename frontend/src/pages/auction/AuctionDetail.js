@@ -136,7 +136,9 @@ const AuctionDetail = () => {
     // -> refund to other userBidder (except the userWinner)
     // -> update user_seller's coins (unless there is no userBidder)
     const handleAuctionEndByBidder = () => {
-
+       
+       
+        // alertAuctionEnd(xxx.userWinner)
     }
 
     const handleUserBid = async () => {
@@ -286,15 +288,9 @@ const AuctionDetail = () => {
                         });
                     }));
                 
-                    console.log("currentUserBidAmount -> " + currentUserBidAmount);
                     const subTractWinnerCoins = await axios.put(`${process.env.REACT_APP_QUIC_GEAR_API}/users/update/${current_user._id}`, {
                         coins: (current_user.coins + currentUserBidAmount) - res_getLastedSingleAuctionData.buyOutPrice
                     });
-                
-                    console.log("i set coins to -> ");
-                    console.log((current_user.coins + currentUserBidAmount) - res_getLastedSingleAuctionData.buyOutPrice);
-                    console.log("Expected userWinner coins -> ");
-                    console.log(subTractWinnerCoins.data);
                 
                     //update auction
                     const updateSingleAuction = await axios.put(`${process.env.REACT_APP_QUIC_GEAR_API}/auctionProducts/update/${id}`, {
@@ -309,7 +305,7 @@ const AuctionDetail = () => {
                     const res_updateSingleAuction = updateSingleAuction.data;
                     setSingleAuctionData({ ...res_updateSingleAuction });
                     alertAuctionEnd(res_updateSingleAuction.userWinner);
-                    
+
                     // window.location.reload()
                     sessionStorage.setItem('current_user', JSON.stringify(res_updateSingleAuction.userWinner.userId));
                 
@@ -333,7 +329,6 @@ const AuctionDetail = () => {
 
                 if (remaining.total <= 0) {
                     handleAuctionEndByBidder();
-                    alertAuctionEnd(singleAuctionData?.userWinner)
                     clearInterval(timer);
                 }
             }, 1000);

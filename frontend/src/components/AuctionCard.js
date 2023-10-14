@@ -5,7 +5,7 @@ import { formatNumberInput } from '../util/formatUtil'
 import { calculateTimeRemaining } from '../util/auctionModule/countdown';
 import { displayCountDownDate } from '../util/auctionModule/displayCountDownDate';
 
-export default function AuctionCard({ AuctionItem }) {
+export default function AuctionCard({ AuctionItem,callbackUpdate }) {
 
   const [timeRemaining, setTimeRemaining] = useState(calculateTimeRemaining(AuctionItem.end_auction_date));
 
@@ -16,6 +16,7 @@ export default function AuctionCard({ AuctionItem }) {
 
       if (remaining.total <= 0) {
         clearInterval(timer);
+        callbackUpdate(AuctionItem._id)
       }
     }, 1000);
 
