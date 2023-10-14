@@ -255,55 +255,67 @@ const AuctionDetail = () => {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    // get lasted auctionData 
-                    //to check if there is user buyout before (already have userWinner)
-                    // subtract winner'coins and set new current_user session with updated coin
-                    // refund the other userBidder (include userWinner if participate as userBidder)
-                    // update user_seller's coins
-                    // update auctionStatus to "completed" 
-
                     // get lasted auctionData -> set to singleAuctionData 
                     const getLastedSingleAuctionData = await axios.get(`${process.env.REACT_APP_QUIC_GEAR_API}/auctionProducts/${id}`);
                     const res_getLastedSingleAuctionData = getLastedSingleAuctionData.data;
+                
                     if (res_getLastedSingleAuctionData.userWinner) {
-                        alertAuctionEnd(res_getLastedSingleAuctionData.userWinner);
                         const findCurrentUserBidder = res_getLastedSingleAuctionData.userBidder.find(user => user.userId._id === current_user._id);
-                        sessionStorage.setItem('current_user', JSON.stringify(findCurrentUserBidder.userId));
+                        if (findCurrentUserBidder)
+                            sessionStorage.setItem('current_user', JSON.stringify(findCurrentUserBidder.userId));
+                        alertAuctionEnd(res_getLastedSingleAuctionData.userWinner);
                         return;
                     }
-                    //update winner coin (subtract with buyOutPrice) 
-                    const subTractWinnerCoins = await axios.put(`${process.env.REACT_APP_QUIC_GEAR_API}/users/update/${current_user._id}`, {
-                        coins: current_user.coins - singleAuctionData.buyOutPrice
-                    })
-                    sessionStorage.setItem('current_user', JSON.stringify(subTractWinnerCoins.data))
-                    //refund other userBidder (include userWinner if participate as userBidder)
-                    singleAuctionData.userBidder.map(async (item) => {
-                        const refundUserBidder = await axios.put(`${process.env.REACT_APP_QUIC_GEAR_API}/users/update/${item.userId._id}`, {
-                            coins: item.bidAmount + item.userId.coins
-                        })
-                    });
+                
                     // update coins to user_seller
-                    const increaseUserSellerCoins = await axios.put(`${process.env.REACT_APP_QUIC_GEAR_API}/users/update/${singleAuctionData.user_seller._id}`, {
-                        coins: singleAuctionData.user_seller.coins + singleAuctionData.buyOutPrice
-                    })
+                    const increaseUserSellerCoins = await axios.put(`${process.env.REACT_APP_QUIC_GEAR_API}/users/update/${res_getLastedSingleAuctionData.user_seller._id}`, {
+                        coins: res_getLastedSingleAuctionData.user_seller.coins + res_getLastedSingleAuctionData.buyOutPrice
+                    });
+                
+                    // refund other userBidder (include userWinner if participate as userBidder) + subtract winner coin (subtract with buyOutPrice) 
+                    let currentUserBidAmount = 0;
+                
+                    // Use Promise.all to wait for all asynchronous operations inside the map function
+                    await Promise.all(res_getLastedSingleAuctionData.userBidder.map(async (item) => {
+                        if (item.userId._id === current_user._id) {
+                            currentUserBidAmount = item.bidAmount;
+                        }
+                
+                        await axios.put(`${process.env.REACT_APP_QUIC_GEAR_API}/users/update/${item.userId._id}`, {
+                            coins: item.bidAmount + item.userId.coins
+                        });
+                    }));
+                
+                    console.log("currentUserBidAmount -> " + currentUserBidAmount);
+                    const subTractWinnerCoins = await axios.put(`${process.env.REACT_APP_QUIC_GEAR_API}/users/update/${current_user._id}`, {
+                        coins: (current_user.coins + currentUserBidAmount) - res_getLastedSingleAuctionData.buyOutPrice
+                    });
+                
+                    console.log("i set coins to -> ");
+                    console.log((current_user.coins + currentUserBidAmount) - res_getLastedSingleAuctionData.buyOutPrice);
+                    console.log("Expected userWinner coins -> ");
+                    console.log(subTractWinnerCoins.data);
+                
                     //update auction
                     const updateSingleAuction = await axios.put(`${process.env.REACT_APP_QUIC_GEAR_API}/auctionProducts/update/${id}`, {
                         auctionStatus: "completed",
                         userWinner: {
                             userId: current_user._id,
-                            bidAmount: singleAuctionData.buyOutPrice
+                            bidAmount: res_getLastedSingleAuctionData.buyOutPrice
                         },
-                        startPrice: singleAuctionData.buyOutPrice
-                    })
+                        startPrice: res_getLastedSingleAuctionData.buyOutPrice
+                    });
+                
                     const res_updateSingleAuction = updateSingleAuction.data;
                     setSingleAuctionData({ ...res_updateSingleAuction });
                     alertAuctionEnd(res_updateSingleAuction.userWinner);
-
-                    //create auctionOrder later...
-
-                }
-                catch (err) {
-                    console.log(err)
+                    
+                    // window.location.reload()
+                    sessionStorage.setItem('current_user', JSON.stringify(res_updateSingleAuction.userWinner.userId));
+                
+                    // create auctionOrder later...
+                } catch (err) {
+                    console.log(err);
                 }
             }
         })
