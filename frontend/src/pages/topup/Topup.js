@@ -36,16 +36,16 @@ export default function Topup() {
     if (err_status === "invalid_amount")
       Swal.fire({
         icon: 'error',
-        title: 'Invalid top-up amount',
-        text: 'Please make sure to top up at least 100 baht.',
+        title: 'ยอดเติมเงินไม่ถูกต้อง',
+        text: 'กรุณาเติมเงินอย่างน้อย 100 บาท',
       })
 
     //Topup invalid : empty file input
     else if (err_status === "invalid_file_empty") {
       Swal.fire({
         icon: 'error',
-        title: 'File empty',
-        text: 'Please select a file',
+        title: 'ไฟล์ว่างเปล่า',
+        text: 'กรุณาเลือกไฟล์',
       })
     }
 
@@ -53,8 +53,8 @@ export default function Topup() {
     else if (err_status === "invalid_file_extension") {
       Swal.fire({
         icon: 'error',
-        title: 'Invalid file extension',
-        text: 'Please select a file with the allowed extensions: ' + validExtensions.join(', ')
+        title: 'นามสกุลไฟล์ไม่ถูกต้อง',
+        text: 'กรุณาเลือกไฟล์ที่มีนามสกุลที่อนุญาต: ' + validExtensions.join(', ')
       })
     }
   }
