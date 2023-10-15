@@ -173,7 +173,8 @@ const AuctionDetail = () => {
         }
 
         // check if this function handleAuctionEndByBidder() not invoked by the user with most bidAmount(the one that will be userWinner)
-        if (tempMostBidder.userId?._id === current_user._id) {
+        if (tempMostBidder.userId?._id !== current_user._id && res_getLastedSingleAuctionData.userBidder.length > 1) {
+            alertAuctionEnd(tempMostBidder)
             return ;
         }
         // update coins to user_seller
