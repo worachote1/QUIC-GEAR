@@ -14,6 +14,7 @@ app.use("/api/auctionProducts", require('./routes/auctionProductsRoutes'));
 app.use("/api/transactions", require('./routes/transactionsRoutes'));
 app.use("/api/topup", require('./routes/topupRoutes'));
 app.use("/api/upload", require('./routes/uploadRoutes'));
+app.use("/api/auctionOrder", require('./routes/auctionOrderRoutes'));
 
 connectDb();
 

@@ -45,7 +45,7 @@ export default function Admin() {
       case "Create Products":
         setSelectedTasktCompoent(<CreateProducts />);
         break;
-    } 
+    }
   }
 
   useEffect(() => {
@@ -55,13 +55,15 @@ export default function Admin() {
   return (
     <div className="min-h-screen max-w-[1640px] mx-auto mt-5 overflow-hidden" >
       <div className="flex flex-col justify-center">
-        <div className="dropdown">
-          <label tabIndex={0} className={`btn m-1 text-white ${taskBGColor[selectedTask]}`}> {selectedTask} <span className='ml-1'> {<AiFillCaretDown size={20} />} </span></label>
-          <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
-            {adminTaskType.map((item, Idx) => {
-              return <li key={Idx}> <button onClick={() => handleClickSelectTask(item)}>{item}</button></li>
-            })}
-          </ul>
+        <div className='flex justify-start'>
+          <div className="dropdown">
+            <label tabIndex={0} className={`btn m-1 text-white ${taskBGColor[selectedTask]}`}> {selectedTask} <span className='ml-1'> {<AiFillCaretDown size={20} />} </span></label>
+            <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
+              {adminTaskType.map((item, Idx) => {
+                return <li key={Idx}> <button onClick={() => handleClickSelectTask(item)}>{item}</button></li>
+              })}
+            </ul>
+          </div>
         </div>
         {selectedTasktCompoent}
       </div>

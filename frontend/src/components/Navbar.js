@@ -1,17 +1,44 @@
 import React, { useEffect, useState } from "react";
 import { Route, Link, useNavigate } from 'react-router-dom';
+import { formatNumberInput } from "../util/formatUtil";
+import { useCart } from "./CartContext";
+import axios from "axios";
 
 export default function Navbar() {
-    const [userRole, setUserRole] = useState("admin"); {/*guest,user,admin*/ }
+
+    const current_user = JSON.parse(sessionStorage.getItem('current_user'))
+    const [updateUser, setUpdateUser] = useState(current_user)
     const [profileMenuActive, setProfileMenuActive] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
     const navigate = useNavigate();
-
+    const { cart } = useCart();
+    
     const clickProfileDropdown = () => {
         setProfileMenuActive(!profileMenuActive);
     };
 
+    const logOut = () => {
+        clickProfileDropdown();
+        sessionStorage.clear() ;
+        setUpdateUser(null);
+        navigate('/');
+    }
+
+    const getSingleUser = async () => {
+        if (!current_user){
+            return ;
+        }
+        const res_getUserData = await axios.get(`${process.env.REACT_APP_QUIC_GEAR_API}/users/${current_user._id}`);
+        setUpdateUser({ ...res_getUserData.data });
+        sessionStorage.setItem('current_user', JSON.stringify(res_getUserData.data))
+    }
+
+    useEffect(() => {
+        getSingleUser()
+    }, [])
+
     return (
+
         <div className="sticky top-0 z-40 bg-white">
             <nav className="flex flex-col md:flex-row items-center p-4 border-b-2 border-[#dbdbdb] shadow-md">
                 <div className="w-full md:w-1/2 text-center md:text-left">
@@ -58,14 +85,15 @@ export default function Navbar() {
                         </Link>
                         <Link to="/cart" className="btn border-white text-black rounded-full hover:bg-[#d8d8d8] mr-2" id="cart_btn">
                             <i className="fas fa-cart-shopping" style={{ fontSize: '1.25rem' }}></i>
+                            {/* {cart.length !== 0 ? <div className="badge badge-secondary" style={{ backgroundColor: '#a51d2d', color: 'white' }}>{cart.length}</div> : ""} */}
                         </Link>
-                        {userRole === "admin" && (
+                        {current_user?.role === "admin" && (
                             <Link to="/admin" className="btn border-white text-black rounded-full hover:bg-[#d8d8d8] mr-2">
                                 <i className="fa-solid fa-screwdriver-wrench " style={{ fontSize: '1.25rem' }}></i>
                             </Link>
                         )}
-                        {userRole === "user" || userRole === "admin" ? (
-                            <div className="relative group">
+                        {current_user ? (
+                            <div className="relative ">
                                 <div
                                     className="flex items-center cursor-pointer relative"
                                     onMouseEnter={() => setProfileMenuActive(true)}
@@ -74,11 +102,11 @@ export default function Navbar() {
                                     <Link to="/edit-profile" className="w-10 h-10 rounded-full bg-gray-300 overflow-hidden">
                                         <img
                                             // https://www.gzone-conan.com/wp-content/uploads/2019/05/25262960-6716-11e9-b3c5-246e963a41ed_03.jpg   
-                                            src="https://media.istockphoto.com/id/1298261537/th/%E0%B9%80%E0%B8%A7%E0%B8%84%E0%B9%80%E0%B8%95%E0%B8%AD%E0%B8%A3%E0%B9%8C/%E0%B8%95%E0%B8%B1%E0%B8%A7%E0%B8%A2%E0%B8%B6%E0%B8%94%E0%B9%84%E0%B8%AD%E0%B8%84%E0%B8%AD%E0%B8%99%E0%B8%AB%E0%B8%B1%E0%B8%A7%E0%B9%82%E0%B8%9B%E0%B8%A3%E0%B9%84%E0%B8%9F%E0%B8%A5%E0%B9%8C%E0%B8%8A%E0%B8%B2%E0%B8%A2%E0%B8%A7%E0%B9%88%E0%B8%B2%E0%B8%87%E0%B9%80%E0%B8%9B%E0%B8%A5%E0%B9%88%E0%B8%B2.jpg?s=612x612&w=0&k=20&c=YlnFFQuxqyOE9gfuj7eKaHl0bjRpn22p2PPlc91YA48="
+                                            src={`/uploads/${current_user ? current_user?.imgPath : "default-avatar-1.jpg"}`}
                                             alt="Profile"
                                             className="w-full h-full object-cover"
                                         />
-                               
+
                                     </Link>
 
                                 </div>
@@ -89,35 +117,42 @@ export default function Navbar() {
                                         onMouseLeave={() => setProfileMenuActive(false)}
                                     >
                                         <div className="py-2">
-                                            <div className="p-3 flex items-center justify-between">
+                                            {/* <div className="p-3 flex items-center justify-between">
                                                 <div className="text-left">
-                                                    <p className="text-m font-medium truncate overflow-hidden w-44">Username</p>
+                                                    <p className="text-m font-medium truncate overflow-hidden w-44">{current_user.username}</p>
                                                 </div>
-
+                                
                                                 <span className="text-s font-medium bg-red-100 text-[#a51d2d] px-2 py-1 rounded-full">
-                                                    {userRole}
+                                                    {current_user?.role}
                                                 </span>
 
-                                            </div>
-                                            <div className="p-3 border-b flex items-center justify-between text-left">
-                                                <p className="text-m text-gray-700 font-medium">QuicCoins <i className="fas fa-coins mr-1 text-l"></i></p>
-                                                <p className="text-m text-gray-700 font-medium truncate overflow-hidden">Coins Value</p>
-                                            </div>
+                                            </div> */}
+                                            {
+                                                current_user ?
+                                                    <div className="p-3 border-b flex items-center justify-between text-left">
+                                                        <p className="text-m text-gray-700 font-medium">QuicCoins <i className="fas fa-coins mr-1 text-l"></i></p>
+                                                        <p className="text-m text-gray-700 font-medium truncate overflow-hidden">{formatNumberInput(current_user?.coins)}</p>
+                                                    </div>
+                                                    : ""
+                                            }
                                             <Link to="/edit-profile" className="block p-3 text-sm font-medium text-gray-600 hover:bg-gray-100 text-left">
                                                 บัญชีของฉัน
                                             </Link>
                                             <Link to="/topup" className="block p-3 text-sm font-medium text-gray-600 hover:bg-gray-100 text-left">
                                                 เติมเงิน
                                             </Link>
-                                            <Link to="/my-orders" className="block p-3 text-sm font-medium text-gray-600 hover:bg-gray-100 text-left">
+                                            <Link to="/myorder" className="block p-3 text-sm font-medium text-gray-600 hover:bg-gray-100 text-left">
                                                 การซื้อของฉัน
+                                            </Link>
+                                            <Link to="/myauction" className="block p-3 text-sm font-medium text-gray-600 hover:bg-gray-100 text-left">
+                                                การประมูลของฉัน
                                             </Link>
                                             <div className="text-center mt-2">
                                                 <button
                                                     className="p-2 text-sm text-white bg-[#e01b24] rounded-xl hover:bg-red-700  w-60"
-                                                    onClick={() => setUserRole("guest")}
+                                                    onClick={logOut}
                                                 >
-                                                    ลงชื่อออก
+                                                    ออกจากระบบ
                                                 </button>
                                             </div>
                                         </div>
@@ -126,9 +161,12 @@ export default function Navbar() {
                             </div>
 
                         ) : (
-                            <button className="btn bg-[#a51d2d] text-white hover:bg-red-600 hover:shadow-lg px-2 py-1 text-md lg:px-4 lg:py-2 lg:text-base" id="login_btn">
-                                ลงชื่อเข้าใช้
-                            </button>
+                            <Link to={'/login'}>
+                                <button className="btn bg-[#a51d2d] text-white hover:bg-red-600 hover:shadow-lg px-2 py-1 text-md lg:px-4 lg:py-2 lg:text-base" id="login_btn"
+                                >
+                                    เข้าสู่ระบบ
+                                </button>
+                            </Link>
                         )}
 
 
@@ -137,5 +175,7 @@ export default function Navbar() {
                 </div>
             </nav>
         </div>
+
+
     );
 }

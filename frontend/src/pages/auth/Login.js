@@ -71,17 +71,16 @@ export default function Login() {
 
   const handleLogIn = async (event) => {
     event.preventDefault();
-    if (!validateNamePassword())
-    {
+    if (!validateNamePassword()) {
       return;
     }
-    try{
-      const logInUser = await axios.post(`${process.env.REACT_APP_QUIC_GEAR_API}/users/login`, {...userData});
+    try {
+      const logInUser = await axios.post(`${process.env.REACT_APP_QUIC_GEAR_API}/users/login`, { ...userData });
       const res_LogInUser = logInUser.data;
-      sessionStorage.setItem('current_user',JSON.stringify(res_LogInUser));
+      sessionStorage.setItem('current_user', JSON.stringify(res_LogInUser));
       alertLogInSuccess();
     }
-    catch(err){
+    catch (err) {
       const res_err = err.response.data
       alertFormError(res_err.message)
     }
@@ -208,13 +207,13 @@ export default function Login() {
           </button>
         </div>
 
-        <div class="flex justify-center">
-          <button href="/register" className="text-sm items-center w-44 bg-[#00000014] text-black py-2 px-4 rounded-full hover:bg-[#00000029] ">
+        <Link to={'/register'} class="flex justify-center">
+          <button className="text-sm items-center w-44 bg-[#00000014] text-black py-2 px-4 rounded-full hover:bg-[#00000029] ">
             ฉันต้องการสมัครสมาชิก
           </button>
-        </div>
-        {/* </div> */}
+        </Link>
       </div>
+      {/* </div> */}
     </div>
   )
 }

@@ -1,8 +1,14 @@
-import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { SideBarCtegories } from "../constant/sideBarConstants";
+import { formatNumberInput } from "../util/formatUtil";
+import axios from "axios";
 
 export default function Mobilebar() {
+    
+    const navigate = useNavigate()
+    const current_user = JSON.parse(sessionStorage.getItem('current_user'))
+    const [updateUser, setUpdateUser] = useState(current_user)
     const currentPath = useLocation().pathname;
     const [open, setOpen] = useState(false);
     const [userRole, setUserRole] = useState("admin"); {/*guest,user,admin*/ }
@@ -15,6 +21,30 @@ export default function Mobilebar() {
     const clickProfileDropdown = () => {
         setProfileMenuActive(!profileMenuActive);
     };
+    const logOut = () => {
+        clickProfileDropdown()
+        sessionStorage.clear();
+        setUpdateUser(null);
+        navigate('/');
+    }
+
+    const getSingleUser = async () => {
+        if (!current_user){
+            return ;
+        }
+        const res_getUserData = await axios.get(`${process.env.REACT_APP_QUIC_GEAR_API}/users/${current_user._id}`);
+        setUpdateUser({ ...res_getUserData.data });
+        sessionStorage.setItem('current_user', JSON.stringify(res_getUserData.data))
+    }
+
+    useEffect(() => {
+        getSingleUser()
+    }, [])
+
+    if (currentPath==='/cart') {
+        return null;
+    }
+
     return (
         <div>
             <div>
@@ -116,12 +146,12 @@ export default function Mobilebar() {
                                 style={{ fontSize: "1.25rem" }}
                             ></i>
                         </Link>
-                        {userRole === "admin" && (
+                        {current_user?.role === "admin" && (
                             <Link to="/admin" className="btn text-red-600 mr-2  hover:bg-red-700/30 rounded-full" id="admin_btn">
                                 <i className="fa-solid fa-screwdriver-wrench " style={{ fontSize: "1.25rem" }}></i>
                             </Link>
                         )}
-                        {userRole === "user" || userRole === "admin" ? (
+                        {current_user ? (
                             <div className="relative group">
                                 <div
                                     className="flex items-center cursor-pointer relative"
@@ -129,7 +159,7 @@ export default function Mobilebar() {
                                 >
                                     <div className="w-10 h-10 rounded-full bg-gray-300 overflow-hidden">
                                         <img
-                                            src="https://www.gzone-conan.com/wp-content/uploads/2019/05/25262960-6716-11e9-b3c5-246e963a41ed_03.jpg"
+                                            src={`/uploads/${current_user ? current_user?.imgPath : "default-avatar-1.jpg"}`}
                                             alt="Profile"
                                             className="w-full h-full object-cover"
                                         />
@@ -141,7 +171,7 @@ export default function Mobilebar() {
                                         className="absolute right-0 bottom-16 w-64 bg-white rounded-md shadow-lg"
                                     >
                                         <div className="py-2">
-                                            <div className="p-3 flex items-center justify-between">
+                                            {/* <div className="p-3 flex items-center justify-between">
                                                 <div className="text-left">
                                                     <p className="text-m text-gray-700 font-medium truncate overflow-hidden w-44">Username</p>
                                                 </div>
@@ -150,27 +180,30 @@ export default function Mobilebar() {
                                                     {userRole}
                                                 </span>
 
-                                            </div>
+                                            </div> */}
                                             <div className="p-3 border-b flex items-center justify-between text-left">
                                                 <p className="text-m text-gray-700 font-medium">QuicCoins <i className="fas fa-coins mr-1 text-l"></i></p>
-                                                <p className="text-m text-gray-700 font-medium truncate overflow-hidden">Coins Value</p>
+                                                <p className="text-m text-gray-700 font-medium truncate overflow-hidden">{formatNumberInput(current_user?.coins)}</p>
                                             </div>
 
+                                            <Link to="/edit-profile" className="block p-3 text-sm font-medium text-gray-600 hover:bg-gray-100 text-left">
+                                                บัญชีของฉัน
+                                            </Link>
                                             <Link to="/topup" className="block p-3 text-sm font-medium text-gray-600 hover:bg-gray-100 text-left">
                                                 เติมเงิน
                                             </Link>
-                                            <Link to="/my-orders" className="block p-3 text-sm font-medium text-gray-600 hover:bg-gray-100 text-left">
+                                            <Link to="/myorder" className="block p-3 text-sm font-medium text-gray-600 hover:bg-gray-100 text-left">
                                                 การซื้อของฉัน
                                             </Link>
-                                            <Link to="/edit-profile" className="block p-3 text-sm font-medium text-gray-600 hover:bg-gray-100 text-left">
-                                                การตั้งค่า
+                                            <Link to="/myauction" className="block p-3 text-sm font-medium text-gray-600 hover:bg-gray-100 text-left">
+                                                การประมูลของฉัน
                                             </Link>
                                             <div className="text-center mt-2">
                                                 <button
                                                     className="p-2 text-sm text-white bg-[#e01b24] rounded-xl hover:bg-red-700  w-60"
-                                                    onClick={() => setUserRole("guest")}
+                                                    onClick={logOut}
                                                 >
-                                                    ลงชื่อออก
+                                                    ออกจากระบบ
                                                 </button>
                                             </div>
                                         </div>
@@ -183,6 +216,7 @@ export default function Mobilebar() {
                                 className="btn text-red-600 mr-2  hover:bg-red-700/30 rounded-full"
                                 id="profile_m_btn"
                             >
+                                 เข้าสู่ระบบ
                                 <i className="fa-solid fa-user" style={{ fontSize: "1.25rem" }}></i>
                             </Link>
                         )}

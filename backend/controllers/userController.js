@@ -8,40 +8,28 @@ const getAllUser = asyncHandler(async (req, res) => {
     res.status(200).json(users);
 });
 
+// Get single user => GET api/user/:id
+const getUserData = asyncHandler(async (req, res) => {
+    try {
+        const userId = req.params.id;
+
+        const findbyUserId = await user.findById(userId).populate("favList");
+
+        if(!findbyUserId) {
+            return res.status(404).send('User not found!');
+        }
+
+        res.status(200).json(findbyUserId);
+
+    } catch(err) {
+        console.log(err);
+    }
+});
+
 // Create new user => POST api/users/create
 const createUser = asyncHandler(async (req, res) => {
     try {
-        const { username,
-                password,
-                imgPath,
-                role,
-                email,
-                address,
-                phone,
-                bankAccount: {
-                    bank,
-                    account_number,
-                    account_name
-                },
-                coins,
-                isGoogleAccount } = req.body;
-
-        const users = await user.create({
-            username,
-            password,
-            imgPath,
-            role,
-            email,
-            address,
-            phone,
-            bankAccount: {
-                bank,
-                account_number,
-                account_name
-            },
-            coins,
-            isGoogleAccount 
-        });
+        const users = await user.create(req.body);
 
         res.status(200).json(users);
     } catch(err) {
@@ -65,24 +53,6 @@ const deleteUser = asyncHandler(async (req, res) => {
         res.status(200).send({
             message: `Deleted ${userId} from database`
         });
-    } catch(err) {
-        console.log(err);
-    }
-});
-
-// Get single user => GET api/user/:id
-const getUserData = asyncHandler(async (req, res) => {
-    try {
-        const userId = req.params.id;
-
-        const findbyUserId = await user.findById(userId).populate("favList");
-
-        if(!findbyUserId) {
-            return res.status(404).send('User not found!');
-        }
-
-        res.status(200).json(findbyUserId);
-
     } catch(err) {
         console.log(err);
     }
@@ -153,4 +123,4 @@ const loginUser = asyncHandler(async (req, res) => {
     res.status(200).json(userFound);
 });
 
-module.exports = { getAllUser, createUser, deleteUser, updateUser, loginUser, registerUser, getUserData};
+module.exports = { getAllUser, getUserData,createUser, deleteUser, updateUser, loginUser, registerUser};
