@@ -172,9 +172,13 @@ const AuctionDetail = () => {
             }
         }
 
+        // check if this function handleAuctionEndByBidder() not invoked by the user with most bidAmount(the one that will be userWinner)
+        if (tempMostBidder.userId?._id === current_user._id) {
+            return ;
+        }
         // update coins to user_seller
         const increaseUserSellerCoins = await axios.put(`${process.env.REACT_APP_QUIC_GEAR_API}/users/update/${res_getLastedSingleAuctionData.user_seller._id}`, {
-            coins: res_getLastedSingleAuctionData.user_seller.coins + res_getLastedSingleAuctionData.buyOutPrice
+            coins: res_getLastedSingleAuctionData.user_seller.coins + tempMostBidder.bidAmount
         });
         console.log("add coin to seller prn")
 
@@ -429,6 +433,7 @@ const AuctionDetail = () => {
                     setTimeRemaining(nonNegativeRemaining);
 
                     if (nonNegativeRemaining.total <= 0) {
+
                         handleAuctionEndByBidder();
                         clearInterval(timer);
                     }
