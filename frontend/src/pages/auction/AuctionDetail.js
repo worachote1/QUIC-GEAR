@@ -147,8 +147,7 @@ const AuctionDetail = () => {
             setSingleAuctionData({ ...res_getLastedSingleAuctionData })
             // if the current user is winner -> update coins in session 
             // so current user don't need to refresh to check his updated coin
-            if (res_getLastedSingleAuctionData.userWinner.userId._id === current_user._id)
-            {
+            if (res_getLastedSingleAuctionData.userWinner.userId._id === current_user._id) {
                 sessionStorage.setItem('current_user', JSON.stringify(res_getLastedSingleAuctionData.userWinner.userId));
             }
             return;
@@ -186,12 +185,12 @@ const AuctionDetail = () => {
                 const refundTo = await axios.put(`${process.env.REACT_APP_QUIC_GEAR_API}/users/update/${item.userId._id}`, {
                     coins: item.bidAmount + item.userId.coins
                 })
-                
+
                 // if current user is one participants (which not a winner) -> update coin in session
                 // so current user don't need to refresh to check his updated coin
-                if (item.userId._id === current_user._id){
+                if (item.userId._id === current_user._id) {
                     const res_refundTo = refundTo.data;
-                    sessionStorage.setItem('current_user',JSON.stringify(res_refundTo));
+                    sessionStorage.setItem('current_user', JSON.stringify(res_refundTo));
                     console.log("refund to current user(a bidder) prn")
                 }
             }
@@ -208,11 +207,10 @@ const AuctionDetail = () => {
         });
         console.log("update auction with winner prn")
         const res_updateSingleAuction = updateSingleAuction.data
-        
+
         // if the current user is winner(with most bidAmount) -> update coins in session 
         // so current user don't need to refresh to check his updated coin
-        if (res_updateSingleAuction.userWinner.userId._id === current_user._id)
-        {
+        if (res_updateSingleAuction.userWinner.userId._id === current_user._id) {
             sessionStorage.setItem('current_user', JSON.stringify(res_updateSingleAuction.userWinner.userId));
         }
         setSingleAuctionData({ ...res_updateSingleAuction })
@@ -240,7 +238,6 @@ const AuctionDetail = () => {
         //-> update session,so coins is refunded in real-time
         if (res_getLastedSingleAuctionData.userWinner) {
             alertAuctionEnd(res_getLastedSingleAuctionData.userWinner);
-
             if (findCurrentUserBidder)
                 sessionStorage.setItem('current_user', JSON.stringify(findCurrentUserBidder.userId));
             return;
@@ -261,6 +258,23 @@ const AuctionDetail = () => {
             cancelButtonText: "ยกเลิก",
             showLoaderOnConfirm: true,
             preConfirm: async (inputValue) => {
+
+                // Get lasted auctionData (กันคนเหลี่ยม เข้าหน้า pop up ค้าง)
+                getLastedSingleAuctionData = await axios.get(`${process.env.REACT_APP_QUIC_GEAR_API}/auctionProducts/${id}`);
+                res_getLastedSingleAuctionData = getLastedSingleAuctionData.data;
+                setSingleAuctionData({ ...res_getLastedSingleAuctionData })
+                findCurrentUserBidder = res_getLastedSingleAuctionData.userBidder.find(user => user.userId._id === current_user._id);
+                previousBidAmount = (findCurrentUserBidder) ? findCurrentUserBidder?.bidAmount : 0;
+                //if there is winner before you bid and you're one of userBidder 
+                //-> update session,so coins is refunded in real-time
+                if (res_getLastedSingleAuctionData.userWinner) {
+                    alertAuctionEnd(res_getLastedSingleAuctionData.userWinner);
+
+                    if (findCurrentUserBidder)
+                        sessionStorage.setItem('current_user', JSON.stringify(findCurrentUserBidder.userId));
+                    return;
+                }
+
                 const bidAmount = parseFloat(inputValue);
                 if (isNaN(bidAmount)) {
 
