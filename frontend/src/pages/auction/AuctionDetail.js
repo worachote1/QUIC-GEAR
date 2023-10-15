@@ -160,36 +160,36 @@ const AuctionDetail = () => {
         }
         
         // If auction end(time's up) and with some participants
-        // let tempMostBidder = res_getLastedSingleAuctionData.userBidder[0]
-        // for (let i = 1; i < res_getLastedSingleAuctionData.userBidder.length; i++) {
-        //     if (res_getLastedSingleAuctionData.userBidder[i].bidAmount > tempMostBidder.bidAmount) {
-        //         tempMostBidder = res_getLastedSingleAuctionData.userBidder[i];
-        //     }
-        // }
+        let tempMostBidder = res_getLastedSingleAuctionData.userBidder[0]
+        for (let i = 1; i < res_getLastedSingleAuctionData.userBidder.length; i++) {
+            if (res_getLastedSingleAuctionData.userBidder[i].bidAmount > tempMostBidder.bidAmount) {
+                tempMostBidder = res_getLastedSingleAuctionData.userBidder[i];
+            }
+        }
 
-        // // refund all userBidder except for winner 
-        // // Use Promise.all to wait for all asynchronous operations inside the map function
-        // await Promise.all(res_getLastedSingleAuctionData.userBidder.map(async (item) => {
-        //     if (item.userId._id !== tempMostBidder.userId._id) {
-        //         await axios.put(`${process.env.REACT_APP_QUIC_GEAR_API}/users/update/${item.userId._id}`, {
-        //             coins: item.bidAmount + item.userId.coins
-        //         })
-        //     }
-        // }))
+        // refund all userBidder except for winner 
+        // Use Promise.all to wait for all asynchronous operations inside the map function
+        await Promise.all(res_getLastedSingleAuctionData.userBidder.map(async (item) => {
+            if (item.userId._id !== tempMostBidder.userId._id) {
+                await axios.put(`${process.env.REACT_APP_QUIC_GEAR_API}/users/update/${item.userId._id}`, {
+                    coins: item.bidAmount + item.userId.coins
+                })
+            }
+        }))
 
-        // //update auction
-        // const updateSingleAuction = await axios.put(`${process.env.REACT_APP_QUIC_GEAR_API}/auctionProducts/update/${id}`, {
-        //     auctionStatus: "completed",
-        //     userWinner: {
-        //         userId: tempMostBidder.userId._id ,
-        //         bidAmount: tempMostBidder.bidAmount
-        //     },
-        //     startPrice: tempMostBidder.bidAmount
-        // });
+        //update auction
+        const updateSingleAuction = await axios.put(`${process.env.REACT_APP_QUIC_GEAR_API}/auctionProducts/update/${id}`, {
+            auctionStatus: "completed",
+            userWinner: {
+                userId: tempMostBidder.userId._id ,
+                bidAmount: tempMostBidder.bidAmount
+            },
+            startPrice: tempMostBidder.bidAmount
+        });
 
-        // const res_updateSingleAuction = updateSingleAuction.data
-        // setSingleAuctionData({...res_updateSingleAuction})
-        // alertAuctionEnd(res_updateSingleAuction.userWinner)
+        const res_updateSingleAuction = updateSingleAuction.data
+        setSingleAuctionData({...res_updateSingleAuction})
+        alertAuctionEnd(res_updateSingleAuction.userWinner)
     }
 
     const handleUserBid = async () => {
@@ -377,9 +377,17 @@ const AuctionDetail = () => {
             if (!singleAuctionData?.userWinner) {
                 const timer = setInterval(() => {
                     const remaining = calculateTimeRemaining(singleAuctionData?.end_auction_date);
-                    setTimeRemaining(remaining);
+                    const nonNegativeRemaining = {
+                        days: Math.max(0, remaining.days),
+                        hours: Math.max(0, remaining.hours),
+                        minutes: Math.max(0, remaining.minutes),
+                        seconds: Math.max(0, remaining.seconds),
+                        total: Math.max(0, remaining.total),
+                      };
 
-                    if (remaining.total <= 0) {
+                    setTimeRemaining(nonNegativeRemaining);
+
+                    if (nonNegativeRemaining.total <= 0) {
                         handleAuctionEndByBidder();
                         clearInterval(timer);
                     }
