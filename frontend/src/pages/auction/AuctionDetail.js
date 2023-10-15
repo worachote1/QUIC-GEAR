@@ -135,6 +135,7 @@ const AuctionDetail = () => {
     // after that -> update userWinner,auctionStatus 
     // -> refund to other userBidder (except the userWinner)
     // -> update user_seller's coins (unless there is no userBidder)
+    // **don't need to update userWinner'coins (the one with most bidAmount) because every userBidder was subtracted coins when they bid amount of coins
     const handleAuctionEndByBidder = async () => {
 
         const getLastedSingleAuctionData = await axios.get(`${process.env.REACT_APP_QUIC_GEAR_API}/auctionProducts/${id}`);
@@ -143,8 +144,13 @@ const AuctionDetail = () => {
         // If auction end(time's up) but there is someone buyout before
         if (res_getLastedSingleAuctionData.userWinner) {
             alertAuctionEnd(res_getLastedSingleAuctionData.userWinner);
-            console.log("a")
             setSingleAuctionData({ ...res_getLastedSingleAuctionData })
+            // if the current user is winner -> update coins in session 
+            // so current user don't need to refresh to check his updated coin
+            if (res_getLastedSingleAuctionData.userWinner.userId._id === current_user._id)
+            {
+                sessionStorage.setItem('current_user', JSON.stringify(res_getLastedSingleAuctionData.userWinner.userId));
+            }
             return;
         }
 
@@ -156,9 +162,9 @@ const AuctionDetail = () => {
             const res_updateSingleAuction = updateSingleAuction.data
             alertAuctionEnd(res_updateSingleAuction.userWinner)
             setSingleAuctionData({ ...res_updateSingleAuction })
-            return ;
+            return;
         }
-        
+
         // If auction end(time's up) and with some participants
         let tempMostBidder = res_getLastedSingleAuctionData.userBidder[0]
         for (let i = 1; i < res_getLastedSingleAuctionData.userBidder.length; i++) {
@@ -167,13 +173,27 @@ const AuctionDetail = () => {
             }
         }
 
+        // update coins to user_seller
+        const increaseUserSellerCoins = await axios.put(`${process.env.REACT_APP_QUIC_GEAR_API}/users/update/${res_getLastedSingleAuctionData.user_seller._id}`, {
+            coins: res_getLastedSingleAuctionData.user_seller.coins + res_getLastedSingleAuctionData.buyOutPrice
+        });
+        console.log("add coin to seller prn")
+
         // refund all userBidder except for winner 
         // Use Promise.all to wait for all asynchronous operations inside the map function
         await Promise.all(res_getLastedSingleAuctionData.userBidder.map(async (item) => {
             if (item.userId._id !== tempMostBidder.userId._id) {
-                await axios.put(`${process.env.REACT_APP_QUIC_GEAR_API}/users/update/${item.userId._id}`, {
+                const refundTo = await axios.put(`${process.env.REACT_APP_QUIC_GEAR_API}/users/update/${item.userId._id}`, {
                     coins: item.bidAmount + item.userId.coins
                 })
+                
+                // if current user is one participants (which not a winner) -> update coin in session
+                // so current user don't need to refresh to check his updated coin
+                if (item.userId._id === current_user._id){
+                    const res_refundTo = refundTo.data;
+                    sessionStorage.setItem('current_user',JSON.stringify(res_refundTo));
+                    console.log("refund to current user(a bidder) prn")
+                }
             }
         }))
 
@@ -181,14 +201,21 @@ const AuctionDetail = () => {
         const updateSingleAuction = await axios.put(`${process.env.REACT_APP_QUIC_GEAR_API}/auctionProducts/update/${id}`, {
             auctionStatus: "completed",
             userWinner: {
-                userId: tempMostBidder.userId._id ,
+                userId: tempMostBidder.userId._id,
                 bidAmount: tempMostBidder.bidAmount
             },
             startPrice: tempMostBidder.bidAmount
         });
-
+        console.log("update auction with winner prn")
         const res_updateSingleAuction = updateSingleAuction.data
-        setSingleAuctionData({...res_updateSingleAuction})
+        
+        // if the current user is winner(with most bidAmount) -> update coins in session 
+        // so current user don't need to refresh to check his updated coin
+        if (res_updateSingleAuction.userWinner.userId._id === current_user._id)
+        {
+            sessionStorage.setItem('current_user', JSON.stringify(res_updateSingleAuction.userWinner.userId));
+        }
+        setSingleAuctionData({ ...res_updateSingleAuction })
         alertAuctionEnd(res_updateSingleAuction.userWinner)
     }
 
@@ -383,7 +410,7 @@ const AuctionDetail = () => {
                         minutes: Math.max(0, remaining.minutes),
                         seconds: Math.max(0, remaining.seconds),
                         total: Math.max(0, remaining.total),
-                      };
+                    };
 
                     setTimeRemaining(nonNegativeRemaining);
 
