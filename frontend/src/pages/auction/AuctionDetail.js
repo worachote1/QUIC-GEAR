@@ -172,9 +172,13 @@ const AuctionDetail = () => {
             }
         }
 
+        // check if this function handleAuctionEndByBidder() not invoked by the user with most bidAmount(the one that will be userWinner)
+        if (tempMostBidder.userId?._id === current_user._id) {
+            return ;
+        }
         // update coins to user_seller
         const increaseUserSellerCoins = await axios.put(`${process.env.REACT_APP_QUIC_GEAR_API}/users/update/${res_getLastedSingleAuctionData.user_seller._id}`, {
-            coins: res_getLastedSingleAuctionData.user_seller.coins + res_getLastedSingleAuctionData.buyOutPrice
+            coins: res_getLastedSingleAuctionData.user_seller.coins + tempMostBidder.bidAmount
         });
         console.log("add coin to seller prn")
 
@@ -229,11 +233,11 @@ const AuctionDetail = () => {
         }
 
         // Get lasted auctionData 
-        const getLastedSingleAuctionData = await axios.get(`${process.env.REACT_APP_QUIC_GEAR_API}/auctionProducts/${id}`);
-        const res_getLastedSingleAuctionData = getLastedSingleAuctionData.data;
+        let getLastedSingleAuctionData = await axios.get(`${process.env.REACT_APP_QUIC_GEAR_API}/auctionProducts/${id}`);
+        let res_getLastedSingleAuctionData = getLastedSingleAuctionData.data;
         setSingleAuctionData({ ...res_getLastedSingleAuctionData })
-        const findCurrentUserBidder = res_getLastedSingleAuctionData.userBidder.find(user => user.userId._id === current_user._id);
-        const previousBidAmount = (findCurrentUserBidder) ? findCurrentUserBidder?.bidAmount : 0;
+        let findCurrentUserBidder = res_getLastedSingleAuctionData.userBidder.find(user => user.userId._id === current_user._id);
+        let previousBidAmount = (findCurrentUserBidder) ? findCurrentUserBidder?.bidAmount : 0;
         //if there is winner before you bid and you're one of userBidder 
         //-> update session,so coins is refunded in real-time
         if (res_getLastedSingleAuctionData.userWinner) {
@@ -429,6 +433,7 @@ const AuctionDetail = () => {
                     setTimeRemaining(nonNegativeRemaining);
 
                     if (nonNegativeRemaining.total <= 0) {
+
                         handleAuctionEndByBidder();
                         clearInterval(timer);
                     }
