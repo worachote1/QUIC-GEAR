@@ -229,11 +229,11 @@ const AuctionDetail = () => {
         }
 
         // Get lasted auctionData 
-        const getLastedSingleAuctionData = await axios.get(`${process.env.REACT_APP_QUIC_GEAR_API}/auctionProducts/${id}`);
-        const res_getLastedSingleAuctionData = getLastedSingleAuctionData.data;
+        let getLastedSingleAuctionData = await axios.get(`${process.env.REACT_APP_QUIC_GEAR_API}/auctionProducts/${id}`);
+        let res_getLastedSingleAuctionData = getLastedSingleAuctionData.data;
         setSingleAuctionData({ ...res_getLastedSingleAuctionData })
-        const findCurrentUserBidder = res_getLastedSingleAuctionData.userBidder.find(user => user.userId._id === current_user._id);
-        const previousBidAmount = (findCurrentUserBidder) ? findCurrentUserBidder?.bidAmount : 0;
+        let findCurrentUserBidder = res_getLastedSingleAuctionData.userBidder.find(user => user.userId._id === current_user._id);
+        let previousBidAmount = (findCurrentUserBidder) ? findCurrentUserBidder?.bidAmount : 0;
         //if there is winner before you bid and you're one of userBidder 
         //-> update session,so coins is refunded in real-time
         if (res_getLastedSingleAuctionData.userWinner) {
