@@ -1,17 +1,8 @@
-FROM nginx:alpine
+FROM alpine
 
-# Set up environment for building
 RUN apk add yarn nodejs
 
-# Copy files to build environment
-RUN mkdir /opt/quicgear
-COPY . /opt/quicgear
+RUN mkdir /opt/frontend
+WORKDIR /opt/frontend
 
-# Run Vite production build
-WORKDIR /opt/quicgear
-RUN yarn
-CMD yarn start
-
-# Copy files to nginx path
-#RUN cp -r build/* /usr/share/nginx/html
 
