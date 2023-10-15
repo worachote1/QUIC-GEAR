@@ -261,6 +261,8 @@ const AuctionDetail = () => {
             cancelButtonText: "ยกเลิก",
             showLoaderOnConfirm: true,
             preConfirm: async (inputValue) => {
+
+
                 const bidAmount = parseFloat(inputValue);
                 if (isNaN(bidAmount)) {
 
