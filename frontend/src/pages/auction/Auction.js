@@ -27,8 +27,6 @@ const Auction = () => {
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
 
-  // store Idx of auction which is expired
-  const [idxToRemove, setIdxToRemove] = useState([])
   // this will be use as a call back function (props in AuctionCard)
   // in order to keep index of expired auction
   const updateListOfIdxToRemove = (auctionId) => {

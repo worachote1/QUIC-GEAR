@@ -91,26 +91,26 @@ const AuctionDetail = () => {
     }
 
     const alertAuctionEnd = (userWinner) => {
-        console.log(userWinner)
-        console.log(userWinner.userId._id)
-        console.log(current_user._id)
-        Swal.fire({
-            title: `${userWinner.userId._id === current_user._id ? 'ยินดีด้วยคุณชนะการประมูล' : 'การประมูลนี้จบลงแล้ว'}`,
-            html:
-                `${(userWinner) ?
-                    `ปิดการประมูลที่ราคา ${formatNumberInput(userWinner.bidAmount)} coins </span>`
-                    : `ไม่มีผู้เข้าร่วมการประมูล`}`,
-            icon: `${userWinner.userId._id === current_user._id ? 'success' : 'warning'}`,
-            showCancelButton: false,
-            confirmButtonColor: "#a51d2d",
-            cancelButtonColor: "#a51d2d",
-            confirmButtonText: "<span class='text-white'>ยืนยัน</span>",
-        }).then((result) => {
-            if (result.isConfirmed) {
-                // Perform any necessary delete action here
-                navigate(`/auction`);
-            }
-        })
+        if (!hasAlertedAuctionEnd.current) {
+            Swal.fire({
+                title: `${userWinner?.userId._id === current_user._id ? 'ยินดีด้วยคุณชนะการประมูล' : 'การประมูลนี้จบลงแล้ว'}`,
+                html:
+                    `${(userWinner) ?
+                        `ปิดการประมูลที่ราคา ${formatNumberInput(userWinner?.bidAmount)} coins </span>`
+                        : `ไม่มีผู้เข้าร่วมการประมูล`}`,
+                icon: `${userWinner?.userId._id === current_user._id ? 'success' : 'warning'}`,
+                showCancelButton: false,
+                confirmButtonColor: "#a51d2d",
+                cancelButtonColor: "#a51d2d",
+                confirmButtonText: "<span class='text-white'>ยืนยัน</span>",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Perform any necessary delete action here
+                    navigate(`/auction`);
+                }
+            })
+        }
+        hasAlertedAuctionEnd.current = true;
     }
 
     const getSingleAuctionData = async () => {
@@ -129,16 +129,67 @@ const AuctionDetail = () => {
         }
     }
 
-    // use this function when time's up and there is no userWinner
+    // use this function when time's up
     // get lasted auctionData -> set to singleAuctionData
     // if there are userBidder find the winner (the onw with most bidAmount)
     // after that -> update userWinner,auctionStatus 
     // -> refund to other userBidder (except the userWinner)
     // -> update user_seller's coins (unless there is no userBidder)
-    const handleAuctionEndByBidder = () => {
-       
-       
-        // alertAuctionEnd(xxx.userWinner)
+    const handleAuctionEndByBidder = async () => {
+
+        const getLastedSingleAuctionData = await axios.get(`${process.env.REACT_APP_QUIC_GEAR_API}/auctionProducts/${id}`);
+        const res_getLastedSingleAuctionData = getLastedSingleAuctionData.data;
+
+        // If auction end(time's up) but there is someone buyout before
+        if (res_getLastedSingleAuctionData.userWinner) {
+            alertAuctionEnd(res_getLastedSingleAuctionData.userWinner);
+            console.log("a")
+            setSingleAuctionData({ ...res_getLastedSingleAuctionData })
+            return;
+        }
+
+        // If auction end(time's up) without any participants
+        if (res_getLastedSingleAuctionData.userBidder.length === 0) {
+            const updateSingleAuction = await axios.put(`${process.env.REACT_APP_QUIC_GEAR_API}/auctionProducts/update/${id}`, {
+                auctionStatus: "completed"
+            })
+            const res_updateSingleAuction = updateSingleAuction.data
+            alertAuctionEnd(res_updateSingleAuction.userWinner)
+            setSingleAuctionData({ ...res_updateSingleAuction })
+            return ;
+        }
+        
+        // If auction end(time's up) and with some participants
+        // let tempMostBidder = res_getLastedSingleAuctionData.userBidder[0]
+        // for (let i = 1; i < res_getLastedSingleAuctionData.userBidder.length; i++) {
+        //     if (res_getLastedSingleAuctionData.userBidder[i].bidAmount > tempMostBidder.bidAmount) {
+        //         tempMostBidder = res_getLastedSingleAuctionData.userBidder[i];
+        //     }
+        // }
+
+        // // refund all userBidder except for winner 
+        // // Use Promise.all to wait for all asynchronous operations inside the map function
+        // await Promise.all(res_getLastedSingleAuctionData.userBidder.map(async (item) => {
+        //     if (item.userId._id !== tempMostBidder.userId._id) {
+        //         await axios.put(`${process.env.REACT_APP_QUIC_GEAR_API}/users/update/${item.userId._id}`, {
+        //             coins: item.bidAmount + item.userId.coins
+        //         })
+        //     }
+        // }))
+
+        // //update auction
+        // const updateSingleAuction = await axios.put(`${process.env.REACT_APP_QUIC_GEAR_API}/auctionProducts/update/${id}`, {
+        //     auctionStatus: "completed",
+        //     userWinner: {
+        //         userId: tempMostBidder.userId._id ,
+        //         bidAmount: tempMostBidder.bidAmount
+        //     },
+        //     startPrice: tempMostBidder.bidAmount
+        // });
+
+        // const res_updateSingleAuction = updateSingleAuction.data
+        // setSingleAuctionData({...res_updateSingleAuction})
+        // alertAuctionEnd(res_updateSingleAuction.userWinner)
     }
 
     const handleUserBid = async () => {
@@ -155,7 +206,7 @@ const AuctionDetail = () => {
         // Get lasted auctionData 
         const getLastedSingleAuctionData = await axios.get(`${process.env.REACT_APP_QUIC_GEAR_API}/auctionProducts/${id}`);
         const res_getLastedSingleAuctionData = getLastedSingleAuctionData.data;
-        setSingleAuctionData({...res_getLastedSingleAuctionData})
+        setSingleAuctionData({ ...res_getLastedSingleAuctionData })
         const findCurrentUserBidder = res_getLastedSingleAuctionData.userBidder.find(user => user.userId._id === current_user._id);
         const previousBidAmount = (findCurrentUserBidder) ? findCurrentUserBidder?.bidAmount : 0;
         //if there is winner before you bid and you're one of userBidder 
@@ -177,15 +228,15 @@ const AuctionDetail = () => {
                 step: 'any', // Use this if you want decimal values. Remove it if only integers are allowed.
             },
             showCancelButton: true,
-            confirmButtonColor: '#ebebeb',  
-            cancelButtonColor: '#a51d2d',  
+            confirmButtonColor: '#ebebeb',
+            cancelButtonColor: '#a51d2d',
             confirmButtonText: "<span class='text-black'>ยืนยัน</span>",
             cancelButtonText: "ยกเลิก",
             showLoaderOnConfirm: true,
             preConfirm: async (inputValue) => {
                 const bidAmount = parseFloat(inputValue);
                 if (isNaN(bidAmount)) {
-                    
+
                     Swal.showValidationMessage('Please enter a valid number');
                     return;
                 }
@@ -208,13 +259,13 @@ const AuctionDetail = () => {
                 // Continue with Bid logic
                 // Update userBidder (auction api)
                 const userBidderWitoutCurrent = res_getLastedSingleAuctionData.userBidder.filter((item) => item.userId._id !== current_user._id)
-                const updatedUserBidder = [...userBidderWitoutCurrent,{userId : current_user._id, bidAmount : currentBidAmount}]
+                const updatedUserBidder = [...userBidderWitoutCurrent, { userId: current_user._id, bidAmount: currentBidAmount }]
                 const updateSingleAuction = await axios.put(`${process.env.REACT_APP_QUIC_GEAR_API}/auctionProducts/update/${id}`, {
                     startPrice: currentBidAmount,
                     userBidder: [...updatedUserBidder]
                 })
                 console.log(updateSingleAuction.data)
-                setSingleAuctionData({...updateSingleAuction.data})
+                setSingleAuctionData({ ...updateSingleAuction.data })
                 // And user's coin (user api) and current_user session
                 const subTractUserCoins = await axios.put(`${process.env.REACT_APP_QUIC_GEAR_API}/users/update/${current_user._id}`, {
                     coins: current_user.coins - bidAmount
@@ -260,7 +311,7 @@ const AuctionDetail = () => {
                     // get lasted auctionData -> set to singleAuctionData 
                     const getLastedSingleAuctionData = await axios.get(`${process.env.REACT_APP_QUIC_GEAR_API}/auctionProducts/${id}`);
                     const res_getLastedSingleAuctionData = getLastedSingleAuctionData.data;
-                
+
                     if (res_getLastedSingleAuctionData.userWinner) {
                         const findCurrentUserBidder = res_getLastedSingleAuctionData.userBidder.find(user => user.userId._id === current_user._id);
                         if (findCurrentUserBidder)
@@ -268,30 +319,30 @@ const AuctionDetail = () => {
                         alertAuctionEnd(res_getLastedSingleAuctionData.userWinner);
                         return;
                     }
-                
+
                     // update coins to user_seller
                     const increaseUserSellerCoins = await axios.put(`${process.env.REACT_APP_QUIC_GEAR_API}/users/update/${res_getLastedSingleAuctionData.user_seller._id}`, {
                         coins: res_getLastedSingleAuctionData.user_seller.coins + res_getLastedSingleAuctionData.buyOutPrice
                     });
-                
+
                     // refund other userBidder (include userWinner if participate as userBidder) + subtract winner coin (subtract with buyOutPrice) 
                     let currentUserBidAmount = 0;
-                
+
                     // Use Promise.all to wait for all asynchronous operations inside the map function
                     await Promise.all(res_getLastedSingleAuctionData.userBidder.map(async (item) => {
                         if (item.userId._id === current_user._id) {
                             currentUserBidAmount = item.bidAmount;
                         }
-                
+
                         await axios.put(`${process.env.REACT_APP_QUIC_GEAR_API}/users/update/${item.userId._id}`, {
                             coins: item.bidAmount + item.userId.coins
                         });
                     }));
-                
+
                     const subTractWinnerCoins = await axios.put(`${process.env.REACT_APP_QUIC_GEAR_API}/users/update/${current_user._id}`, {
                         coins: (current_user.coins + currentUserBidAmount) - res_getLastedSingleAuctionData.buyOutPrice
                     });
-                
+
                     //update auction
                     const updateSingleAuction = await axios.put(`${process.env.REACT_APP_QUIC_GEAR_API}/auctionProducts/update/${id}`, {
                         auctionStatus: "completed",
@@ -301,14 +352,14 @@ const AuctionDetail = () => {
                         },
                         startPrice: res_getLastedSingleAuctionData.buyOutPrice
                     });
-                
+
                     const res_updateSingleAuction = updateSingleAuction.data;
                     setSingleAuctionData({ ...res_updateSingleAuction });
                     alertAuctionEnd(res_updateSingleAuction.userWinner);
 
                     // window.location.reload()
                     sessionStorage.setItem('current_user', JSON.stringify(res_updateSingleAuction.userWinner.userId));
-                
+
                     // create auctionOrder later...
                 } catch (err) {
                     console.log(err);
@@ -322,24 +373,22 @@ const AuctionDetail = () => {
     }, [])
 
     useEffect(() => {
-        if (!singleAuctionData?.userWinner) {
-            const timer = setInterval(() => {
-                const remaining = calculateTimeRemaining(singleAuctionData?.end_auction_date);
-                setTimeRemaining(remaining);
+        if (!hasAlertedAuctionEnd.current) {
+            if (!singleAuctionData?.userWinner) {
+                const timer = setInterval(() => {
+                    const remaining = calculateTimeRemaining(singleAuctionData?.end_auction_date);
+                    setTimeRemaining(remaining);
 
-                if (remaining.total <= 0) {
-                    handleAuctionEndByBidder();
-                    clearInterval(timer);
-                }
-            }, 1000);
-
-            return () => clearInterval(timer); // Cleanup the timer on unmount
-        }
-        else {
-            if (!hasAlertedAuctionEnd.current) {
+                    if (remaining.total <= 0) {
+                        handleAuctionEndByBidder();
+                        clearInterval(timer);
+                    }
+                }, 1000);
+                return () => clearInterval(timer); // Cleanup the timer on unmount
+            }
+            else {
                 console.log(singleAuctionData?.userWinner)
                 alertAuctionEnd(singleAuctionData?.userWinner);
-                hasAlertedAuctionEnd.current = true;
             }
         }
     }, [singleAuctionData]);
@@ -352,7 +401,7 @@ const AuctionDetail = () => {
         </div>;
     }
 
-    if (singleAuctionData?.userWinner) {
+    if (singleAuctionData?.userWinner || singleAuctionData?.auctionStatus === "completed") {
         return <div className="flex-col">
             <div className="flex justify-center p-4 text-xl">
                 การประมูลนี้จบลงแล้ว
