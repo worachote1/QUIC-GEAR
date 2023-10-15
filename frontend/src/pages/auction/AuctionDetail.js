@@ -492,11 +492,7 @@ const AuctionDetail = () => {
                                             <li key={index} className="p-2 overflow-hidden">
                                                  <div className={`border-2 rounded-2xl overflow-hidden ${hoverIndex === index ? 'border-2 rounded-2xl border-rose-600' : ''}`}>
                                                     <img
-<<<<<<< HEAD
                                                         className={`h-28 w-44 rounded-md overflow-hidden object-contain`}
-=======
-                                                        className={`h-28 w-28 rounded-md overflow-hidden object-contain ${hoverIndex === index ? 'border-2 rounded-2xl border-rose-600' : ''}`}
->>>>>>> origin/time-frontend
                                                         onMouseEnter={() => setHoverIndex(index)}
                                                         src={`/uploads/${slides[index]}`}
                                                         alt=""
