@@ -40,6 +40,9 @@ export default function AuctionOrderProduct({ item }) {
                         <div>
                             <div className="flex pt-2 text-l md:text-2xl text-green-700">คุณประมูลสูงสุด</div>
                         </div>
+                        <button className="flex self-end mt-4 border border-red-500 bg-white text-red-500 text-sm md:text-lg font-bold px-4 py-2 rounded-md hover:bg-red-500 hover:text-white transition duration-300">
+                            จ่ายเงิน
+                        </button>
                     </div>
                 </div>
             </div>
