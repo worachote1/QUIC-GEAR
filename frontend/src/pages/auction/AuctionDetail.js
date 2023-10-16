@@ -172,7 +172,7 @@ const AuctionDetail = () => {
             }
         }
 
-        // check if this function handleAuctionEndByBidder() not invoked by the user with most bidAmount(the one that will be userWinner)
+        // check if this function handleAuctionEndByBidder() only invoked by the userWinner 
         if (tempMostBidder.userId?._id !== current_user._id && res_getLastedSingleAuctionData.userBidder.length > 1) {
             alertAuctionEnd(tempMostBidder)
             return ;
@@ -190,7 +190,6 @@ const AuctionDetail = () => {
                 const refundTo = await axios.put(`${process.env.REACT_APP_QUIC_GEAR_API}/users/update/${item.userId._id}`, {
                     coins: item.bidAmount + item.userId.coins
                 })
-
                 // if current user is one participants (which not a winner) -> update coin in session
                 // so current user don't need to refresh to check his updated coin
                 if (item.userId._id === current_user._id) {

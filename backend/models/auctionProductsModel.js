@@ -21,6 +21,14 @@ const auctionProductSchema = new mongoose.Schema({
         type: String,
         default: "waiting approved"
     },
+    orderStatus: {
+        type: String,
+        default: 'order received'
+    },
+    trackingNumber: {
+        type: String,
+        default: "prnXX"
+    },
     createdAt: {
         type: Date,
         default: Date.now
@@ -93,7 +101,7 @@ const auctionProductSchema = new mongoose.Schema({
             type: Number,
             required: false
         },
-        default: {}
+        // default: {}
     },
 
 });

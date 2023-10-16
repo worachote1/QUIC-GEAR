@@ -10,12 +10,12 @@ import Swal from 'sweetalert2';
 const MyAuction = () => {
     const { id } = useParams();
     const navigate = useNavigate();
-    const [auctionOrder, setAuctionOrder] = useState(null);
+    const [auction, setAuction] = useState(null);
     const statusAuctionOrder = ['auction received', 'dispatched', 'completed'];
 
     const getStatusIcon = (auctionOrderStatus) => {
         switch (auctionOrderStatus) {
-            case 'auction received':
+            case 'order received':
                 return 'fa-clipboard';
             case 'dispatched':
                 return 'fa-shipping-fast';
@@ -29,7 +29,7 @@ const MyAuction = () => {
     const getStatusText = (auctionOrderStatus) => {
         console.log(auctionOrderStatus)
         switch (auctionOrderStatus) {
-            case 'auction received':
+            case 'order received':
                 return 'ได้รับคำสั่งซื้อ';
             case 'dispatched':
                 return 'อยู่ระหว่างการจัดส่ง';
@@ -42,22 +42,21 @@ const MyAuction = () => {
 
 
     const getSingleAuctionOrder = async () => {
-        const singleAuctionOrder = await axios.get(`${process.env.REACT_APP_QUIC_GEAR_API}/auctionOrder/${id}`)
-        console.log({ ...singleAuctionOrder.data })
-        setAuctionOrder({ ...singleAuctionOrder.data })
+        const singleAuction = await axios.get(`${process.env.REACT_APP_QUIC_GEAR_API}/auctionProducts/${id}`)
+        setAuction({ ...singleAuction.data })
     }
 
     useEffect(() => {
         getSingleAuctionOrder()
     }, [])
 
-    if (!auctionOrder) {
+    if (!auction) {
         return <div className='w-full h-screen flex justify-center items-center'>
             <ThreeDots type="Circles" color="#841724" height={100} width={100} />
         </div>;
     }
 
-    const currentStatus = auctionOrder?.auctionOrderStatus;
+    const currentStatus = auction?.orderStatus;
 
     const openRatingDialog = () => {
         Swal.fire({
@@ -71,14 +70,13 @@ const MyAuction = () => {
             cancelButtonText: "ยกเลิก",
         }).then(async (result) => {
             if (result.isConfirmed) {
-                await axios.put(`${process.env.REACT_APP_QUIC_GEAR_API}/auctionOrder/update/${id}`, {
-                    auctionOrderStatus: "completed"
+                await axios.put(`${process.env.REACT_APP_QUIC_GEAR_API}/auctionProducts/update/${id}`, {
+                    orderStatus: "completed"
                 })
                 navigate('/myauction')
             }
         })
     };
-
 
     return (
         <div className="container mx-auto p-4 max-w-[1000px]"> 
@@ -86,20 +84,20 @@ const MyAuction = () => {
                 <div className="flex flex-col md:flex-row justify-between items-center mb-4">
                     <h1 className="text-2xl font-semibold">รายละเอียดการประมูล</h1>
                     <div className="text-right">
-                        <p className="font-bold text-gray-700 mt-4 lg:mt-0">วันที่ประมูล {new Date(auctionOrder?.createdAt).toLocaleString()}</p>
+                        <p className="font-bold text-gray-700 mt-4 lg:mt-0">วันที่ประมูล {new Date(auction?.createdAt).toLocaleString()}</p>
                     </div>
                 </div>
                 <div className="bg-gray-100 p-4 rounded-lg shadow-md mb-4 flex flex-col md:flex-row md:justify-between md:items-center">
                     <div className="mb-4 lg:mb-0 flex flex-col items-start">
                         <p className="text-l md:text-xl font-semibold mb-2">ที่อยู่จัดส่ง
                             <i className="fas fa-map-marker-alt text-gray-500 ml-2"></i></p>
-                        <p className="text-gray-700">{auctionOrder?.userID.address}</p>
+                        <p className="text-gray-700">{auction?.userWinner.userID.address}</p>
                     </div>
-                    {(auctionOrder?.orderStatus !== "order received") &&
+                    {(auction?.orderStatus !== "order received") &&
                         <div className='flex flex-col items-start'>
                             <p className="text-l text-left md:text-xl md:text-right font-semibold mb-2">เลขติดตามพัสดุ
                                 <i className="fas fa-box text-gray-500 ml-2"></i></p>
-                            <p className="text-left md:text-right text-gray-700">{auctionOrder?.trackingNumber}</p>
+                            <p className="text-left md:text-right text-gray-700">{auction?.trackingNumber}</p>
                         </div>}
                 </div>
                 <h1 className="text-l md:text-xl font-semibold mt-8 mb-2 md:mt-0 mb-4">สถานะคำสั่งซื้อสินค้า</h1>
@@ -107,9 +105,9 @@ const MyAuction = () => {
                     {statusAuctionOrder.map((status, index) => (
                         <div
                             key={index}
-                            className={`flex items-center ${auctionOrder?.auctionOrderStatus === status
+                            className={`flex items-center ${auction?.orderStatus === status
                                 ? 'text-red-500'
-                                : statusAuctionOrder.indexOf(auctionOrder?.auctionOrderStatus) >= index
+                                : statusAuctionOrder.indexOf(auction?.orderStatus) >= index
                                     ? 'text-red-500'
                                     : 'text-gray-400'
                                 } mb-2 lg:mb-0 lg:mr-4`}
@@ -120,15 +118,13 @@ const MyAuction = () => {
                     ))}
                 </div>
                 <div className="flex flex-col mb-2">
-                    {auctionOrder.auctionID.productItem.map((item) => (
-                        <AuctionOrderProduct item={item.auctionID} />
-                    ))}
+                    <AuctionOrderProduct item={auction.productItem} />
                 </div>
                 <div className="bg-gray-100 p-4 rounded-lg shadow-md mb-4 flex flex-row lg:flex-row justify-between items-center">
                     <p className="text-l md:text-xl font-semibold">ราคาสุทธิ</p>
                     <p className="text-l md:text-xl font-semibold flex items-center">
                         <AiOutlineDollarCircle class=' text-2xl' />
-                        {formatNumberInput(auctionOrder?.auctionID.startPrice)}</p>
+                        {formatNumberInput(auction.startPrice)}</p>
                 </div>
 
                 {currentStatus === 'dispatched' && (

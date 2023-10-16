@@ -3,8 +3,9 @@ import { ThreeDots } from 'react-loader-spinner';
 import AuctionOrderCard from "../../components/AuctionOrderCard";
 import React, { useEffect, useState } from "react";
 import { AiFillCaretDown } from 'react-icons/ai';
-
-export default function MyAuctionOrder() {
+import axios from 'axios';
+export default function MyAuctionList() {
+    const current_user = JSON.parse(sessionStorage.getItem('current_user'))
     const auctionType = ["การประมูลที่คุณสร้าง", "ชนะการประมูล", "แพ้การประมูล", "กำลังประมูล"]
     const taskAuctionBGColor = {
         "การประมูลที่คุณสร้าง": "bg-yellow-500",
@@ -17,11 +18,48 @@ export default function MyAuctionOrder() {
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 7;
 
+    const [selectedDataList, setSelectedDataList] = useState(null);
     const [auctionList, setAuctionList] = useState(null);
 
+    const updateSelectedDataList = async(option) => {
+        switch (option) {
+            case "การประมูลที่คุณสร้าง":
+                const auctionWithSeller = await axios.get(`${process.env.REACT_APP_QUIC_GEAR_API}/auctionProducts/seller?user_seller=${current_user._id}`)
+                const dataSeller = auctionWithSeller.data.filter((item) => {
+                    return item.auctionStatus !== "waiting approved"
+                })             
+                setAuctionList([...dataSeller])
+                break;
+            case "ชนะการประมูล":
+                const auctionWithWinner = await axios.get(`${process.env.REACT_APP_QUIC_GEAR_API}/auctionProducts/winner?userWinner=${current_user._id}`)
+                const dataWinner = auctionWithWinner.data
+                setAuctionList([...dataWinner])
+                break;
+            case "แพ้การประมูล":
+                const auctionWithBidderLoser = await axios.get(`${process.env.REACT_APP_QUIC_GEAR_API}/auctionProducts/bidder?userBidder=${current_user._id}`)
+                const dataLoser = auctionWithBidderLoser.data.filter((item) => {
+                    return item.auctionStatus === "completed" && item.userWinner.userId._id !== current_user._id
+                })
+                setAuctionList([...dataLoser])
+                break;
+            case "กำลังประมูล":
+                const auctionWithBidderAttend = await axios.get(`${process.env.REACT_APP_QUIC_GEAR_API}/auctionProducts/bidder?userBidder=${current_user._id}`)
+                const dataBidder = auctionWithBidderAttend.data.filter((item) => {
+                    return item.auctionStatus === "in progress"
+                })
+                setAuctionList([...dataBidder])
+                break;
+        }
+    }
+
     useEffect(() => {
-        setAuctionList(auctionOrder);
-    }, [])
+        //fetch auction or auctionOrder with specific slectedTask
+        updateSelectedDataList(selectedTask)
+    },[])
+
+    useEffect(() => {
+        updateSelectedDataList(selectedTask)
+    },[selectedTask])
 
     const totalPages = Math.ceil((auctionList?.length ? auctionList?.length : 0) / itemsPerPage);
 

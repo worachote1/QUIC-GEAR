@@ -2,8 +2,90 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { formatNumberInput } from "../util/formatUtil";
 import { AiOutlineDollarCircle } from 'react-icons/ai'
-
+import { BsFillCheckCircleFill } from 'react-icons/bs'
+import { ImCross } from 'react-icons/im'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 export default function AuctionOrderProduct({ item }) {
+
+    const current_user = JSON.parse(sessionStorage.getItem('current_user'))
+
+    const isMostBidAmount = (userBidder) => {
+        let tempMostBidder = userBidder[0]
+        for (let i = 1; i < userBidder.length; i++) {
+            if (userBidder[i].bidAmount > tempMostBidder.bidAmount) {
+                tempMostBidder = userBidder[i];
+            }
+        }
+        return tempMostBidder.userId._id === current_user._id;
+    }
+
+    // render text auction base on auctionStatus + user type (winner,loser,seller)
+    const renderTextAuction = (auction) => {
+        //if auction end
+        if (auction.auctionStatus === "completed") {
+            //if current user is seller
+            if (current_user._id === auction.user_seller._id) {
+                return <h2 className="font-bold text-l md:text-2xl flex text-red-700">การประมูลจบลงแล้ว</h2>
+            }
+            //if current_user is winner
+            else if (current_user._id === auction.userWinner.userId._id) {
+                return (
+                    <div className="flex pt-2 text-l md:text-2xl text-green-700">
+                        <div className="flex justify-center items-center ">
+                            <div>
+                                <BsFillCheckCircleFill size={20} className="text-[#478d4e]" />
+                            </div>
+                            <div className="ml-1 text-[#478d4e]">คุณชนะประมูล</div>
+                        </div>
+                    </div>
+                )
+            }
+            // if current_user is loser
+            else {
+                return (
+                    <div className="flex pt-2 text-l md:text-2xl text-green-700">
+                        <div className="flex justify-center items-center">
+                            <div>
+                                <BsFillCheckCircleFill size={21} className="text-[#4b98d8]" />
+                            </div>
+                            <div className="ml-1 text-[#4b98d8]">ได้รับเงินคืนแล้ว</div>
+                        </div>
+                    </div>
+                )
+            }
+        }
+
+        //if auction is in progress
+        else if (auction.auctionStatus === "in progress") {
+            //if current user is seller
+            if (current_user._id === auction.user_seller._id) {
+                return <h2 className="font-bold text-l md:text-2xl flex text-yellow-500">อยู่ระหว่างการประมูล</h2>
+            }
+            //if current_user is winner
+            else if (current_user._id === auction.userWinner.userId._id) {
+                return (
+                    <div className="flex justify-center items-center ">
+                        <div>
+                            <BsFillCheckCircleFill size={21} className="text-[#478d4e]" />
+                        </div>
+                        <div className="ml-1 text-[#478d4e]">คุณประมูลสูงสุด</div>
+                    </div>
+                )
+            }
+            // if current_user is loser
+            else {
+                return (
+                    <div className="flex justify-center items-center ">
+                        <div>
+                            <ImCross size={21} className="text-[#ff950b]" />
+                        </div>
+                        <div className="ml-1 text-[#ff950b]">คนอื่นประมูลสูงกว่าคุณ</div>
+                    </div>
+                )
+            }
+        }
+    }
+
     return (
         <div className="py-4 rounded-lg">
             <div className="flex justify-between items-center">
@@ -24,7 +106,7 @@ export default function AuctionOrderProduct({ item }) {
                                 <h2 className="font-bold text-l md:text-2xl">{item.productItem.name} </h2>
                             </div>
                             <div>
-                                <div className="pt-2 text-sm md:text-lg">จำนวน : 1</div>
+                                <div className="pt-2 text-sm md:text-lg">จำนวน : 1 </div>
                             </div>
                         </div>
                     </div>
@@ -32,17 +114,9 @@ export default function AuctionOrderProduct({ item }) {
 
                 <div className="ml-6 flex mr-6">
                     <div className="flex flex-col items-start">
-                        {item.auctionStatus === 'in progress' && (
-                            <div className="md:mt-5">
-                                <h2 className="font-bold text-l md:text-2xl flex text-red-700">สถานะ : กำลังประมูล</h2>
-                            </div>
-                        )}
-                        <div>
-                            <div className="flex pt-2 text-l md:text-2xl text-green-700">คุณประมูลสูงสุด</div>
+                        <div className="md:mt-5">
+                            {renderTextAuction(item)}
                         </div>
-                        <button className="flex self-end mt-4 border border-red-500 bg-white text-red-500 text-sm md:text-lg font-bold px-4 py-2 rounded-md hover:bg-red-500 hover:text-white transition duration-300">
-                            จ่ายเงิน
-                        </button>
                     </div>
                 </div>
             </div>
