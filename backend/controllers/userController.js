@@ -17,7 +17,7 @@ const getUserData = asyncHandler(async (req, res) => {
 
         if(!findbyUserId) {
             return res.status(404).send('User not found!');
-        }
+        } 
 
         res.status(200).json(findbyUserId);
 
@@ -122,5 +122,5 @@ const loginUser = asyncHandler(async (req, res) => {
 
     res.status(200).json(userFound);
 });
-
+   
 module.exports = { getAllUser, getUserData,createUser, deleteUser, updateUser, loginUser, registerUser};
