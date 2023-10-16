@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import AuctionOrderProduct from "./AuctionOrderProduct";
 import { AiOutlineDollarCircle } from 'react-icons/ai';
 import { formatNumberInput } from "../util/formatUtil";
+import { auctionOrder } from "../constant/auctionOrderConstants";
 
 export default function AuctionOrderCard({ auction }) {
 
@@ -32,7 +33,7 @@ export default function AuctionOrderCard({ auction }) {
                                 สถานะ : {getStatusText(auction.auctionOrderStatus)}
                             </div>
                         )}
-                        <Link to={``} className="border border-red-500 bg-white text-red-500 text-sm md:text-lg font-bold px-4 py-2 rounded-md hover:bg-red-500 hover:text-white transition duration-300">
+                        <Link to={`/myauction/${auction._id}`} className="border border-red-500 bg-white text-red-500 text-sm md:text-lg font-bold px-4 py-2 rounded-md hover:bg-red-500 hover:text-white transition duration-300">
                             ดูรายละเอียด
                         </Link>
                     </div>
