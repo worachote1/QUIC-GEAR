@@ -3,10 +3,9 @@ import AuctionOrderProduct from '../../components/AuctionOrderProduct';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ThreeDots } from 'react-loader-spinner';
 import axios from 'axios';
-import { formatNumberInput } from '../util/formatUtil';
+import { formatNumberInput } from '../../util/formatUtil';
 import { AiOutlineDollarCircle } from 'react-icons/ai';
 import Swal from 'sweetalert2';
-import '../index.css';
 
 const MyAuction = () => {
     const { id } = useParams();
@@ -45,7 +44,7 @@ const MyAuction = () => {
     const getSingleAuctionOrder = async () => {
         const singleAuctionOrder = await axios.get(`${process.env.REACT_APP_QUIC_GEAR_API}/auctionOrder/${id}`)
         console.log({ ...singleAuctionOrder.data })
-        setOrders({ ...singleAuctionOrder.data })
+        setAuctionOrder({ ...singleAuctionOrder.data })
     }
 
     useEffect(() => {
