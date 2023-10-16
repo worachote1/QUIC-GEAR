@@ -11,5 +11,5 @@ const auctionOrderSchema = new mongoose.Schema({
         default: ''
     },
 })
-
+   
 module.exports = mongoose.model('auctionOrder', auctionOrderSchema); 

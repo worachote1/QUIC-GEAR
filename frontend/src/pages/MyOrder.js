@@ -97,11 +97,12 @@ const MyOrder = () => {
                             <i className="fas fa-map-marker-alt text-gray-500 ml-2"></i></p>
                         <p className="text-gray-700">{orders?.userID.address}</p>
                     </div>
-                    <div className='flex flex-col items-start'>
-                        <p className="text-l text-left md:text-xl md:text-right font-semibold mb-2">เลขติดตามพัสดุ
-                            <i className="fas fa-box text-gray-500 ml-2"></i></p>
-                        <p className="text-left md:text-right text-gray-700">{orders?.trackingNumber}</p>
-                    </div>
+                    {(orders?.orderStatus !== "order received") &&
+                        <div className='flex flex-col items-start'>
+                            <p className="text-l text-left md:text-xl md:text-right font-semibold mb-2">เลขติดตามพัสดุ
+                                <i className="fas fa-box text-gray-500 ml-2"></i></p>
+                            <p className="text-left md:text-right text-gray-700">{orders?.trackingNumber}</p>
+                        </div>}
                 </div>
                 <h1 className="text-l md:text-xl font-semibold mt-8 mb-2 md:mt-0 mb-4">สถานะคำสั่งซื้อสินค้า</h1>
                 <div className="flex flex-col md:flex-row items-left md:items-center md:justify-between mb-4">
@@ -145,5 +146,5 @@ const MyOrder = () => {
         </div>
     );
 };
-
+   
 export default MyOrder;
