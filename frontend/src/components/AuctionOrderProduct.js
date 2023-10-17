@@ -61,8 +61,8 @@ export default function AuctionOrderProduct({ item }) {
             if (current_user._id === auction.user_seller._id) {
                 return <h2 className="font-bold text-l md:text-2xl flex text-yellow-500">อยู่ระหว่างการประมูล</h2>
             }
-            //if current_user is winner
-            else if (current_user._id === auction.userWinner.userId._id) {
+            //if current_user is userBidder with most bid amount
+            else if (isMostBidAmount(auction.userBidder)) {
                 return (
                     <div className="flex justify-center items-center ">
                         <div>
@@ -94,7 +94,7 @@ export default function AuctionOrderProduct({ item }) {
                         <Link to={``}>
                             <img
                                 // src={`uploads/${item.productID.imgPath[0]}`}
-                                src={`${item.productItem.imgPath[0]}`}
+                                src={`/uploads/${item.productItem.imgPath[0]}`}
                                 alt={item.productItem.name}
                                 className="w-16 h-16 sm:w-36 sm:h-36 object-cover rounded-lg"
                             />
