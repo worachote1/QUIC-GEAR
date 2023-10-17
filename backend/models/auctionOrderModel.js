@@ -8,7 +8,7 @@ const auctionOrderSchema = new mongoose.Schema({
     },
     auctionOrderStatus: {
         type: String,
-        default: ''
+        default: 'order received'
     },
 })
    

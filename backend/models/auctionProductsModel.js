@@ -21,6 +21,14 @@ const auctionProductSchema = new mongoose.Schema({
         type: String,
         default: "waiting approved"
     },
+    orderStatus: {
+        type: String,
+        default: 'order received'
+    },
+    trackingNumber: {
+        type: String,
+        default: "prnXX"
+    },
     createdAt: {
         type: Date,
         default: Date.now
@@ -83,6 +91,19 @@ const auctionProductSchema = new mongoose.Schema({
         default: []
     }
     ,
+    userWinner: {
+        userId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'user',
+            required: false
+        },
+        bidAmount: {
+            type: Number,
+            required: false
+        },
+        // default: {}
+    },
+
 });
 
 module.exports = mongoose.model('auctionProducts', auctionProductSchema);

@@ -1,26 +1,59 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { ImHammer2 } from 'react-icons/im';
 import { formatNumberInput } from '../util/formatUtil'
 import { calculateTimeRemaining } from '../util/auctionModule/countdown';
 import { displayCountDownDate } from '../util/auctionModule/displayCountDownDate';
 
-export default function AuctionCard({ AuctionItem }) {
+export default function AuctionCard({ AuctionItem,callbackUpdate }) {
 
+  const isMountedRef = useRef(true);
   const [timeRemaining, setTimeRemaining] = useState(calculateTimeRemaining(AuctionItem.end_auction_date));
+  
+  // prn this one it work (expired not display but the next one is wired time for a seeconds)
+  // useEffect(() => {
+  //   const timer = setInterval(() => {
+  //     const remaining = calculateTimeRemaining(AuctionItem.end_auction_date);
+  //     setTimeRemaining(remaining);
 
-  useEffect(() => {
+  //     if (remaining.total <= 0) {
+  //       clearInterval(timer);
+  //       callbackUpdate(AuctionItem._id);
+      
+  //     }
+  //   }, 1000);
+  
+  //   return () => {
+  //     clearInterval(timer);
+
+  //   };
+  // }, [callbackUpdate]);
+
+    useEffect(() => {
     const timer = setInterval(() => {
       const remaining = calculateTimeRemaining(AuctionItem.end_auction_date);
-      setTimeRemaining(remaining);
+      const nonNegativeRemaining = {
+        days: Math.max(0, remaining.days),
+        hours: Math.max(0, remaining.hours),
+        minutes: Math.max(0, remaining.minutes),
+        seconds: Math.max(0, remaining.seconds),
+        total: Math.max(0, remaining.total),
+      };
 
-      if (remaining.total <= 0) {
+      setTimeRemaining(nonNegativeRemaining);
+
+      if (nonNegativeRemaining.total <= 0) {
         clearInterval(timer);
+        callbackUpdate(AuctionItem._id);
+      
       }
     }, 1000);
+  
+    return () => {
+      clearInterval(timer);
 
-    return () => clearInterval(timer); // Cleanup the timer on unmount
-  }, []);
+    };
+  }, [callbackUpdate]);
 
   return (
     // lg:w-[210px] md:w-[210px] w-[170px]

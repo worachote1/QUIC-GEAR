@@ -33,6 +33,8 @@ import UpdateProducts from "./pages/admin/ProductsAdmin/UpdateProducts";
 import NotFound from "./util/not_found/NotFound";
 import CheckAuctionDetail from './pages/admin/AuctionsAdmin/CheckAutionDetail';
 import ProtectedRoute from './ProtectedRoute';
+import MyAuctionList from './pages/auction/myAuctionList';
+import MyAuction from './pages/auction/myAuction';
 
 function App() {
   return (
@@ -60,6 +62,8 @@ function App() {
                 <Route path='/myorder/:id' element={<MyOrder />} />
                 <Route path='/auction_create' element={<AuctionCreate />} />
                 <Route path='/topup' element={<Topup />} />
+                <Route path='/myauction' element={<MyAuctionList />} />
+                <Route path='/myauction/:id' element={<MyAuction />} />
               </Route>
 
               {/* Protected Admin Routes */}
