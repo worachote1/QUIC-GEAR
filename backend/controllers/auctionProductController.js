@@ -89,10 +89,6 @@ const getAuctionProductByBidder = asyncHandler(async (req, res) => {
             .populate('userBidder.userId')
             .populate('userWinner.userId');
 
-        if (auctionProducts.length === 0) {
-            return res.status(404).json({ message: 'No auction products found for the provided userBidder ID.' });
-        }
-
         res.status(200).json(auctionProducts);
     } catch (err) {
         console.log(err);
