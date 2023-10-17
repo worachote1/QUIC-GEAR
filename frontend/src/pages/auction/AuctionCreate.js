@@ -93,8 +93,8 @@ export default function AuctionCreate() {
     else if (startDate > endDate)
       return "Start date must be earlier than the end date !";
     //uncomment later this for test purpose
-    // else if (endDate.getTime() - startDate.getTime() < oneHourInMilliseconds)
-    //   return "The auction duration must be at least 1 hour !"
+    else if (endDate.getTime() - startDate.getTime() < oneHourInMilliseconds)
+      return "The auction duration must be at least 1 hour !"
     else if (checkEmptyREGEX.test(product.description))
       return "Description must not be empty !";
     else if (!selectedMultipleFiles.length)
