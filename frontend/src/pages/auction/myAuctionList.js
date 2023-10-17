@@ -28,26 +28,26 @@ export default function MyAuctionList() {
                 const dataSeller = auctionWithSeller.data.filter((item) => {
                     return item.auctionStatus !== "waiting approved"
                 })             
-                setAuctionList([...dataSeller])
+                setAuctionList([...dataSeller].reverse())
                 break;
             case "ชนะการประมูล":
                 const auctionWithWinner = await axios.get(`${process.env.REACT_APP_QUIC_GEAR_API}/auctionProducts/winner?userWinner=${current_user._id}`)
                 const dataWinner = auctionWithWinner.data
-                setAuctionList([...dataWinner])
+                setAuctionList([...dataWinner].reverse())
                 break;
             case "แพ้การประมูล":
                 const auctionWithBidderLoser = await axios.get(`${process.env.REACT_APP_QUIC_GEAR_API}/auctionProducts/bidder?userBidder=${current_user._id}`)
                 const dataLoser = auctionWithBidderLoser.data.filter((item) => {
                     return item.auctionStatus === "completed" && item.userWinner.userId._id !== current_user._id
                 })
-                setAuctionList([...dataLoser])
+                setAuctionList([...dataLoser].reverse())
                 break;
             case "กำลังประมูล":
                 const auctionWithBidderAttend = await axios.get(`${process.env.REACT_APP_QUIC_GEAR_API}/auctionProducts/bidder?userBidder=${current_user._id}`)
                 const dataBidder = auctionWithBidderAttend.data.filter((item) => {
                     return item.auctionStatus === "in progress"
                 })
-                setAuctionList([...dataBidder])
+                setAuctionList([...dataBidder].reverse())
                 break;
         }
     }

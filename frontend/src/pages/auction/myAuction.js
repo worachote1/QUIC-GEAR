@@ -8,10 +8,11 @@ import { AiOutlineDollarCircle } from 'react-icons/ai';
 import Swal from 'sweetalert2';
 
 const MyAuction = () => {
+    const current_user = JSON.parse(sessionStorage.getItem('current_user'));
     const { id } = useParams();
     const navigate = useNavigate();
     const [auction, setAuction] = useState(null);
-    const statusAuctionOrder = ['auction received', 'dispatched', 'completed'];
+    const statusAuctionOrder = ['order received', 'dispatched', 'completed'];
 
     const getStatusIcon = (auctionOrderStatus) => {
         switch (auctionOrderStatus) {
@@ -27,7 +28,6 @@ const MyAuction = () => {
     };
 
     const getStatusText = (auctionOrderStatus) => {
-        console.log(auctionOrderStatus)
         switch (auctionOrderStatus) {
             case 'order received':
                 return 'ได้รับคำสั่งซื้อ';
@@ -35,11 +35,8 @@ const MyAuction = () => {
                 return 'อยู่ระหว่างการจัดส่ง';
             case 'completed':
                 return 'สำเร็จ';
-            default:
-                return 'Unknown';
         }
     };
-
 
     const getSingleAuctionOrder = async () => {
         const singleAuction = await axios.get(`${process.env.REACT_APP_QUIC_GEAR_API}/auctionProducts/${id}`)
@@ -78,11 +75,48 @@ const MyAuction = () => {
         })
     };
 
+    const openSellerDispatchDialog = async () => {
+        const { value: trackingNumber } = await Swal.fire({
+            title: 'ใส่หมายเลข Tracking',
+            input: 'text',
+            inputLabel: '',
+            inputPlaceholder: 'ใส่เลข tracking',
+            showCancelButton: true,
+            confirmButtonText: "<span class='text-black'>ยืนยัน</span>",
+            cancelButtonText: 'ยกเลิก',
+            confirmButtonColor: "#ebebeb",
+            cancelButtonColor: "#a51d2d",
+            inputValidator: (value) => {
+                if (/^\s*$/gm.test(value)) {
+                    return 'กรุณาใส่หมายเลข Tracking';
+                }
+            }
+        });
+    
+        if (trackingNumber) {
+            // User entered a valid tracking number
+            Swal.fire({
+                title: 'จัดส่งสําเร็จ!',
+                text: `ผลิตภัณฑ์ที่มีหมายเลข Tracking ${trackingNumber} ได้ถูกจัดส่งแล้ว`,
+                icon: 'success',
+                confirmButtonText: 'ตกลง',
+            });
+            
+            // You can perform further actions with the entered trackingNumber if needed
+            console.log('Tracking Number:', trackingNumber);
+            await axios.put(`${process.env.REACT_APP_QUIC_GEAR_API}/auctionProducts/update/${id}`, {
+                orderStatus: "dispatched",
+                trackingNumber: trackingNumber
+            })
+            navigate('/myauction')
+        }
+    };
+
     return (
         <div className="container mx-auto p-4 max-w-[1000px]"> 
             <div className="bg-white p-6 shadow-lg rounded-lg">
                 <div className="flex flex-col md:flex-row justify-between items-center mb-4">
-                    <h1 className="text-2xl font-semibold">รายละเอียดการประมูล</h1>
+                    <h1 className="text-2xl font-semibold">รายการประมูล #{auction._id}</h1>
                     <div className="text-right">
                         <p className="font-bold text-gray-700 mt-4 lg:mt-0">วันที่ประมูล {new Date(auction?.createdAt).toLocaleString()}</p>
                     </div>
@@ -91,7 +125,7 @@ const MyAuction = () => {
                     <div className="mb-4 lg:mb-0 flex flex-col items-start">
                         <p className="text-l md:text-xl font-semibold mb-2">ที่อยู่จัดส่ง
                             <i className="fas fa-map-marker-alt text-gray-500 ml-2"></i></p>
-                        <p className="text-gray-700">{auction?.userWinner.userID.address}</p>
+                        <p className="text-gray-700">{auction?.userWinner.userId.address}</p>
                     </div>
                     {(auction?.orderStatus !== "order received") &&
                         <div className='flex flex-col items-start'>
@@ -118,7 +152,7 @@ const MyAuction = () => {
                     ))}
                 </div>
                 <div className="flex flex-col mb-2">
-                    <AuctionOrderProduct item={auction.productItem} />
+                    <AuctionOrderProduct item={auction} />
                 </div>
                 <div className="bg-gray-100 p-4 rounded-lg shadow-md mb-4 flex flex-row lg:flex-row justify-between items-center">
                     <p className="text-l md:text-xl font-semibold">ราคาสุทธิ</p>
@@ -127,7 +161,18 @@ const MyAuction = () => {
                         {formatNumberInput(auction.startPrice)}</p>
                 </div>
 
-                {currentStatus === 'dispatched' && (
+
+                {currentStatus === 'order received' && current_user._id === auction.user_seller._id && (
+                    <div
+                        className="border border-red-500 bg-white text-red-500 text-sm md:text-lg font-bold px-4 py-2 rounded-md hover:bg-red-500 hover:text-white transition duration-300"
+                        onClick={openSellerDispatchDialog}
+                    >
+                        จัดส่งสินค้าเรียบร้อย
+                    </div>
+                )}
+
+
+                {currentStatus === 'dispatched' && current_user._id === auction.userWinner.userId._id && (
                     <div
                         className="border border-red-500 bg-white text-red-500 text-sm md:text-lg font-bold px-4 py-2 rounded-md hover:bg-red-500 hover:text-white transition duration-300"
                         onClick={openRatingDialog}
