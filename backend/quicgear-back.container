@@ -1,0 +1,14 @@
+[Unit]
+Description=QUICGEAR Backend container
+
+[Container]
+ContainerName=quicgear-back
+Image=localhost/quicgear-back
+PublishPort=5000:5000
+Volume=/media/sasha/Data1/Apps/QUIC-GEAR/frontend:/opt/frontend
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=multi-user.target default.target
