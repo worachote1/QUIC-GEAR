@@ -1,5 +1,4 @@
-podman stop quicgear-back
-podman rm quicgear-back
+systemctl --user stop quicgear-back
 
 podman build -t quicgear-back .
 cp quicgear-back.container ~/.config/containers/systemd
