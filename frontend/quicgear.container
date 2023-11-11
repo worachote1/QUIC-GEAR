@@ -1,0 +1,15 @@
+[Unit]
+Description=QUICGEAR container
+
+[Container]
+ContainerName=quicgear
+Image=localhost/quicgear
+PublishPort=8083:3000
+Volume=/media/sasha/Data1/Apps/QUIC-GEAR/frontend:/opt/frontend
+Exec=yarn start
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=multi-user.target default.target
