@@ -1,6 +1,7 @@
 const asyncHandler = require('express-async-handler');
 const user = require('../models/userModel');
 const sendToken = require('../utils/jwtToken');
+const bcrypt = require('bcrypt') 
 
 // Get all users => GET api/users
 const getAllUser = asyncHandler(async (req, res) => {
@@ -65,8 +66,10 @@ const updateUser = asyncHandler(async (req, res) => {
     if(!users) {
         return res.status(404).send('User not found!');
     }
-
-    users = await user.findByIdAndUpdate(req.params.id, req.body, {
+    
+    hashPassword = await bcrypt.hash(req.body.password,10)
+    updatedUser = {...req.body, password : hashPassword}
+    users = await user.findByIdAndUpdate(req.params.id, updatedUser, {
         new: true,
     })
     res.status(200).json(users)
@@ -89,11 +92,11 @@ const registerUser = asyncHandler(async (req, res) => {
         if (password !== confirmPassword) {
             return res.status(400).json({ message: 'Passwords do not match.' });
         }
-
+        const hashPassword = await bcrypt.hash(password, 10)
         const newUser = await user.create({
             email,
             username,
-            password
+            password : hashPassword
         });
 
         res.status(201).json(newUser);
@@ -102,7 +105,6 @@ const registerUser = asyncHandler(async (req, res) => {
         res.status(500).json({ message: 'Internal Server Error' });
     }
 });
-
 
 //Login user
 //route POST /api/users/login
@@ -115,8 +117,8 @@ const loginUser = asyncHandler(async (req, res) => {
     if (!userFound) {
         return res.status(404).json({ message: 'Invalid username or password.' });
     }
-
-    if (password !== userFound.password) {
+    checkPassword = await bcrypt.compare(password,userFound.password) 
+    if (!checkPassword) {
         return res.status(400).json({ message: 'incorrect password.' });
     }
 
