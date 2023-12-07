@@ -26,7 +26,6 @@ export default function Cart() {
   }
 
   const alert_NotEnoughCoins = () => {
-    sessionStorage.removeItem("current_cartItem");
     Swal.fire({
       title: "เหรียญไม่เพียงพอ",
       text: "กรุณาเติมเหรียญก่อนดำเนินการต่อ",
