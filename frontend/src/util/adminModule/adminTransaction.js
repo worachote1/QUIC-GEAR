@@ -44,6 +44,7 @@ const updateTransaction = async (transactionData, userData, option, amount) => {
         const updateUserCoin = await axios.put(`${process.env.REACT_APP_QUIC_GEAR_API}/users/update/${userData._id}`, {
           coins: userData.coins + amount
         })
+        console.log(updateUserCoin.data)
       }
       if (option === "decline") {
         const updateTransactionStatus = await axios.put(`${process.env.REACT_APP_QUIC_GEAR_API}/transactions/update/${transactionData._id}`, {

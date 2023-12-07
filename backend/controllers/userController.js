@@ -66,12 +66,18 @@ const updateUser = asyncHandler(async (req, res) => {
     if(!users) {
         return res.status(404).send('User not found!');
     }
-    
-    hashPassword = await bcrypt.hash(req.body.password,10)
-    updatedUser = {...req.body, password : hashPassword}
-    users = await user.findByIdAndUpdate(req.params.id, updatedUser, {
-        new: true,
-    })
+    if(req.body.password){
+        hashPassword = await bcrypt.hash(req.body.password,10)
+        updatedUser = {...req.body, password : hashPassword}
+        users = await user.findByIdAndUpdate(req.params.id, updatedUser, {
+            new: true,
+        })
+    }
+    else{
+        users = await user.findByIdAndUpdate(req.params.id, req.body, {
+            new: true,
+        })       
+    }
     res.status(200).json(users)
 });
 
@@ -108,7 +114,7 @@ const registerUser = asyncHandler(async (req, res) => {
 
 //Login user
 //route POST /api/users/login
-//access : public
+//access : public 
 const loginUser = asyncHandler(async (req, res) => {
     const { username, password } = req.body;
 
@@ -122,7 +128,7 @@ const loginUser = asyncHandler(async (req, res) => {
         return res.status(400).json({ message: 'incorrect password.' });
     }
 
-    res.status(200).json(userFound);
+    res.status(200).json({ ...userFound.toObject(), password});
 });
    
 module.exports = { getAllUser, getUserData,createUser, deleteUser, updateUser, loginUser, registerUser};

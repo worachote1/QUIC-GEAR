@@ -210,6 +210,13 @@ export default function ProductView() {
       if (result.isConfirmed) {
         //Create Order
         try {
+
+          // update lasted user data
+          const getLastedUserData = await axios.get(`${process.env.REACT_APP_QUIC_GEAR_API}/users/${current_user._id}`)
+          const res_getLastedUserData = getLastedUserData.data
+          const lastedUserData = {...res_getLastedUserData , password : current_user.password}
+          sessionStorage.setItem('current_user', JSON.stringify(lastedUserData));
+
           const productsObj = []
           const orderData = {
             userID: current_user._id,
@@ -219,7 +226,7 @@ export default function ProductView() {
             }],
             totalPrice: product.price * amount
           }
-          if (current_user.coins < orderData.totalPrice) {
+          if (res_getLastedUserData.coins < orderData.totalPrice) {
             alert_NotEnoughCoins()
             return;
           }
@@ -239,10 +246,9 @@ export default function ProductView() {
           })
           //update user coin
           const updateUser = await axios.put(`${process.env.REACT_APP_QUIC_GEAR_API}/users/update/${res_getSingleOrder.userID._id}`, {
-            ...res_getSingleOrder.userID,
             coins: res_getSingleOrder.userID.coins - res_getSingleOrder.totalPrice
           })
-          sessionStorage.setItem("current_user", JSON.stringify(updateUser.data));
+          sessionStorage.setItem("current_user", JSON.stringify({...updateUser.data,password : current_user.password}));
           alert_placeOrderSuccess();
         }
         catch (err) {
