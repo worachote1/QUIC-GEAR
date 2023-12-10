@@ -8,8 +8,8 @@ const auctionOrderSchema = new mongoose.Schema({
     },
     auctionOrderStatus: {
         type: String,
-        default: ''
+        default: 'order received'
     },
 })
-
-module.exports = mongoose.model('auctionOrder', auctionOrderSchema);
+   
+module.exports = mongoose.model('auctionOrder', auctionOrderSchema); 

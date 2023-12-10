@@ -1,13 +1,13 @@
 const asyncHandler = require('express-async-handler');
 const order = require('../models/auctionOrderModel');
 
-// Get all orders => GET api/orders
+// Get all orders => GET api/auctionOrder
 const getAllAuctionOrder = asyncHandler(async (req, res) => {
     const orders = await order.find().populate('auctionID');
     res.status(200).json(orders);
-});
+}); 
 
-// Get single order => GET api/orders/:id
+// Get single order => GET api/auctionOrder/:id
 //Test
 const getSingleAuctionOrder = asyncHandler(async (req, res) => {
     try {
@@ -26,7 +26,7 @@ const getSingleAuctionOrder = asyncHandler(async (req, res) => {
     }
 });
 
-// Create new order => POST api/orders/create
+// Create new order => POST api/auctionOrder/create
 const createAuctionOrder = asyncHandler(async (req, res) => {
     try {
         const orders = await order.create(req.body)
@@ -36,7 +36,7 @@ const createAuctionOrder = asyncHandler(async (req, res) => {
     }
 });
 
-// Delete order => DELETE api/orders/delete/:id
+// Delete order => DELETE api/auctionOrder/delete/:id
 const deleteAuctionOrder = asyncHandler(async (req, res) => {
     try {
         const orderId = req.params.id;
@@ -57,7 +57,7 @@ const deleteAuctionOrder = asyncHandler(async (req, res) => {
     }
 });
 
-// Update order => api/orders/update/:id
+// Update order => api/auctionOrder/update/:id
 const updateAuctionOrder = asyncHandler(async (req, res) => {
     let orders = await order.findById(req.params.id);
 
@@ -70,5 +70,5 @@ const updateAuctionOrder = asyncHandler(async (req, res) => {
     })
     res.status(200).json(orders)
 });
-
+   
 module.exports = { getAllAuctionOrder, getSingleAuctionOrder, createAuctionOrder, deleteAuctionOrder, updateAuctionOrder };

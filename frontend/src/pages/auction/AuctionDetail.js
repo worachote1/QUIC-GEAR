@@ -147,8 +147,7 @@ const AuctionDetail = () => {
             setSingleAuctionData({ ...res_getLastedSingleAuctionData })
             // if the current user is winner -> update coins in session 
             // so current user don't need to refresh to check his updated coin
-            if (res_getLastedSingleAuctionData.userWinner.userId._id === current_user._id)
-            {
+            if (res_getLastedSingleAuctionData.userWinner.userId._id === current_user._id) {
                 sessionStorage.setItem('current_user', JSON.stringify(res_getLastedSingleAuctionData.userWinner.userId));
             }
             return;
@@ -173,9 +172,14 @@ const AuctionDetail = () => {
             }
         }
 
+        // check if this function handleAuctionEndByBidder() only invoked by the userWinner 
+        if (tempMostBidder.userId?._id !== current_user._id && res_getLastedSingleAuctionData.userBidder.length > 1) {
+            alertAuctionEnd(tempMostBidder)
+            return ;
+        }
         // update coins to user_seller
         const increaseUserSellerCoins = await axios.put(`${process.env.REACT_APP_QUIC_GEAR_API}/users/update/${res_getLastedSingleAuctionData.user_seller._id}`, {
-            coins: res_getLastedSingleAuctionData.user_seller.coins + res_getLastedSingleAuctionData.buyOutPrice
+            coins: res_getLastedSingleAuctionData.user_seller.coins + tempMostBidder.bidAmount
         });
         console.log("add coin to seller prn")
 
@@ -186,12 +190,11 @@ const AuctionDetail = () => {
                 const refundTo = await axios.put(`${process.env.REACT_APP_QUIC_GEAR_API}/users/update/${item.userId._id}`, {
                     coins: item.bidAmount + item.userId.coins
                 })
-                
                 // if current user is one participants (which not a winner) -> update coin in session
                 // so current user don't need to refresh to check his updated coin
-                if (item.userId._id === current_user._id){
+                if (item.userId._id === current_user._id) {
                     const res_refundTo = refundTo.data;
-                    sessionStorage.setItem('current_user',JSON.stringify(res_refundTo));
+                    sessionStorage.setItem('current_user', JSON.stringify(res_refundTo));
                     console.log("refund to current user(a bidder) prn")
                 }
             }
@@ -208,11 +211,10 @@ const AuctionDetail = () => {
         });
         console.log("update auction with winner prn")
         const res_updateSingleAuction = updateSingleAuction.data
-        
+
         // if the current user is winner(with most bidAmount) -> update coins in session 
         // so current user don't need to refresh to check his updated coin
-        if (res_updateSingleAuction.userWinner.userId._id === current_user._id)
-        {
+        if (res_updateSingleAuction.userWinner.userId._id === current_user._id) {
             sessionStorage.setItem('current_user', JSON.stringify(res_updateSingleAuction.userWinner.userId));
         }
         setSingleAuctionData({ ...res_updateSingleAuction })
@@ -231,16 +233,15 @@ const AuctionDetail = () => {
         }
 
         // Get lasted auctionData 
-        const getLastedSingleAuctionData = await axios.get(`${process.env.REACT_APP_QUIC_GEAR_API}/auctionProducts/${id}`);
-        const res_getLastedSingleAuctionData = getLastedSingleAuctionData.data;
+        let getLastedSingleAuctionData = await axios.get(`${process.env.REACT_APP_QUIC_GEAR_API}/auctionProducts/${id}`);
+        let res_getLastedSingleAuctionData = getLastedSingleAuctionData.data;
         setSingleAuctionData({ ...res_getLastedSingleAuctionData })
-        const findCurrentUserBidder = res_getLastedSingleAuctionData.userBidder.find(user => user.userId._id === current_user._id);
-        const previousBidAmount = (findCurrentUserBidder) ? findCurrentUserBidder?.bidAmount : 0;
+        let findCurrentUserBidder = res_getLastedSingleAuctionData.userBidder.find(user => user.userId._id === current_user._id);
+        let previousBidAmount = (findCurrentUserBidder) ? findCurrentUserBidder?.bidAmount : 0;
         //if there is winner before you bid and you're one of userBidder 
-        //-> update session,so coins is refunded in real-time
+        //-> update session, so coins is refunded in real-time
         if (res_getLastedSingleAuctionData.userWinner) {
             alertAuctionEnd(res_getLastedSingleAuctionData.userWinner);
-
             if (findCurrentUserBidder)
                 sessionStorage.setItem('current_user', JSON.stringify(findCurrentUserBidder.userId));
             return;
@@ -262,6 +263,27 @@ const AuctionDetail = () => {
             showLoaderOnConfirm: true,
             preConfirm: async (inputValue) => {
 
+                // Get lasted auctionData (ป้องกันคน เข้าหน้า pop up ค้างไว้)
+                getLastedSingleAuctionData = await axios.get(`${process.env.REACT_APP_QUIC_GEAR_API}/auctionProducts/${id}`);
+                res_getLastedSingleAuctionData = getLastedSingleAuctionData.data;
+                setSingleAuctionData({ ...res_getLastedSingleAuctionData })
+                findCurrentUserBidder = res_getLastedSingleAuctionData.userBidder.find(user => user.userId._id === current_user._id);
+                previousBidAmount = (findCurrentUserBidder) ? findCurrentUserBidder?.bidAmount : 0;
+                //if there is winner before you bid and you're one of userBidder 
+                //-> update session,so coins is refunded in real-time
+                if (res_getLastedSingleAuctionData.userWinner) {
+                    alertAuctionEnd(res_getLastedSingleAuctionData.userWinner);
+
+                    if (findCurrentUserBidder)
+                        sessionStorage.setItem('current_user', JSON.stringify(findCurrentUserBidder.userId));
+                    return;
+                }
+
+                // update lasted user data
+                const getLastedUserData = await axios.get(`${process.env.REACT_APP_QUIC_GEAR_API}/users/${current_user._id}`)
+                const res_getLastedUserData = getLastedUserData.data
+                const lastedUserData = {...res_getLastedUserData , password : current_user.password}
+                sessionStorage.setItem('current_user', JSON.stringify(lastedUserData));
 
                 const bidAmount = parseFloat(inputValue);
                 if (isNaN(bidAmount)) {
@@ -270,7 +292,7 @@ const AuctionDetail = () => {
                     return;
                 }
 
-                else if (current_user.coins < bidAmount) {
+                else if (res_getLastedUserData.coins < bidAmount) {
                     Swal.showValidationMessage('เหรียญไม่เพียงพอ');
                     return;
                 }
@@ -285,6 +307,7 @@ const AuctionDetail = () => {
                     return;
                 }
                 const currentBidAmount = bidAmount + previousBidAmount;
+
                 // Continue with Bid logic
                 // Update userBidder (auction api)
                 const userBidderWitoutCurrent = res_getLastedSingleAuctionData.userBidder.filter((item) => item.userId._id !== current_user._id)
@@ -297,9 +320,9 @@ const AuctionDetail = () => {
                 setSingleAuctionData({ ...updateSingleAuction.data })
                 // And user's coin (user api) and current_user session
                 const subTractUserCoins = await axios.put(`${process.env.REACT_APP_QUIC_GEAR_API}/users/update/${current_user._id}`, {
-                    coins: current_user.coins - bidAmount
+                    coins: res_getLastedUserData.coins - bidAmount
                 })
-                sessionStorage.setItem('current_user', JSON.stringify(subTractUserCoins.data))
+                sessionStorage.setItem('current_user', JSON.stringify({...subTractUserCoins.data, password : current_user.password}))
 
                 //create auctionOrder later...
 
@@ -310,6 +333,13 @@ const AuctionDetail = () => {
     }
 
     const handleUserBuyOut = async () => {
+
+        // update lasted user data
+        const getLastedUserData = await axios.get(`${process.env.REACT_APP_QUIC_GEAR_API}/users/${current_user._id}`)
+        const res_getLastedUserData = getLastedUserData.data
+        const lastedUserData = {...res_getLastedUserData , password : current_user.password}
+        sessionStorage.setItem('current_user', JSON.stringify(lastedUserData));        
+
         //validate
         if (!current_user) {
             navigate('/login')
@@ -319,7 +349,7 @@ const AuctionDetail = () => {
             alert_NotAddress();
             return;
         }
-        if (current_user.coins < singleAuctionData?.buyOutPrice) {
+        if (res_getLastedUserData.coins < singleAuctionData?.buyOutPrice) {
             alert_NotEnoughCoins();
             return;
         }
@@ -354,6 +384,11 @@ const AuctionDetail = () => {
                         coins: res_getLastedSingleAuctionData.user_seller.coins + res_getLastedSingleAuctionData.buyOutPrice
                     });
 
+                    //get lasted current userData for buyOut (update after project present)
+                    const getLastedUserData = await axios.get(`${process.env.REACT_APP_QUIC_GEAR_API}/users/${current_user._id}`)
+                    const res_getLastedUserData = getLastedUserData.data
+                    sessionStorage.setItem('current_user', JSON.stringify(res_getLastedUserData))
+
                     // refund other userBidder (include userWinner if participate as userBidder) + subtract winner coin (subtract with buyOutPrice) 
                     let currentUserBidAmount = 0;
 
@@ -387,7 +422,7 @@ const AuctionDetail = () => {
                     alertAuctionEnd(res_updateSingleAuction.userWinner);
 
                     // window.location.reload()
-                    sessionStorage.setItem('current_user', JSON.stringify(res_updateSingleAuction.userWinner.userId));
+                    sessionStorage.setItem('current_user', JSON.stringify({...res_updateSingleAuction.userWinner.userId, password : current_user.password}));
 
                     // create auctionOrder later...
                 } catch (err) {
@@ -417,6 +452,7 @@ const AuctionDetail = () => {
                     setTimeRemaining(nonNegativeRemaining);
 
                     if (nonNegativeRemaining.total <= 0) {
+
                         handleAuctionEndByBidder();
                         clearInterval(timer);
                     }

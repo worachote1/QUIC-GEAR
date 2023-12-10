@@ -26,7 +26,6 @@ export default function Cart() {
   }
 
   const alert_NotEnoughCoins = () => {
-    sessionStorage.removeItem("current_cartItem");
     Swal.fire({
       title: "เหรียญไม่เพียงพอ",
       text: "กรุณาเติมเหรียญก่อนดำเนินการต่อ",
@@ -102,6 +101,13 @@ export default function Cart() {
       if (result.isConfirmed) {
         //Create Order
         try {
+        
+          // update lasted user data
+          const getLastedUserData = await axios.get(`${process.env.REACT_APP_QUIC_GEAR_API}/users/${current_user._id}`)
+          const res_getLastedUserData = getLastedUserData.data
+          const lastedUserData = {...res_getLastedUserData , password : current_user.password}
+          sessionStorage.setItem('current_user', JSON.stringify(lastedUserData));
+
           const productsObj = []
           currentItemInCart.forEach(item => {
             const itemObj = {
@@ -115,7 +121,7 @@ export default function Cart() {
             orderItems: [...productsObj],
             totalPrice: Total
           }
-          if (current_user.coins < orderData.totalPrice) {
+          if (res_getLastedUserData.coins < orderData.totalPrice) {
             alert_NotEnoughCoins()
             return;
           }
@@ -134,10 +140,9 @@ export default function Cart() {
           })
           //update user coin
           const updateUser = await axios.put(`${process.env.REACT_APP_QUIC_GEAR_API}/users/update/${res_getSingleOrder.userID._id}`, {
-            ...res_getSingleOrder.userID,
             coins: res_getSingleOrder.userID.coins - res_getSingleOrder.totalPrice
           })
-          sessionStorage.setItem("current_user", JSON.stringify(updateUser.data));
+          sessionStorage.setItem("current_user", JSON.stringify({...updateUser.data,password : current_user.password}));
           alert_placeOrderSuccess();
         }
         catch (err) {

@@ -77,5 +77,5 @@ const userSchema = new mongoose.Schema({
 //         expiresIn: process.env.JWT_EXPIRES_TIME
 //     });
 // };
-
-module.exports = mongoose.model('user', userSchema);
+   
+module.exports = mongoose.model('user', userSchema); 

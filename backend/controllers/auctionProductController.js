@@ -28,9 +28,75 @@ const getSingleAuctionProduct = asyncHandler(async (req, res) => {
     }
 });
 
+//@desc Get single auctionProduct by user_seller
+//@route GET api/auctionProducts/seller?user_seller=user_seller_id
+const getAuctionProductByUserSeller = asyncHandler(async (req, res) => {
+    try {
+        //pass the user_seller ID in the request query
+        const { user_seller } = req.query;
+        console.log('User Seller ID:', user_seller);
+        let query = {};
+
+        // If user_seller is provided, add it to the query
+        if (user_seller) {
+            query.user_seller = user_seller;
+        }
+        console.log("seller query prn")
+        console.log(query)
+        const auctionProducts = await auctionProduct.find(query)
+            .populate('user_seller')
+            .populate('userBidder.userId')
+            .populate('userWinner.userId');
+
+        res.status(200).json(auctionProducts);
+    } catch (err) {
+        console.log(err);
+    }
+});
+
+//@desc Get single auctionProduct by userWinner
+//@route GET /api/auctionProducts/winner?userWinner=user_winner_id
+const getAuctionProductByWinner = asyncHandler(async (req, res) => {
+    try {
+        const { userWinner } = req.query;
+
+        const auctionProducts = await auctionProduct.find({
+            'userWinner.userId': userWinner,
+        }).populate('user_seller').populate('userBidder.userId').populate('userWinner.userId');
+
+        res.status(200).json(auctionProducts);
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
+//@desc Get single auctionProduct by userBidder
+//@route GET /api/auctionProducts/bidder?userBidder=user_bidder_id
+const getAuctionProductByBidder = asyncHandler(async (req, res) => {
+    try {
+        const { userBidder } = req.query;
+
+        let query = {};
+
+        // If userBidder is provided, add it to the query
+        if (userBidder) {
+            query['userBidder.userId'] = userBidder;
+        }
+
+        const auctionProducts = await auctionProduct.find(query)
+            .populate('user_seller')
+            .populate('userBidder.userId')
+            .populate('userWinner.userId');
+
+        res.status(200).json(auctionProducts);
+    } catch (err) {
+        console.log(err);
+    }
+});
+
 //@desc Create new auctionProduct
 //@route POST /api/auctionProducts/create
-
 const createAuctionProducts = asyncHandler(async (req, res) => {
     try {
         // const { startPrice, buyOutPrice, start_auction_date, end_auction_date, productItem, user_seller } = req.body;
@@ -100,5 +166,12 @@ const updateAuctionProducts = asyncHandler(async (req, res) => {
 });
 
 module.exports = {
-    getAllAuctionProducts, getSingleAuctionProduct, createAuctionProducts, deleteAuctionProducts, updateAuctionProducts
+    getAllAuctionProducts, 
+    getSingleAuctionProduct, 
+    getAuctionProductByUserSeller, 
+    getAuctionProductByWinner, 
+    getAuctionProductByBidder,
+    createAuctionProducts, 
+    deleteAuctionProducts, 
+    updateAuctionProducts
 };
