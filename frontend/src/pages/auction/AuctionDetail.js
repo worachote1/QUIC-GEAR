@@ -9,9 +9,11 @@ import { ThreeDots } from 'react-loader-spinner';
 import axios from "axios";
 import { formatNumberInput } from "../../util/formatUtil";
 import Swal from 'sweetalert2';
+import io from 'socket.io-client'
 
 const AuctionDetail = () => {
 
+    const socket = io(`http://localhost:5000`)
     const navigate = useNavigate();
     const { id } = useParams();
     const current_user = JSON.parse(sessionStorage.getItem("current_user"));
@@ -91,6 +93,11 @@ const AuctionDetail = () => {
     }
 
     const alertAuctionEnd = (userWinner) => {
+
+        //disconnecting from socket
+        socket.disconnect();
+
+        //display process
         if (!hasAlertedAuctionEnd.current) {
             Swal.fire({
                 title: `${userWinner?.userId._id === current_user._id ? 'ยินดีด้วยคุณชนะการประมูล' : 'การประมูลนี้จบลงแล้ว'}`,
@@ -127,6 +134,8 @@ const AuctionDetail = () => {
             setArrayIndex([...updatedArrayIndex])
             console.log([...updatedArrayIndex])
         }
+
+        return res_singleAuctionData
     }
 
     // use this function when time's up
@@ -175,7 +184,7 @@ const AuctionDetail = () => {
         // check if this function handleAuctionEndByBidder() only invoked by the userWinner 
         if (tempMostBidder.userId?._id !== current_user._id && res_getLastedSingleAuctionData.userBidder.length > 1) {
             alertAuctionEnd(tempMostBidder)
-            return ;
+            return;
         }
         // update coins to user_seller
         const increaseUserSellerCoins = await axios.put(`${process.env.REACT_APP_QUIC_GEAR_API}/users/update/${res_getLastedSingleAuctionData.user_seller._id}`, {
@@ -282,7 +291,7 @@ const AuctionDetail = () => {
                 // update lasted user data
                 const getLastedUserData = await axios.get(`${process.env.REACT_APP_QUIC_GEAR_API}/users/${current_user._id}`)
                 const res_getLastedUserData = getLastedUserData.data
-                const lastedUserData = {...res_getLastedUserData , password : current_user.password}
+                const lastedUserData = { ...res_getLastedUserData, password: current_user.password }
                 sessionStorage.setItem('current_user', JSON.stringify(lastedUserData));
 
                 const bidAmount = parseFloat(inputValue);
@@ -322,7 +331,7 @@ const AuctionDetail = () => {
                 const subTractUserCoins = await axios.put(`${process.env.REACT_APP_QUIC_GEAR_API}/users/update/${current_user._id}`, {
                     coins: res_getLastedUserData.coins - bidAmount
                 })
-                sessionStorage.setItem('current_user', JSON.stringify({...subTractUserCoins.data, password : current_user.password}))
+                sessionStorage.setItem('current_user', JSON.stringify({ ...subTractUserCoins.data, password: current_user.password }))
 
                 //create auctionOrder later...
 
@@ -337,8 +346,8 @@ const AuctionDetail = () => {
         // update lasted user data
         const getLastedUserData = await axios.get(`${process.env.REACT_APP_QUIC_GEAR_API}/users/${current_user._id}`)
         const res_getLastedUserData = getLastedUserData.data
-        const lastedUserData = {...res_getLastedUserData , password : current_user.password}
-        sessionStorage.setItem('current_user', JSON.stringify(lastedUserData));        
+        const lastedUserData = { ...res_getLastedUserData, password: current_user.password }
+        sessionStorage.setItem('current_user', JSON.stringify(lastedUserData));
 
         //validate
         if (!current_user) {
@@ -419,10 +428,11 @@ const AuctionDetail = () => {
 
                     const res_updateSingleAuction = updateSingleAuction.data;
                     setSingleAuctionData({ ...res_updateSingleAuction });
-                    alertAuctionEnd(res_updateSingleAuction.userWinner);
+                    // alertAuctionEnd will be invoke in socket.io implementation
+                    // alertAuctionEnd(res_updateSingleAuction.userWinner);
 
                     // window.location.reload()
-                    sessionStorage.setItem('current_user', JSON.stringify({...res_updateSingleAuction.userWinner.userId, password : current_user.password}));
+                    sessionStorage.setItem('current_user', JSON.stringify({ ...res_updateSingleAuction.userWinner.userId, password: current_user.password }));
 
                     // create auctionOrder later...
                 } catch (err) {
@@ -466,6 +476,28 @@ const AuctionDetail = () => {
         }
     }, [singleAuctionData]);
 
+    // real-time bidPrice feature
+    useEffect(() => {
+        // Join the auction room on component mount
+        socket.emit('joinAuctionRoom', id);
+
+        // Listen for bid updates
+        socket.on('currentBid', (bidAmount) => {
+            // Handle bid updates in your component state
+            //if listen and check that there is a winner -> disconnect socket and alertAuctionEnd
+            if(bidAmount >= singleAuctionData.buyOutPrice){
+                const curData = getSingleAuctionData()
+                alertAuctionEnd(curData.userWinner)
+                return ;
+            }
+            setSingleAuctionData({...singleAuctionData, startPrice : bidAmount })
+        });
+
+        // Clean up on component unmount
+        return () => {
+            socket.disconnect();
+        }; 
+    }, [socket]);
 
 
     if (!singleAuctionData) {
