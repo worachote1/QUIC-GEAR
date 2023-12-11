@@ -99,13 +99,6 @@ const getAuctionProductByBidder = asyncHandler(async (req, res) => {
 //@route POST /api/auctionProducts/create
 const createAuctionProducts = asyncHandler(async (req, res) => {
     try {
-        // const { startPrice, buyOutPrice, start_auction_date, end_auction_date, productItem, user_seller } = req.body;
-
-        //Create object from data
-        // const auctionProducts = await auctionProduct.create({
-        //     startPrice, buyOutPrice, start_auction_date, end_auction_date, productItem, user_seller
-        // });
-
         const auctionProducts = await auctionProduct.create(req.body);
         res.status(200).json(auctionProducts);
 
@@ -157,9 +150,8 @@ const updateAuctionProducts = asyncHandler(async (req, res) => {
             .populate('user_seller')
             .populate('userBidder.userId')
             .populate('userWinner.userId');
-
+        req.io.to(`auction_${productId}`).emit('currentBid', populatedProduct.startPrice);
         res.status(200).json(populatedProduct);
-
     } catch (err) {
         console.log(err);
     }
